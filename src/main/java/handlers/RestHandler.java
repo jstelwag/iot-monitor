@@ -1,0 +1,87 @@
+package handlers;
+
+import building.Building;
+import building.HeatZone;
+import control.HeatingControl;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.json.JSONObject;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Created by Jaap on 27-5-2016.
+ */
+public class RestHandler extends AbstractHandler {
+    @Override
+    public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        Pattern restPattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
+        Matcher matcher = restPattern.matcher(s);
+
+        if (matcher.find()) {
+            String roomOrValve = matcher.group(1);
+            try {
+                matchRoom(roomOrValve, s, response.getWriter());
+            } catch (IllegalArgumentException e) {
+                matchValveOverride(roomOrValve, s, response.getWriter());
+            }
+        }
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        baseRequest.setHandled(true);
+    }
+
+    /** /rest/room/on|off|toggle/ */
+    void matchRoom(String roomText, String lineIn, PrintWriter out) throws IllegalArgumentException {
+        Building.ControllableRoom room = Building.ControllableRoom.valueOf(roomText);
+        Pattern pattern = Pattern.compile(Pattern.quote("rest/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
+                + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
+        Matcher matcher = pattern.matcher(lineIn + "/");
+        if (matcher.find()) {
+            System.out.println("/rest request for " + room);
+            if ("toggle".equals(matcher.group(2))) {
+                HeatingControl.INSTANCE.setRoomActive(room, null);
+                out.println("Toggled room " + room + " to " + HeatingControl.INSTANCE.setpoints.get(room).isActive);
+            } else {
+                HeatingControl.INSTANCE.setRoomActive(room, "on".equals(matcher.group(2)));
+                out.println("Switched room " + room + " " + "on".equals(matcher.group(2)));
+            }
+        } else {
+            out.println(lineIn + "?");
+        }
+    }
+
+    /** /rest/valvegroup/sequence/on|off|remove/ */
+    void matchValveOverride(String valveText, String lineIn, PrintWriter out) throws IllegalArgumentException {
+        HeatZone.ValveGroup valve = HeatZone.ValveGroup.valueOf(valveText);
+        Pattern pattern = Pattern.compile(Pattern.quote("rest/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
+                + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
+        Matcher matcher = pattern.matcher(lineIn);
+        if (matcher.find() && StringUtils.isNumeric(matcher.group(2))) {
+            System.out.println("/rest request for " + valve);
+            int sequence = Integer.parseInt(matcher.group(2));
+            HeatZone zone = Building.INSTANCE.zoneById(valve, sequence);
+            // First remove the old override, then add new
+            HeatingControl.INSTANCE.overrides.remove(zone);
+            if ("on".equals(matcher.group(3))) {
+                HeatingControl.INSTANCE.overrides.put(zone, true);
+                out.println("Override " + zone + " on");
+            } else if ("off".equals(matcher.group(3))) {
+                HeatingControl.INSTANCE.overrides.put(zone, false);
+                out.println("Override " + zone + " off");
+            } else {
+                out.println("Removed vverride " + zone);
+            }
+        } else {
+            out.println(lineIn + "?");
+        }
+    }
+}
