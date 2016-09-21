@@ -1,0 +1,7 @@
+#!/bin/bash
+cd /home/pi/iot-monitor
+
+/usr/bin/mvn clean install
+/usr/bin/crontab src/main/bash/crontab
+
+exit 0
