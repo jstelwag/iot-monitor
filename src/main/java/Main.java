@@ -15,7 +15,7 @@ import java.io.IOException;
 public class Main {
 
     /**
-     * Add a properties file (heating.properties) in the jar directory
+     * Add a properties file (monitor.conf) in the jar directory
      */
     static final HeatingProperties prop = new HeatingProperties();
 

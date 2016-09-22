@@ -10,6 +10,7 @@ import org.apache.http.entity.ContentType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import speaker.CustomerNameSpeaker;
+import speaker.LogstashTimedSpeaker;
 import util.HeatingProperties;
 
 import java.io.IOException;
@@ -34,8 +35,9 @@ public class Beds24BookingRetriever implements Runnable {
     }
 
     void requestBeds24() {
+        String responseBody = null;
         try {
-            String responseBody = Request.Post("https://www.beds24.com/api/json/getBookings")
+            responseBody = Request.Post("https://www.beds24.com/api/json/getBookings")
                     .version(HttpVersion.HTTP_1_1)
                     .bodyString(request.toString(), ContentType.APPLICATION_JSON)
                     .execute().returnContent().asString();
@@ -69,6 +71,8 @@ public class Beds24BookingRetriever implements Runnable {
                     + " are occupiedNow and " +  HeatingControl.INSTANCE.occupiedTonight.size() + " rooms are booked for today");
         } catch (IOException | ParseException e) {
             HeatingControl.INSTANCE.hasUpdatedBookings = false;
+            System.out.println("Unexpected response from beds24: " + responseBody);
+            LogstashTimedSpeaker.INSTANCE.message("MasterController", "ERROR: Unexpected response from beds24: " + responseBody);
             e.printStackTrace();
         }
     }

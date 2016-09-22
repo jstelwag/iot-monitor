@@ -5,5 +5,5 @@ HOME=/home/pi
 
 * 3 * * * iot-upgrade > $HOME/upgrade.log 2>&1
 * 4 * * * sudo reboot
-
+*/10 * * * * curl localhost:8000/beds24/
 # needs newline at the end

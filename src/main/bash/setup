@@ -7,9 +7,22 @@ sudo apt-get -y install cron-apt rpi-update
 sudo rpi-update
 sudo apt-get -y install maven
 #sudo apt-get -y install collectd
+pip install supervisor
+
+curl https://gist.githubusercontent.com/howthebodyworks/176149/raw/d60b505a585dda836fadecca8f6b03884153196b/supervisord.sh > supervisord
+chmod +x supervisord
+sudo mv supervisord /etc/init.d
+sudo update-rc.d supervisord defaults
+echo_supervisord_conf > supervisord.conf
+sed -i 's/tmp\/supervisord.log/var\/log\/supervisord.log/' supervisord.conf
+echo "[program:iot_monitor]" >> supervisord.conf
+echo "command=/usr/local/bin/iot-runtime" >> supervisord.conf
+echo "redirect_stderr=true" >> supervisord.conf
+echo "stdout_logfile=/var/log/iot-monitor.log" >> supervisord.conf
+sudo mv supervisord.conf /etc
 
 cat <<EOF >monitor.conf
-iot.port=
+iot.port=8888
 master.port=
 influx.ip=192.168.
 influx.port=8087
@@ -33,7 +46,7 @@ sudo chmod +x /usr/local/bin/iot-upgrade
 
 cat <<EOF >iot-runtime
 #!/bin/bash
-sh /home/pi/iot-solar-boiler/src/main/bash/iot-runtime $1
+sh /home/pi/iot-monitor/src/main/bash/iot-runtime $1
 exit 0
 EOF
 sudo mv iot-runtime /usr/local/bin

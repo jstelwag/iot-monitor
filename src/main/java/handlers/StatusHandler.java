@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import retriever.Booking;
 import state.RoomTemperatureState;
+import state.ZoneState;
 import state.ZoneTemperatureState;
 
 import javax.servlet.ServletException;
@@ -57,7 +58,11 @@ public class StatusHandler extends AbstractHandler {
                 if (zoneTemperatureState != null) {
                     zoneResponse.put("temperature", zoneTemperatureState.temperature);
                 }
-                zoneResponse.put("state", HeatingControl.INSTANCE.controlState.get(zone).peekLast().valve);
+
+                ZoneState zoneState = HeatingControl.INSTANCE.controlState.get(zone).peekLast();
+                if (zoneState != null) {
+                    zoneResponse.put("state", zoneState.valve);
+                }
             }
 
             JSONArray overrides = new JSONArray();
