@@ -6,7 +6,6 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ErrorHandler;
 import retriever.Beds24BookingRetriever;
-import retriever.KNXRoomTemperatures;
 import speaker.*;
 import util.HeatingProperties;
 
@@ -27,8 +26,6 @@ public class Main {
         try {
             //speed things up, I need booking information in order to control things
             new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
-            //also to have the set points and temperatures is nice.
-            new KNXRoomTemperatures().run();
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
@@ -49,20 +46,12 @@ public class Main {
             System.exit(0);
         }
 
-        long last30seconds = System.currentTimeMillis();
-
         while (true) {
             try {
-                Thread.sleep(50);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {}
             try {
-                if (last30seconds + 30000 < System.currentTimeMillis()) {
-                    last30seconds = System.currentTimeMillis();
-                    new Thread(new ControlCalculator()).start();
-                    new Thread(new StateSpeaker()).start();
-                    new Thread(new RoomtemperatureSpeaker()).run();
-                    new Thread(new SetpointSpeaker()).run();
-                }
+                //hello
             } catch (RuntimeException e) {
                 LogstashTimedSpeaker.INSTANCE.message("MasterController", "ERROR: exception occurred at the regular speaker scheduling " + e.toString());
                 e.printStackTrace();
@@ -83,15 +72,24 @@ public class Main {
         roomResetContext.setHandler(new RoomResetHandler());
         ContextHandler roomTemperatureContext = new ContextHandler("/knxtemperatures");
         roomTemperatureContext.setHandler(new RoomTemperatureHandler());
+        ContextHandler controlContext = new ContextHandler("/control");
+        controlContext.setHandler(new ControlCalculator());
+        ContextHandler stateSpeakerContext = new ContextHandler("/stateSpeaker");
+        stateSpeakerContext.setHandler(new StateSpeaker());
+        ContextHandler roomTemperatureSpeakerContext = new ContextHandler("/roomTemperatureSpeaker");
+        roomTemperatureSpeakerContext.setHandler(new RoomtemperatureSpeaker());
+        ContextHandler setpointContext = new ContextHandler("/setpointSpeaker");
+        setpointContext.setHandler(new SetpointSpeaker());
+
         ContextHandler echoContext = new ContextHandler("/echo");
         echoContext.setHandler(new EchoHandler());
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext
-                , beds24Context, roomResetContext, roomTemperatureContext, echoContext});
+                , beds24Context, roomResetContext, roomTemperatureContext, controlContext
+                , stateSpeakerContext, roomTemperatureSpeakerContext, setpointContext, echoContext});
         return contexts;
     }
-
 
     static void removeHeaders(Server server) {
         for(Connector y : server.getConnectors()) {

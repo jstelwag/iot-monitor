@@ -2,14 +2,20 @@ package control;
 
 import building.Building;
 import building.HeatZone;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import state.ZoneState;
 
-public class ControlCalculator implements Runnable {
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-    public ControlCalculator() {}
+public class ControlCalculator extends AbstractHandler {
 
     @Override
-    public void run() {
+    public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
         System.out.println("Calculating state");
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
             double setpoint = HeatingControl.INSTANCE.setpoints.get(controllableRoom).getSetpoint();
