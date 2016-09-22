@@ -2,6 +2,7 @@ package listener;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
+import speaker.LogstashLogger;
 import speaker.LogstashTimedSpeaker;
 
 import java.io.*;
@@ -30,7 +31,7 @@ public class IoTListener implements Runnable, Closeable {
             try {
                 accept();
             } catch (IOException e) {
-                LogstashTimedSpeaker.INSTANCE.message("MasterController", "ERROR IoTListener connection failure, trying to continue "
+                LogstashLogger.INSTANCE.message("ERROR IoTListener connection failure, trying to continue "
                         + e.toString());
             }
         }
@@ -40,7 +41,7 @@ public class IoTListener implements Runnable, Closeable {
 
         Socket socket = listener.accept(); // waits for a connection
         if (executor.getActiveCount() == WORKERS) {
-            LogstashTimedSpeaker.INSTANCE.message("MasterController", "IoTListener rejecting connection");
+            LogstashLogger.INSTANCE.message("IoTListener rejecting connection");
             socket.close();
         }
         executor.execute(new IoTAcceptHandler(socket));

@@ -1,6 +1,7 @@
 package listener;
 
 import org.apache.commons.io.IOUtils;
+import speaker.LogstashLogger;
 import speaker.LogstashTimedSpeaker;
 import speaker.TemperatureSpeaker;
 import util.LineProtocolUtil;
@@ -49,12 +50,12 @@ public class IoTAcceptHandler implements Runnable {
                     out.println(dispatcher.actuatorsOut());
                 }
             } else {
-                LogstashTimedSpeaker.INSTANCE.message("MasterController", "IoTAccept with unrecognized content " + dispatcher.lineIn);
+                LogstashLogger.INSTANCE.message("IoTAccept with unrecognized content " + dispatcher.lineIn);
                 System.out.println("Unrecognized IoT request: " + dispatcher.lineIn + "?");
             }
         } catch (IOException | RuntimeException e) {
             System.out.println("Error processing IoT response " + request);
-            LogstashTimedSpeaker.INSTANCE.message("MasterController", "IoTAcceptHandler ERROR " + e.toString());
+            LogstashLogger.INSTANCE.message("IoTAcceptHandler ERROR " + e.toString());
             e.printStackTrace();
         } finally {
             IOUtils.closeQuietly(socket);

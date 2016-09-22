@@ -25,7 +25,7 @@ public class InfluxDBTimedSpeaker implements Closeable {
 
     private InfluxDBTimedSpeaker() {
         System.out.println("Starting timed InfluxDB speaker");
-        LogstashTimedSpeaker.INSTANCE.message("MasterController", "InfluxDB launched");
+        LogstashLogger.INSTANCE.message("InfluxDB launched");
         final HeatingProperties properties = new HeatingProperties();
         try {
             host = InetAddress.getByName(properties.influxIp);

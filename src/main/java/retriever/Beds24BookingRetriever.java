@@ -10,6 +10,7 @@ import org.apache.http.entity.ContentType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import speaker.CustomerNameSpeaker;
+import speaker.LogstashLogger;
 import speaker.LogstashTimedSpeaker;
 import util.HeatingProperties;
 
@@ -72,7 +73,7 @@ public class Beds24BookingRetriever implements Runnable {
         } catch (IOException | ParseException e) {
             HeatingControl.INSTANCE.hasUpdatedBookings = false;
             System.out.println("Unexpected response from beds24: " + responseBody);
-            LogstashTimedSpeaker.INSTANCE.message("MasterController", "ERROR: Unexpected response from beds24: " + responseBody);
+            LogstashLogger.INSTANCE.message("ERROR: Unexpected response from beds24: " + responseBody);
             e.printStackTrace();
         }
     }

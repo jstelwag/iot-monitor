@@ -3,6 +3,7 @@ package handlers;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import speaker.LogstashLogger;
 import speaker.LogstashTimedSpeaker;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,7 @@ public class EchoHandler extends AbstractHandler {
             throws IOException, ServletException {
         System.out.println("Echo request");
         response.getWriter().println("{" + s + ":" + IOUtils.toString(request.getReader()).trim() + "}");
-        LogstashTimedSpeaker.INSTANCE.message("echo: " + s);
+        LogstashLogger.INSTANCE.message("echo: " + s);
         baseRequest.setHandled(true);
     }
 }

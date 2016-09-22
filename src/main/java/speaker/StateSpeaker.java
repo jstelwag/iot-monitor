@@ -24,7 +24,7 @@ public class StateSpeaker extends AbstractHandler {
             throws IOException, ServletException {
         int count = 0;
         for (HeatZone zone : Building.INSTANCE.zones) {
-            InfluxDBTimedSpeaker.INSTANCE.message(LineProtocolUtil.protocolLine(zone, "state"
+            FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(zone, "state"
                     , HeatingControl.INSTANCE.controlState.get(zone).peekLast().valve ? "1i" : "0i"));
             count++;
         }

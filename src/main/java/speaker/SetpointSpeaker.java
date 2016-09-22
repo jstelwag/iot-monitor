@@ -23,7 +23,7 @@ public class SetpointSpeaker extends AbstractHandler {
         int count = 0;
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
             RoomSetpoint setpoint = HeatingControl.INSTANCE.setpoints.get(controllableRoom);
-            InfluxDBTimedSpeaker.INSTANCE.message(LineProtocolUtil.protocolLine(controllableRoom, "setpoint", Double.toString(setpoint.getSetpoint())));
+            FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(controllableRoom, "setpoint", Double.toString(setpoint.getSetpoint())));
         }
         count++;
         System.out.println("Posted " + count + " setpoints to InfluxDB");

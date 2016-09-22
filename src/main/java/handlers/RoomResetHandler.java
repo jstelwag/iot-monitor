@@ -3,6 +3,7 @@ package handlers;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import speaker.KNXRoomReset;
+import speaker.LogstashLogger;
 import speaker.LogstashTimedSpeaker;
 
 import javax.servlet.ServletException;
@@ -19,7 +20,7 @@ public class RoomResetHandler extends AbstractHandler {
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         System.out.println("RoomReset request");
-        LogstashTimedSpeaker.INSTANCE.message("MasterController", "dispatch /roomreset request");
+        LogstashLogger.INSTANCE.message("dispatch /roomreset request");
         new KNXRoomReset().run();
 
         response.setContentType("application/json");

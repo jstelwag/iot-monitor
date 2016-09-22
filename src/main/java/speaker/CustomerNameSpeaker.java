@@ -21,9 +21,9 @@ public class CustomerNameSpeaker implements Runnable {
         for (Building.Room room : Building.Room.values()) {
             Booking booking =  HeatingControl.INSTANCE.occupiedNow.get(room);
             if (booking != null) {
-                InfluxDBTimedSpeaker.INSTANCE.message(LineProtocolUtil.protocolLine(booking.room, booking.name));
+                FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(booking.room, booking.name));
             } else {
-                InfluxDBTimedSpeaker.INSTANCE.message(LineProtocolUtil.protocolLine(room, "empty"));
+                FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(room, "empty"));
             }
         }
     }

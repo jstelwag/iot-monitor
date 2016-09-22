@@ -20,8 +20,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Booting");
-        LogstashTimedSpeaker.INSTANCE.message("MasterController", "start");
-        InfluxDBTimedSpeaker.INSTANCE.message("hello"); //make sure this starts in the main thread
+        LogstashLogger.INSTANCE.message("start");
+        //InfluxDBTimedSpeaker.INSTANCE.message("hello"); //make sure this starts in the main thread
         new Thread(new IoTListener(prop.iotPort)).start();
         try {
             //speed things up, I need booking information in order to control things
@@ -41,7 +41,7 @@ public class Main {
             httpServer.start();
             httpServer.join();
         } catch (Exception e) {
-            LogstashTimedSpeaker.INSTANCE.message("MasterController", "FATAL: failed to start http listeners " + e.toString());
+            LogstashLogger.INSTANCE.message("FATAL: failed to start http listeners " + e.toString());
             System.out.println(e.toString());
             System.exit(0);
         }
@@ -53,7 +53,7 @@ public class Main {
             try {
                 //hello
             } catch (RuntimeException e) {
-                LogstashTimedSpeaker.INSTANCE.message("MasterController", "ERROR: exception occurred at the regular speaker scheduling " + e.toString());
+                LogstashLogger.INSTANCE.message("ERROR: exception occurred at the regular speaker scheduling " + e.toString());
                 e.printStackTrace();
             }
         }

@@ -1,5 +1,6 @@
 package knx;
 
+import speaker.LogstashLogger;
 import speaker.LogstashTimedSpeaker;
 import tuwien.auto.calimero.CloseEvent;
 import tuwien.auto.calimero.FrameEvent;
@@ -16,7 +17,7 @@ public class KNXEventListener implements NetworkLinkListener {
     @Override
     public void indication(FrameEvent frameEvent) {
         if (!((CEMILData) frameEvent.getFrame()).getDestination().toString().startsWith("0")) {
-            LogstashTimedSpeaker.INSTANCE.message(frameEvent.getFrame().toString());
+            LogstashLogger.INSTANCE.message(frameEvent.getFrame().toString());
         }
     }
 

@@ -23,7 +23,7 @@ public class TemperatureSpeaker implements Runnable {
         if (!temperatures.isEmpty()) {
             System.out.println("UDP temperature post for " + group);
             for (ZoneTemperatureState state : temperatures) {
-                InfluxDBTimedSpeaker.INSTANCE.message(LineProtocolUtil.protocolLine(state.zone, "temperature", Double.toString(state.temperature)));
+                FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(state.zone, "temperature", Double.toString(state.temperature)));
             }
         }
     }

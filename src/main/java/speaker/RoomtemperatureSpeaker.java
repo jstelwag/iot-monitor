@@ -26,7 +26,7 @@ public class RoomtemperatureSpeaker extends AbstractHandler {
             RoomTemperatureState roomTemperatureState = HeatingControl.INSTANCE.roomTemperatureState.get(controllableRoom).peekLast();
             if (roomTemperatureState != null) {
                 if (!roomTemperatureState.isPosted) {
-                    InfluxDBTimedSpeaker.INSTANCE.message(LineProtocolUtil.protocolLine(controllableRoom, "temperature"
+                    FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(controllableRoom, "temperature"
                             , Double.toString(roomTemperatureState.temperature)));
                     roomTemperatureState.isPosted = true;
                     count++;
