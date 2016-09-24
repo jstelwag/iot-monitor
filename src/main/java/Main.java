@@ -81,7 +81,7 @@ public class Main {
         ContextHandler setpointContext = new ContextHandler("/setpointSpeaker");
         setpointContext.setHandler(new SetpointSpeaker());
         ContextHandler furnaceContext = new ContextHandler("/furnace");
-        setpointContext.setHandler(new FurnaceHandler());
+        furnaceContext.setHandler(new FurnaceHandler());
 
         ContextHandler echoContext = new ContextHandler("/echo");
         echoContext.setHandler(new EchoHandler());
