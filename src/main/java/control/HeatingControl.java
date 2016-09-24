@@ -100,4 +100,16 @@ public class HeatingControl {
 
         return retVal;
     }
+
+    public List<HeatZone.ValveGroup> valveGroupsByFurnace(Building.Furnace furnace) {
+        List<HeatZone.ValveGroup> retVal = new LinkedList<>();
+
+        for (HeatZone.ValveGroup group : HeatZone.ValveGroup.values()) {
+            if (furnace.equals(group.furnace)) {
+                retVal.add(group);
+            }
+        }
+
+        return retVal;
+    }
 }

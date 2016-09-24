@@ -17,9 +17,11 @@ public class ControlCalculator extends AbstractHandler {
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         System.out.println("Calculating state");
+
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
             double setpoint = HeatingControl.INSTANCE.setpoints.get(controllableRoom).getSetpoint();
             double roomTemperature = HeatingControl.INSTANCE.getRoomTemperature(controllableRoom);
+
             for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableRoom)) {
                 if (HeatingControl.INSTANCE.overrides.containsKey(zone)) {
                     HeatingControl.INSTANCE.controlState.get(zone).add(new ZoneState(zone, HeatingControl.INSTANCE.overrides.get(zone)));

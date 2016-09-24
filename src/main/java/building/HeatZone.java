@@ -1,5 +1,8 @@
 package building;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class HeatZone implements Comparable {
 
     public enum ValveGroup {
@@ -13,6 +16,7 @@ public class HeatZone implements Comparable {
         ValveGroup(Building.Furnace furnace) {this.furnace = furnace;}
         public final Building.Furnace furnace;
     }
+
     public enum Position {
         floor, wall, room, radiator
     }
