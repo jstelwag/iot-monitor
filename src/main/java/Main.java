@@ -88,7 +88,7 @@ public class Main {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext
-                , beds24Context, roomResetContext, roomTemperatureContext, controlContext
+                , beds24Context, roomResetContext, roomTemperatureContext, controlContext, furnaceContext
                 , stateSpeakerContext, roomTemperatureSpeakerContext, setpointContext, echoContext});
         return contexts;
     }

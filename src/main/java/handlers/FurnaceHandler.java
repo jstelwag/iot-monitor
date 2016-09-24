@@ -3,11 +3,9 @@ package handlers;
 import building.Building;
 import building.HeatZone;
 import control.HeatingControl;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import speaker.FluxLogger;
-import state.ZoneState;
 import util.LineProtocolUtil;
 
 import javax.servlet.ServletException;
@@ -21,6 +19,7 @@ import java.util.regex.Pattern;
  * Created by Jaap on 23-9-2016.
  */
 public class FurnaceHandler extends AbstractHandler {
+
     @Override
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
