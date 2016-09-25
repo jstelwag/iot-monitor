@@ -8,22 +8,22 @@ import java.util.List;
 
 public class LineProtocolUtil {
 
-    public static List<Double> temperatures(String line) {
-        List<Double> temperatures = new LinkedList<>();
+    public static List<Boolean> states(String line) {
+        List<Boolean> states = new LinkedList<>();
 
         boolean first = true;
         for (String piece : line.split(":")) {
             if (first) {
                 first = false;
             } else {
-                temperatures.add(Double.parseDouble(piece));
+                states.add(Boolean.parseBoolean(piece));
             }
         }
         // Last item is the checksum
-        if (!temperatures.isEmpty()) {
-            temperatures.remove(temperatures.size() - 1);
+        if (!states.isEmpty()) {
+            states.remove(states.size() - 1);
         }
-        return temperatures;
+        return states;
     }
 
     public static HeatZone.ValveGroup device(String line) {
