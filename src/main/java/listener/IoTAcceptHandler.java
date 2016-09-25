@@ -34,21 +34,12 @@ public class IoTAcceptHandler implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
             IoTRequestDispatcher dispatcher = new IoTRequestDispatcher(request.toString());
             if (dispatcher.isGroup()) {
-                if (dispatcher.hasSensors()) {
-                    new Thread(new TemperatureSpeaker(LineProtocolUtil.device(request.toString()))).start();
-                    System.out.print("IoT accept from slave bridge ");
-                    System.out.print(LineProtocolUtil.device(request.toString()) + ": ");
-                    System.out.print("==|" + request.toString() + "|==");
-                    out.println(dispatcher.actuatorsOut());
-                } else {
-                    //TODO create GroupisActiveSpeaker
-                    System.out.print("IoT accept from simple bridge ");
-                    System.out.print(LineProtocolUtil.device(request.toString()) + ": ");
-                    if (request.toString().split(":").length > 2) {
-                        System.out.println(request.toString().split(":")[1]);
-                    }
-                    out.println(dispatcher.actuatorsOut());
+                System.out.print("IoT accept from simple bridge ");
+                System.out.print(LineProtocolUtil.device(request.toString()) + ": ");
+                if (request.toString().split(":").length > 2) {
+                    System.out.println(request.toString().split(":")[1]);
                 }
+                out.println(dispatcher.actuatorsOut());
             } else {
                 LogstashLogger.INSTANCE.message("IoTAccept with unrecognized content " + dispatcher.lineIn);
                 System.out.println("Unrecognized IoT request: " + dispatcher.lineIn + "?");
