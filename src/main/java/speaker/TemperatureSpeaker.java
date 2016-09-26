@@ -22,8 +22,12 @@ public class TemperatureSpeaker implements Runnable {
         List<ZoneTemperatureState> temperatures = HeatingControl.INSTANCE.zoneTemperatureStateByGroup(group);
         if (!temperatures.isEmpty()) {
             System.out.println("UDP temperature post for " + group);
-            for (ZoneTemperatureState state : temperatures) {
-                FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(state.zone, "temperature", Double.toString(state.temperature)));
+            try (FluxLogger flux = new FluxLogger()) {
+                for (ZoneTemperatureState state : temperatures) {
+                    flux.message(LineProtocolUtil.protocolLine(state.zone, "temperature", Double.toString(state.temperature)));
+                }
+            } catch (IOException e) {
+                LogstashLogger.INSTANCE.message("ERROR: connection failure while logging temperatures " + e.getMessage());
             }
         }
     }

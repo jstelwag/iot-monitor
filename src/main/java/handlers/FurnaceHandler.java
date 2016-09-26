@@ -39,7 +39,9 @@ public class FurnaceHandler extends AbstractHandler {
                     }
                 }
             }
-            FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(furnace, "furnaceDesire", String.valueOf(furnaceDesire)));
+            try (FluxLogger flux = new FluxLogger()) {
+                flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceDesire", String.valueOf(furnaceDesire)));
+            }
             response.setStatus(HttpServletResponse.SC_OK);
             if (furnaceDesire > 2) {
                 response.getWriter().println("{\"furnace\"=\"ON\"}");

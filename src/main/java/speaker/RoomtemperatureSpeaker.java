@@ -22,14 +22,16 @@ public class RoomtemperatureSpeaker extends AbstractHandler {
             throws IOException, ServletException {
         int count = 0;
 
-        for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
-            RoomTemperatureState roomTemperatureState = HeatingControl.INSTANCE.roomTemperatureState.get(controllableRoom).peekLast();
-            if (roomTemperatureState != null) {
-                if (!roomTemperatureState.isPosted) {
-                    FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(controllableRoom, "temperature"
-                            , Double.toString(roomTemperatureState.temperature)));
-                    roomTemperatureState.isPosted = true;
-                    count++;
+        try (FluxLogger flux = new FluxLogger()) {
+            for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
+                RoomTemperatureState roomTemperatureState = HeatingControl.INSTANCE.roomTemperatureState.get(controllableRoom).peekLast();
+                if (roomTemperatureState != null) {
+                    if (!roomTemperatureState.isPosted) {
+                        flux.message(LineProtocolUtil.protocolLine(controllableRoom, "temperature"
+                                , Double.toString(roomTemperatureState.temperature)));
+                        roomTemperatureState.isPosted = true;
+                        count++;
+                    }
                 }
             }
         }

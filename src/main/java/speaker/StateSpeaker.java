@@ -23,10 +23,12 @@ public class StateSpeaker extends AbstractHandler {
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         int count = 0;
-        for (HeatZone zone : Building.INSTANCE.zones) {
-            FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(zone, "state"
-                    , HeatingControl.INSTANCE.controlState.get(zone).peekLast().valve ? "1i" : "0i"));
-            count++;
+        try (FluxLogger flux = new FluxLogger()) {
+            for (HeatZone zone : Building.INSTANCE.zones) {
+                flux.message(LineProtocolUtil.protocolLine(zone, "state"
+                        , HeatingControl.INSTANCE.controlState.get(zone).peekLast().valve ? "1i" : "0i"));
+                count++;
+            }
         }
         System.out.println("Posted " + count + " states to InfluxDB");
     }

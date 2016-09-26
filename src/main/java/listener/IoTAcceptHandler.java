@@ -2,8 +2,6 @@ package listener;
 
 import org.apache.commons.io.IOUtils;
 import speaker.LogstashLogger;
-import speaker.LogstashTimedSpeaker;
-import speaker.TemperatureSpeaker;
 import util.LineProtocolUtil;
 
 import java.io.*;
@@ -34,11 +32,7 @@ public class IoTAcceptHandler implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
             IoTRequestDispatcher dispatcher = new IoTRequestDispatcher(request.toString());
             if (dispatcher.isGroup()) {
-                System.out.print("IoT accept from simple bridge ");
-                System.out.print(LineProtocolUtil.device(request.toString()) + ": ");
-                if (request.toString().split(":").length > 2) {
-                    System.out.println(request.toString().split(":")[1]);
-                }
+                dispatcher.logState();
                 out.println(dispatcher.actuatorsOut());
             } else {
                 LogstashLogger.INSTANCE.message("IoTAccept with unrecognized content " + dispatcher.lineIn);

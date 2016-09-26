@@ -21,11 +21,13 @@ public class SetpointSpeaker extends AbstractHandler {
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         int count = 0;
-        for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
-            RoomSetpoint setpoint = HeatingControl.INSTANCE.setpoints.get(controllableRoom);
-            FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(controllableRoom, "setpoint", Double.toString(setpoint.getSetpoint())));
+        try (FluxLogger flux = new FluxLogger()) {
+            for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
+                RoomSetpoint setpoint = HeatingControl.INSTANCE.setpoints.get(controllableRoom);
+                flux.message(LineProtocolUtil.protocolLine(controllableRoom, "setpoint", Double.toString(setpoint.getSetpoint())));
+                count++;
+            }
         }
-        count++;
         System.out.println("Posted " + count + " setpoints to InfluxDB");
     }
 }

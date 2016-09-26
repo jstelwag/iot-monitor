@@ -18,13 +18,17 @@ public class CustomerNameSpeaker implements Runnable {
     @Override
     public void run() {
         System.out.println("Posting " +  HeatingControl.INSTANCE.occupiedNow.size() + " bookings to influx");
-        for (Building.Room room : Building.Room.values()) {
-            Booking booking =  HeatingControl.INSTANCE.occupiedNow.get(room);
-            if (booking != null) {
-                FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(booking.room, booking.name));
-            } else {
-                FluxLogger.INSTANCE.message(LineProtocolUtil.protocolLine(room, "empty"));
+        try (FluxLogger flux = new FluxLogger()) {
+            for (Building.Room room : Building.Room.values()) {
+                Booking booking = HeatingControl.INSTANCE.occupiedNow.get(room);
+                if (booking != null) {
+                    flux.message(LineProtocolUtil.protocolLine(booking.room, booking.name));
+                } else {
+                    flux.message(LineProtocolUtil.protocolLine(room, "empty"));
+                }
             }
+        } catch (IOException e) {
+            LogstashLogger.INSTANCE.message("ERROR: fail to post bookings to Influx " + e.getMessage());
         }
     }
 }
