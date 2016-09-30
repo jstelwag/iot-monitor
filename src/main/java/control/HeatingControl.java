@@ -24,6 +24,7 @@ public class HeatingControl {
     public final SortedMap<HeatZone, Boolean> overrides = new TreeMap<>();
     public final Map<Building.Room, Booking> occupiedNow = new HashMap<>();
     public final Map<Building.Room, Booking> occupiedTonight = new HashMap<>();
+    public final Map<Building.Furnace, ControlModulation> furnaceModulation = new HashMap<>();
 
     public KNXLink knxLink;
 
@@ -39,6 +40,9 @@ public class HeatingControl {
         }
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
             roomTemperatureState.put(controllableRoom, new FIFODeque<RoomTemperatureState>(DefaultZoneState.QUEUE_LENGTH));
+        }
+        for (Building.Furnace furnace : Building.Furnace.values()) {
+            furnaceModulation.put(furnace, new ControlModulation());
         }
 
         try {

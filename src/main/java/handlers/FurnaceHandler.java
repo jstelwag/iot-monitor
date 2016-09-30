@@ -39,14 +39,16 @@ public class FurnaceHandler extends AbstractHandler {
                     }
                 }
             }
-            try (FluxLogger flux = new FluxLogger()) {
-                flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceDesire", String.valueOf(furnaceDesire)));
-            }
             response.setStatus(HttpServletResponse.SC_OK);
-            if (furnaceDesire > 2) {
+            boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(furnace).control(furnaceDesire);
+            if (furnaceState) {
                 response.getWriter().println("{\"furnace\"=\"ON\"}");
             } else {
                 response.getWriter().println("{\"furnace\"=\"OFF\"}");
+            }
+            try (FluxLogger flux = new FluxLogger()) {
+                flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceDesire", Integer.toString(furnaceDesire)));
+                flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceState", furnaceState ? "1i" : "0i"));
             }
         } else {
             System.out.println("/furnace request: no furnace found " + s);
