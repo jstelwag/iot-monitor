@@ -19,11 +19,7 @@ public class ControlCalculator extends AbstractHandler {
         System.out.println("Calculating state");
 
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
-            double setpoint = TimeCorrectionSetpoint.correct(
-                    HeatingControl.INSTANCE.setpoints.get(controllableRoom).getSetpoint());
-            if (setpoint > 23) {
-                setpoint = 23.0;
-            }
+            double setpoint = HeatingControl.INSTANCE.setpoints.get(controllableRoom).getSetpoint();
             double roomTemperature = HeatingControl.INSTANCE.getRoomTemperature(controllableRoom);
 
             for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableRoom)) {
