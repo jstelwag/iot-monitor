@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import speaker.CustomerNameSpeaker;
 import speaker.LogstashLogger;
-import speaker.LogstashTimedSpeaker;
 import util.HeatingProperties;
 
 import java.io.IOException;

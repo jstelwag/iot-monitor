@@ -34,26 +34,11 @@ public class FluxLogger implements Closeable {
         }
     }
 
-    public FluxLogger send(String line) {
-        byte[] data = line.getBytes();
-        try {
-            DatagramPacket packet = new DatagramPacket(data, data.length, host, port);
-            socket.send(packet);
-        } catch (IOException e) {
-            LogstashLogger.INSTANCE.message("ERROR: for UDP connection " + socket.isConnected() + ", @"
-                    + host.getHostAddress() + ":" + port + ", socket " + socket.isBound());
-        }
-
-        return this;
-    }
-
     @Override
     public void close() throws IOException {
         if (socket != null)
             socket.close();
     }
-
-
 
     public void message(String line) {
         byte[] data = line.getBytes();

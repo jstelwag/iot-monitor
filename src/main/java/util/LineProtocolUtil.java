@@ -30,39 +30,6 @@ public class LineProtocolUtil {
         return HeatZone.ValveGroup.valueOf(line.split(":")[0]);
     }
 
-    public static Building.Furnace furnace(String line) {
-        return Building.Furnace.valueOf(line.split(":")[0]);
-    }
-
-    public static Building.Solar solar(String line) {
-        if (line.split(":")[0].startsWith("solar_")) {
- System.out.println("Gooi mij weg!");
-            return Building.Solar.valueOf(line.split(":")[0].substring(6));
-        }
-        return null;
-    }
-
-    public static boolean checksum(String line) {
-        boolean first = true;
-        int checksum = 0;
-        int last = 0;
-        for (String piece : line.split(":")) {
-            if (first) {
-                first = false;
-            } else {
-                last = (int)Double.parseDouble(piece);
-                checksum += last;
-            }
-        }
-        checksum -= last;
-
-        if (checksum != last) {
-            System.out.print(" (" + checksum + "!=" + last + ") ");
-            return false;
-        }
-        return true;
-    }
-
     public static String protocolLine(HeatZone zone, String type, String value) {
         StringBuilder retVal = new StringBuilder();
         if (zone.controllableRoom != null) {
