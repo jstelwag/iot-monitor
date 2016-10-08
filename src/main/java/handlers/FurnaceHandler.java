@@ -33,18 +33,31 @@ public class FurnaceHandler extends AbstractHandler {
             System.out.println("/furnace request: " + furnace);
             int furnaceDesire = 0;
             for (HeatZone.ValveGroup group : HeatingControl.INSTANCE.valveGroupsByFurnace(furnace)) {
-                for (HeatZone zone : Building.INSTANCE.zoneByGroup(group)) {
+                for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
                     if (HeatingControl.INSTANCE.controlState.get(zone).getLast().valve) {
                         furnaceDesire++;
                     }
                 }
             }
+
+            int pumpDesire = 0; // TODO refactor this for every pump
+            for (HeatZone zone : Building.INSTANCE.zonesByGroup(HeatZone.ValveGroup.koetshuis_kelder)) {
+                if (HeatingControl.INSTANCE.controlState.get(zone).getLast().valve) {
+                    pumpDesire++;
+                }
+            }
+
             response.setStatus(HttpServletResponse.SC_OK);
             boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(furnace).control(furnaceDesire);
             if (furnaceState) {
-                response.getWriter().println("{\"furnace\"=\"ON\"}");
+                response.getWriter().print("{\"furnace\"=\"ON\"");
             } else {
-                response.getWriter().println("{\"furnace\"=\"OFF\"}");
+                response.getWriter().print("{\"furnace\"=\"OFF\"");
+            }
+            if (pumpDesire >= 2) {
+                response.getWriter().println(",\"pump\"=\"ON\"}");
+            } else {
+                response.getWriter().println(",\"pump\"=\"OFF\"}");
             }
             try (FluxLogger flux = new FluxLogger()) {
                 flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceDesire", Integer.toString(furnaceDesire)));

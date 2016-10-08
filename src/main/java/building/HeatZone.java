@@ -1,8 +1,5 @@
 package building;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class HeatZone implements Comparable {
 
     public enum ValveGroup {

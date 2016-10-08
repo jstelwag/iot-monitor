@@ -39,7 +39,7 @@ class IoTRequestDispatcher {
     }
 
     public void logState() {
-        List<HeatZone> zones = Building.INSTANCE.zoneByGroup(group);
+        List<HeatZone> zones = Building.INSTANCE.zonesByGroup(group);
         List<Boolean> clientStates = LineProtocolUtil.states(lineIn);
 
         if (zones.size() == clientStates.size()) {

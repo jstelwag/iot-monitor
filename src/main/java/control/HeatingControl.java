@@ -55,7 +55,7 @@ public class HeatingControl {
 
     public List<ZoneState> zoneStateByGroup(HeatZone.ValveGroup group) {
         List<ZoneState> retVal = new LinkedList<>();
-        for (HeatZone zone : Building.INSTANCE.zoneByGroup(group)) {
+        for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
             retVal.add(controlState.get(zone).peekLast());
         }
         return retVal;
@@ -63,7 +63,7 @@ public class HeatingControl {
 
     public List<ZoneTemperatureState> zoneTemperatureStateByGroup(HeatZone.ValveGroup group) {
         List<ZoneTemperatureState> retVal = new LinkedList<>();
-        for (HeatZone zone : Building.INSTANCE.zoneByGroup(group)) {
+        for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
             // At start this map can be empty
             if (!zoneTemperatureState.get(zone).isEmpty()) {
                 retVal.add(zoneTemperatureState.get(zone).peekLast());

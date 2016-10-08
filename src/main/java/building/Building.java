@@ -112,7 +112,7 @@ public class Building {
         return null;
     }
 
-    public List<HeatZone> zoneByGroup(HeatZone.ValveGroup group) {
+    public List<HeatZone> zonesByGroup(HeatZone.ValveGroup group) {
         List<HeatZone> retVal = new ArrayList<>();
         for (HeatZone zone : zones) {
             if (zone.group == group) {
