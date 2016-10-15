@@ -37,6 +37,7 @@ public class LineProtocolUtil {
             if (zone.area != null) {
                 retVal.append(",area=").append(escape(zone.area));
             }
+            retVal.append(",sequence=").append(zone.groupSequence);
         } else {
             retVal.append(zone.group).append(",sequence=").append(zone.groupSequence).append('i');
         }
