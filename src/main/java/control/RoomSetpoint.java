@@ -38,11 +38,11 @@ public class RoomSetpoint implements Comparable {
             case 2:
                 return in - 3.0;
             case 3:
-                return in - 3.0;
-            case 4:
-                return in - 3.0;
-            case 5:
                 return in - 2.0;
+            case 4:
+                return in - 2.0;
+            case 5:
+                return in - 1.5;
             case 6:
                 return in - 1.0;
             case 7:

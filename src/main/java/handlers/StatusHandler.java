@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import retriever.Booking;
 import state.RoomTemperatureState;
 import state.ZoneState;
-import state.ZoneTemperatureState;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -53,11 +52,6 @@ public class StatusHandler extends AbstractHandler {
                 JSONObject zoneResponse = new JSONObject();
                 zoneResponse.put("zone", zone);
                 zones.put(zoneResponse);
-
-                ZoneTemperatureState zoneTemperatureState = HeatingControl.INSTANCE.zoneTemperatureState.get(zone).peekLast();
-                if (zoneTemperatureState != null) {
-                    zoneResponse.put("temperature", zoneTemperatureState.temperature);
-                }
 
                 ZoneState zoneState = HeatingControl.INSTANCE.controlState.get(zone).peekLast();
                 if (zoneState != null) {

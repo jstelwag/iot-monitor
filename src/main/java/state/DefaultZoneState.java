@@ -83,6 +83,23 @@ public class DefaultZoneState {
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_6, 5);
         retVal.get(zone).add(new ZoneState(zone, false));
 
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 0);
+        retVal.get(zone).add(new ZoneState(zone, true));
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 1);
+        retVal.get(zone).add(new ZoneState(zone, true));
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 2);
+        retVal.get(zone).add(new ZoneState(zone, true));
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 3);
+        retVal.get(zone).add(new ZoneState(zone, true));
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 4);
+        retVal.get(zone).add(new ZoneState(zone, false));
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 5);
+        retVal.get(zone).add(new ZoneState(zone, false));
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 6);
+        retVal.get(zone).add(new ZoneState(zone, false));
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 7);
+        retVal.get(zone).add(new ZoneState(zone, true));
+
         return retVal;
     }
 }

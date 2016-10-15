@@ -7,7 +7,6 @@ import retriever.Booking;
 import state.DefaultZoneState;
 import state.RoomTemperatureState;
 import state.ZoneState;
-import state.ZoneTemperatureState;
 import util.FIFODeque;
 
 import java.net.UnknownHostException;
@@ -18,7 +17,6 @@ public class HeatingControl {
     public final static HeatingControl INSTANCE = new HeatingControl();
 
     public final SortedMap<HeatZone, Deque<ZoneState>> controlState;
-    public final SortedMap<HeatZone, Deque<ZoneTemperatureState>> zoneTemperatureState = new TreeMap<>();
     public final SortedMap<Building.ControllableRoom, Deque<RoomTemperatureState>> roomTemperatureState = new TreeMap<>();
     public final SortedMap<Building.ControllableRoom, RoomSetpoint> setpoints;
     public final SortedMap<HeatZone, Boolean> overrides = new TreeMap<>();
@@ -35,9 +33,6 @@ public class HeatingControl {
         System.out.println("Initializing HeatingControl");
         controlState = DefaultZoneState.populate();
         setpoints = DefaultSetpoint.populate();
-        for (HeatZone zone : Building.INSTANCE.zones) {
-            zoneTemperatureState.put(zone, new FIFODeque<ZoneTemperatureState>(DefaultZoneState.QUEUE_LENGTH));
-        }
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
             roomTemperatureState.put(controllableRoom, new FIFODeque<RoomTemperatureState>(DefaultZoneState.QUEUE_LENGTH));
         }
@@ -57,17 +52,6 @@ public class HeatingControl {
         List<ZoneState> retVal = new LinkedList<>();
         for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
             retVal.add(controlState.get(zone).peekLast());
-        }
-        return retVal;
-    }
-
-    public List<ZoneTemperatureState> zoneTemperatureStateByGroup(HeatZone.ValveGroup group) {
-        List<ZoneTemperatureState> retVal = new LinkedList<>();
-        for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
-            // At start this map can be empty
-            if (!zoneTemperatureState.get(zone).isEmpty()) {
-                retVal.add(zoneTemperatureState.get(zone).peekLast());
-            }
         }
         return retVal;
     }

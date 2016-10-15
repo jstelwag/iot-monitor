@@ -14,12 +14,12 @@ import java.util.List;
 
 import static util.LineProtocolUtil.device;
 
-class IoTRequestDispatcher {
+public class IoTRequestDispatcher {
 
     String lineIn;
     private HeatZone.ValveGroup group = null;
 
-    IoTRequestDispatcher(String lineIn) {
+    public IoTRequestDispatcher(String lineIn) {
         if (StringUtils.isEmpty(lineIn)) {
             System.out.println("Empty request");
             this.lineIn = "empty:void";
@@ -34,7 +34,7 @@ class IoTRequestDispatcher {
         }
     }
 
-    boolean isGroup() {
+    public boolean isGroup() {
         return group != null;
     }
 

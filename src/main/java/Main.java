@@ -82,12 +82,14 @@ public class Main {
         setpointContext.setHandler(new SetpointSpeaker());
         ContextHandler furnaceContext = new ContextHandler("/furnace");
         furnaceContext.setHandler(new FurnaceHandler());
+        ContextHandler valveGroupContext = new ContextHandler("/valvegroup");
+        valveGroupContext.setHandler(new ValveGroupHandler());
 
         ContextHandler echoContext = new ContextHandler("/echo");
         echoContext.setHandler(new EchoHandler());
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
-        contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext
+        contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
                 , beds24Context, roomResetContext, roomTemperatureContext, controlContext, furnaceContext
                 , stateSpeakerContext, roomTemperatureSpeakerContext, setpointContext, echoContext});
         return contexts;

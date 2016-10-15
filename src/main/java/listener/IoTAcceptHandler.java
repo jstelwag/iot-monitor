@@ -2,7 +2,6 @@ package listener;
 
 import org.apache.commons.io.IOUtils;
 import speaker.LogstashLogger;
-import util.LineProtocolUtil;
 
 import java.io.*;
 import java.net.Socket;
