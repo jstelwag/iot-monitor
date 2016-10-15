@@ -8,7 +8,7 @@ public class HeatZone implements Comparable {
         koetshuis_trap_15R(Building.Furnace.koetshuis_kelder),
         koetshuis_trap_6(Building.Furnace.koetshuis_kelder),
         koetshuis_electric(null),
-        kasteel_zolder(Building.Furnace.kasteel_torenzolder);
+        kasteel_zolder(Building.Furnace.kasteel_zolder);
 
         ValveGroup(Building.Furnace furnace) {this.furnace = furnace;}
         public final Building.Furnace furnace;
