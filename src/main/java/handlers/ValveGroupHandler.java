@@ -4,6 +4,7 @@ import listener.IoTRequestDispatcher;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import speaker.LogstashLogger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +26,12 @@ public class ValveGroupHandler extends AbstractHandler {
             response.getWriter().println(dispatcher.actuatorsOut());
         } else {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            LogstashLogger.INSTANCE.message("ERROR: bad request received " + s);
         }
 
         baseRequest.setHandled(true);
+        if (dispatcher.isGroup()) {
+            dispatcher.logState();
+        }
     }
 }
