@@ -21,22 +21,13 @@ public class Building {
     public enum Furnace {
         koetshuis_kelder(Construction.koetshuis)
         , kasteel_torenkelder(Construction.kasteel)
-        , kasteel_torenzolder(Construction.kasteel)
+        , kasteel_zolder(Construction.kasteel)
         , kasteel_kelder(Construction.kasteel);
 
         Furnace(Construction construction) {
             this.construction = construction;
         }
 
-        public final Construction construction;
-    }
-
-    public enum Solar {
-        koetshuis(Construction.koetshuis);
-
-        Solar(Construction construction) {
-            this.construction = construction;
-        }
         public final Construction construction;
     }
 

@@ -66,6 +66,12 @@ public class Beds24BookingRetriever implements Runnable {
                     }
                 }
             }
+            //todo remove this
+            Building.Room myRoom = Building.Room.room_3;
+            Booking booking = new Booking("Jaap, Ling en Anna", new Date(), new Date(), myRoom);
+            HeatingControl.INSTANCE.occupiedNow.put(booking.room, booking);
+            HeatingControl.INSTANCE.occupiedTonight.put(booking.room, booking);
+
             HeatingControl.INSTANCE.hasUpdatedBookings = true;
             System.out.println("Retrieved " + response.length() + " bookings, " +  HeatingControl.INSTANCE.occupiedNow.size()
                     + " are occupiedNow and " +  HeatingControl.INSTANCE.occupiedTonight.size() + " rooms are booked for today");
