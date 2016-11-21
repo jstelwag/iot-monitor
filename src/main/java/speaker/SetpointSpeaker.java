@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 /**
  * Publishes the thermostat setpoints to InfluxDB
@@ -27,6 +28,8 @@ public class SetpointSpeaker extends AbstractHandler {
                 flux.message(LineProtocolUtil.protocolLine(controllableRoom, "setpoint", Double.toString(setpoint.getSetpoint())));
                 count++;
             }
+        } catch (UnknownHostException e) {
+            LogstashLogger.INSTANCE.message("ERROR: can't find InfluxDB for SetpointSpeaker " + e.getMessage());
         }
         System.out.println("Posted " + count + " setpoints to InfluxDB");
     }

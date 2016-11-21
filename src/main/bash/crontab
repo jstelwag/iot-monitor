@@ -4,11 +4,11 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 HOME=/home/pi
 
 0 3 * * * (iot-upgrade && sudo reboot) > $HOME/upgrade.log 2>&1
-*/10 * * * * curl localhost:8000/beds24/
-* * * * * curl localhost:8000/knxtemperatures/
-* * * * * curl localhost:8000/control/
-* * * * * curl localhost:8000/stateSpeaker/
-* * * * * curl localhost:8000/roomTemperatureSpeaker/
-* * * * * curl localhost:8000/setpointSpeaker/
+*/10 * * * * curl localhost:8000/beds24
+* * * * * curl localhost:8000/knxtemperatures
+* * * * * curl localhost:8000/control
+* * * * * curl localhost:8000/stateSpeaker
+* * * * * curl localhost:8000/roomTemperatureSpeaker
+* * * * * curl localhost:8000/setpointSpeaker
 
 # needs newline at the end

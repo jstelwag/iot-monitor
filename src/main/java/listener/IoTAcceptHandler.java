@@ -33,6 +33,9 @@ public class IoTAcceptHandler implements Runnable {
             if (dispatcher.isGroup()) {
                 dispatcher.logState();
                 out.println(dispatcher.actuatorsOut());
+            } else if (request.toString().startsWith("koetshuis_trap_15")) {
+                //TODO gooi weg
+                out.println("01010101010101018E");
             } else {
                 LogstashLogger.INSTANCE.message("IoTAccept with unrecognized content " + dispatcher.lineIn);
                 System.out.println("Unrecognized IoT request: " + dispatcher.lineIn + "?");
