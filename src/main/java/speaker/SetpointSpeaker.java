@@ -30,7 +30,15 @@ public class SetpointSpeaker extends AbstractHandler {
             }
         } catch (UnknownHostException e) {
             LogstashLogger.INSTANCE.message("ERROR: can't find InfluxDB for SetpointSpeaker " + e.getMessage());
+            response.setContentType("application/json");
+            response.getWriter().println("{\"status\"=\"ERROR\", \"message\"=\"" + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            baseRequest.setHandled(true);
         }
         System.out.println("Posted " + count + " setpoints to InfluxDB");
+        response.setContentType("application/json");
+        response.getWriter().println("{\"status\"=\"OK\", \"count\"=\"" + count + "\"}");
+        response.setStatus(HttpServletResponse.SC_OK);
+        baseRequest.setHandled(true);
     }
 }

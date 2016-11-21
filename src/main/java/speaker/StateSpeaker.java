@@ -31,5 +31,9 @@ public class StateSpeaker extends AbstractHandler {
             }
         }
         System.out.println("Posted " + count + " states to InfluxDB");
+        response.setContentType("application/json");
+        response.getWriter().println("{\"status\"=\"OK\", \"count\"=\"" + count + "\"}");
+        response.setStatus(HttpServletResponse.SC_OK);
+        baseRequest.setHandled(true);
     }
 }

@@ -36,5 +36,9 @@ public class RoomtemperatureSpeaker extends AbstractHandler {
             }
         }
         System.out.println("Posted " + count + " room temperatures to InfluxDB");
+        response.setContentType("application/json");
+        response.getWriter().println("{\"status\"=\"OK\", \"count\"=\"" + count + "\"}");
+        response.setStatus(HttpServletResponse.SC_OK);
+        baseRequest.setHandled(true);
     }
 }

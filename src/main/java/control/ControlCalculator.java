@@ -37,5 +37,9 @@ public class ControlCalculator extends AbstractHandler {
                 }
             }
         }
+        response.setContentType("application/json");
+        response.getWriter().println("{\"status\"=\"OK\"}");
+        response.setStatus(HttpServletResponse.SC_OK);
+        baseRequest.setHandled(true);
     }
 }
