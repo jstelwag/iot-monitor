@@ -64,6 +64,13 @@ public class IoTRequestDispatcher {
         for (ZoneState state : HeatingControl.INSTANCE.zoneStateByGroup(device(lineIn))) {
             response.append(state.valve ? "1" : "0");
         }
+        if (device(lineIn) == HeatZone.ValveGroup.koetshuis_trap_15) {
+            int requestLevel = 0;
+            for (ZoneState state : HeatingControl.INSTANCE.zoneStateByGroup(device(lineIn))) {
+                if (state.valve) requestLevel++;
+            }
+            response.append(requestLevel > 3 ? "1" : "0");
+        }
         response.append("E");
         return response.toString();
     }

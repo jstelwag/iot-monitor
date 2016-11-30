@@ -4,8 +4,7 @@ public class HeatZone implements Comparable {
 
     public enum ValveGroup {
         koetshuis_kelder(Building.Furnace.koetshuis_kelder),
-        koetshuis_trap_15L(Building.Furnace.koetshuis_kelder),
-        koetshuis_trap_15R(Building.Furnace.koetshuis_kelder),
+        koetshuis_trap_15(Building.Furnace.koetshuis_kelder),
         koetshuis_trap_6(Building.Furnace.koetshuis_kelder),
         koetshuis_electric(null),
         kasteel_zolder(Building.Furnace.kasteel_zolder);
