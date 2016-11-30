@@ -42,12 +42,15 @@ public class IoTRequestDispatcher {
         List<HeatZone> zones = Building.INSTANCE.zonesByGroup(group);
         List<Boolean> clientStates = LineProtocolUtil.states(lineIn);
 
-        if (zones.size() == clientStates.size()) {
+        if (zones.size() == clientStates.size()
+                || (group == HeatZone.ValveGroup.koetshuis_trap_15 && zones.size() + 1 == clientStates.size())) {
             try (FluxLogger flux = new FluxLogger()) {
                 for (int i = 0; i < zones.size(); i++) {
                     flux.message(LineProtocolUtil.protocolLine(zones.get(i), "clientState",
                             clientStates.get(i) ? "1i" : "0i"));
                 }
+
+                //TODO add logging of pump state
             } catch (IOException e) {
                 LogstashLogger.INSTANCE.message("ERROR: failed to log client state " + e.getMessage());
             }
