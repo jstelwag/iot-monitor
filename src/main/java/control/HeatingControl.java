@@ -100,4 +100,17 @@ public class HeatingControl {
 
         return retVal;
     }
+
+    /** @return the number of open zones in reach of given furnace */
+    public int furnaceDesire(Building.Furnace furnace) {
+        int furnaceDesire = 0;
+        for (HeatZone.ValveGroup group : HeatingControl.INSTANCE.valveGroupsByFurnace(furnace)) {
+            for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
+                if (HeatingControl.INSTANCE.controlState.get(zone).getLast().valve) {
+                    furnaceDesire++;
+                }
+            }
+        }
+        return furnaceDesire;
+    }
 }

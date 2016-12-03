@@ -68,11 +68,14 @@ public class IoTRequestDispatcher {
             response.append(state.valve ? "1" : "0");
         }
         if (device(lineIn) == HeatZone.ValveGroup.koetshuis_trap_15) {
-            int requestLevel = 0;
+            int pumpDesire = 0;
             for (ZoneState state : HeatingControl.INSTANCE.zoneStateByGroup(device(lineIn))) {
-                if (state.valve) requestLevel++;
+                if (state.valve) pumpDesire++;
             }
-            response.append(requestLevel > 3 ? "1" : "0");
+            int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(device(lineIn).furnace);
+            boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(device(lineIn).furnace).control(furnaceDesire);
+            response.append(furnaceState && pumpDesire >= 3 ? "1" : "0");
+            //TODO shut down pump as soon as furnace is in boiler mode
         }
         response.append("E");
         return response.toString();

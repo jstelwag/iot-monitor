@@ -31,14 +31,6 @@ public class FurnaceHandler extends AbstractHandler {
             String rawFurnace = matcher.group(1);
             Building.Furnace furnace = Building.Furnace.valueOf(rawFurnace);
             System.out.println("/furnace request: " + furnace);
-            int furnaceDesire = 0;
-            for (HeatZone.ValveGroup group : HeatingControl.INSTANCE.valveGroupsByFurnace(furnace)) {
-                for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
-                    if (HeatingControl.INSTANCE.controlState.get(zone).getLast().valve) {
-                        furnaceDesire++;
-                    }
-                }
-            }
 
             int pumpDesire = 0; // TODO refactor this for every pump
             for (HeatZone zone : Building.INSTANCE.zonesByGroup(HeatZone.ValveGroup.koetshuis_kelder)) {
@@ -48,6 +40,7 @@ public class FurnaceHandler extends AbstractHandler {
             }
 
             response.setStatus(HttpServletResponse.SC_OK);
+            int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(furnace);
             boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(furnace).control(furnaceDesire);
             if (furnaceState) {
                 response.getWriter().print("{\"furnace\"=\"ON\"");
