@@ -21,7 +21,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("Booting");
         LogstashLogger.INSTANCE.message("start");
-        //InfluxDBTimedSpeaker.INSTANCE.message("hello"); //make sure this starts in the main thread
         new Thread(new IoTListener(prop.iotPort)).start();
         try {
             //speed things up, I need booking information in order to control things

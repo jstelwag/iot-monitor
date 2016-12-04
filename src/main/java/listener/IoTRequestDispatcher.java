@@ -74,7 +74,7 @@ public class IoTRequestDispatcher {
             }
             int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(device(lineIn).furnace);
             boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(device(lineIn).furnace).control(furnaceDesire);
-            response.append(furnaceState && pumpDesire >= 3 ? "1" : "0");
+            response.append(furnaceState && pumpDesire >= 5 ? "1" : "0");
             //TODO shut down pump as soon as furnace is in boiler mode
         }
         response.append("E");
