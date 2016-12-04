@@ -7,7 +7,7 @@ import java.util.*;
 public class DefaultSetpoint {
 
     public final static double ROOM_OFF_SETPOINT = 15.0;
-    public final static double ROOM_ON_SETPOINT = 21.0;
+    public final static double ROOM_ON_SETPOINT = 20.0;
 
     public static SortedMap<Building.ControllableRoom, RoomSetpoint> populate() {
         SortedMap<Building.ControllableRoom, RoomSetpoint> retVal = new TreeMap<>();
@@ -18,10 +18,6 @@ public class DefaultSetpoint {
         retVal.get(Building.ControllableRoom.apartment_II_bedroom).setpoint = 19.0;
         retVal.get(Building.ControllableRoom.apartment_III_bathroom).setpoint = 19.0;
         retVal.get(Building.ControllableRoom.room_1).setpoint = 19.0;
-        retVal.get(Building.ControllableRoom.room_2_bathroom).setpoint = 20.0;
-        retVal.get(Building.ControllableRoom.room_3_bathroom).setpoint = 20.0;
-        retVal.get(Building.ControllableRoom.room_c).setpoint = 20.0;
-        retVal.get(Building.ControllableRoom.room_d).setpoint = 20.0;
 
         return retVal;
     }
