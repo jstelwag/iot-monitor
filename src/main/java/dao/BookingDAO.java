@@ -55,7 +55,7 @@ public class BookingDAO implements Closeable {
     }
 
     public boolean isOccupiedNow(Building.Room room) {
-        if (!jedis.exists(room + ".booking-current") || !"empty".equals(getNow(room))) {
+        if (!jedis.exists(room + ".booking-now") || !"empty".equals(getNow(room))) {
             return true;
         }
         return false;
