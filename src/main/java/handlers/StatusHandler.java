@@ -4,13 +4,13 @@ import building.Building;
 import building.HeatZone;
 import control.HeatingControl;
 import dao.SetpointDAO;
+import dao.TemperatureDAO;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import retriever.Booking;
-import state.RoomTemperatureState;
 import state.ZoneState;
 
 import javax.servlet.ServletException;
@@ -32,24 +32,24 @@ public class StatusHandler extends AbstractHandler {
         statusResponse.put("occupiedNow", new JSONArray());
         statusResponse.put("occupiedTonight", new JSONArray());
 
-        SetpointDAO dao = new SetpointDAO();
+        SetpointDAO setpoints = new SetpointDAO();
+        TemperatureDAO temperatures = new TemperatureDAO();
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
             JSONObject roomResponse = new JSONObject();
             statusResponse.getJSONArray("rooms").put(roomResponse);
             roomResponse.put("controllableRoom", controllableRoom);
-            roomResponse.put("setpoint", dao.get(controllableRoom));
-            if (dao.getUser(controllableRoom) != null) {
-                roomResponse.put("setpoint-user", dao.getUser(controllableRoom));
+            roomResponse.put("setpoint", setpoints.get(controllableRoom));
+            if (setpoints.getUser(controllableRoom) != null) {
+                roomResponse.put("setpoint-user", setpoints.getUser(controllableRoom));
             }
-            if (dao.getKnx(controllableRoom) != null) {
-                roomResponse.put("setpoint-knx", dao.getKnx(controllableRoom));
+            if (setpoints.getKnx(controllableRoom) != null) {
+                roomResponse.put("setpoint-knx", setpoints.getKnx(controllableRoom));
             }
-            roomResponse.put("setpoint-default", dao.getDefault(controllableRoom));
-            roomResponse.put("active", dao.isActive(controllableRoom));
+            roomResponse.put("setpoint-default", setpoints.getDefault(controllableRoom));
+            roomResponse.put("active", setpoints.isActive(controllableRoom));
 
-            RoomTemperatureState roomTemperatureState = HeatingControl.INSTANCE.roomTemperatureState.get(controllableRoom).peekLast();
-            if (roomTemperatureState != null) {
-                roomResponse.put("temperature", roomTemperatureState.temperature);
+            if (temperatures.getActual(controllableRoom) != null) {
+                roomResponse.put("temperature", temperatures.getActual(controllableRoom));
             }
 
             JSONArray zones = new JSONArray();
@@ -74,7 +74,8 @@ public class StatusHandler extends AbstractHandler {
                 zoneResponse.put("override", HeatingControl.INSTANCE.overrides.get(zone));
             }
         }
-        IOUtils.closeQuietly(dao);
+        IOUtils.closeQuietly(setpoints);
+        IOUtils.closeQuietly(temperatures);
 
         for (Building.Room room : Building.Room.values()) {
             Booking occupied = HeatingControl.INSTANCE.occupiedNow.get(room);

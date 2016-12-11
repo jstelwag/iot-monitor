@@ -1,10 +1,9 @@
 package speaker;
 
 import building.Building;
-import control.HeatingControl;
+import dao.TemperatureDAO;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import state.RoomTemperatureState;
 import util.LineProtocolUtil;
 
 import javax.servlet.ServletException;
@@ -22,16 +21,13 @@ public class RoomtemperatureSpeaker extends AbstractHandler {
             throws IOException, ServletException {
         int count = 0;
 
-        try (FluxLogger flux = new FluxLogger()) {
+        try (FluxLogger flux = new FluxLogger(); TemperatureDAO temperatures = new TemperatureDAO()) {
             for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
-                RoomTemperatureState roomTemperatureState = HeatingControl.INSTANCE.roomTemperatureState.get(controllableRoom).peekLast();
-                if (roomTemperatureState != null) {
-                    if (!roomTemperatureState.isPosted) {
-                        flux.message(LineProtocolUtil.protocolLine(controllableRoom, "temperature"
-                                , Double.toString(roomTemperatureState.temperature)));
-                        roomTemperatureState.isPosted = true;
-                        count++;
-                    }
+                Double temperature = temperatures.getActual(controllableRoom);
+                if (temperature != null) {
+                    flux.message(LineProtocolUtil.protocolLine(controllableRoom, "temperature"
+                            , Double.toString(temperature)));
+                    count++;
                 }
             }
         }

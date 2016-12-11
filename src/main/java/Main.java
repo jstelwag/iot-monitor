@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ErrorHandler;
 import retriever.Beds24BookingRetriever;
+import retriever.KNXRoomTemperatures;
 import speaker.*;
 import util.HeatingProperties;
 
@@ -61,6 +62,8 @@ public class Main {
             }
         } else if ("setpoints".equals(args[0])) {
             new SetpointSpeaker().run();
+        } else if ("knxtemperatures".equals(args[0])) {
+            new KNXRoomTemperatures().run();
         }
     }
 
@@ -75,8 +78,6 @@ public class Main {
         beds24Context.setHandler(new Beds24Handler());
         ContextHandler roomResetContext = new ContextHandler("/roomreset");
         roomResetContext.setHandler(new RoomResetHandler());
-        ContextHandler roomTemperatureContext = new ContextHandler("/knxtemperatures");
-        roomTemperatureContext.setHandler(new RoomTemperatureHandler());
         ContextHandler controlContext = new ContextHandler("/control");
         controlContext.setHandler(new ControlCalculator());
         ContextHandler stateSpeakerContext = new ContextHandler("/stateSpeaker");
@@ -93,7 +94,7 @@ public class Main {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
-                , beds24Context, roomResetContext, roomTemperatureContext, controlContext, furnaceContext
+                , beds24Context, roomResetContext, controlContext, furnaceContext
                 , stateSpeakerContext, roomTemperatureSpeakerContext, echoContext});
         return contexts;
     }
