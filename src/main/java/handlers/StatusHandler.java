@@ -77,15 +77,18 @@ public class StatusHandler extends AbstractHandler {
 
         BookingDAO bookings = new BookingDAO();
         for (Building.Room room : Building.Room.values()) {
-            JSONObject bookingNow = new JSONObject();
-            statusResponse.getJSONArray("occupiedNow").put(bookingNow);
-            bookingNow.put("name", bookings.getNow(room));
-            bookingNow.put("room", room);
-
-            JSONObject bookingTonight = new JSONObject();
-            statusResponse.getJSONArray("occupiedTonight").put(bookingTonight);
-            bookingTonight.put("name", bookings.getTonight(room));
-            bookingTonight.put("room", room);
+            if (bookings.isOccupiedNow(room)) {
+                JSONObject bookingNow = new JSONObject();
+                statusResponse.getJSONArray("occupiedNow").put(bookingNow);
+                bookingNow.put("name", bookings.getNow(room));
+                bookingNow.put("room", room);
+            }
+            if (bookings.isOccupiedTonight(room)) {
+                JSONObject bookingTonight = new JSONObject();
+                statusResponse.getJSONArray("occupiedTonight").put(bookingTonight);
+                bookingTonight.put("name", bookings.getTonight(room));
+                bookingTonight.put("room", room);
+            }
         }
         IOUtils.closeQuietly(bookings);
 

@@ -37,6 +37,8 @@ public class Beds24BookingRetriever implements Runnable {
 
     void requestBeds24() {
         String responseBody = null;
+        List<Building.Room> roomsNow = new ArrayList<>();
+        List<Building.Room> roomsTonight = new ArrayList<>();
         try (BookingDAO bookings = new BookingDAO()) {
             responseBody = Request.Post("https://www.beds24.com/api/json/getBookings")
                     .version(HttpVersion.HTTP_1_1)
@@ -56,9 +58,11 @@ public class Beds24BookingRetriever implements Runnable {
 
                         if (booking.isOccupied()) {
                             bookings.setNow(room, name);
+                            roomsNow.add(room);
                         }
                         if (booking.isBookedToday()) {
                             bookings.setTonight(room, name);
+                            roomsNow.add(room);
                         }
                         if (booking.isBookedTomorrow()) {
                             bookings.setTomorrow(room, name);
@@ -67,6 +71,15 @@ public class Beds24BookingRetriever implements Runnable {
                         LogstashLogger.INSTANCE.message("ERROR, unknown room id " + bedsBooking.toString(1));
                         System.out.println("ERROR, unknown room id " + bedsBooking.toString(1));
                     }
+                }
+            }
+
+            for (Building.Room room : Building.Room.values()) {
+                if (!roomsNow.contains(room)) {
+                    bookings.setNow(room, null);
+                }
+                if (!roomsTonight.contains(room)) {
+                    bookings.setTonight(room, null);
                 }
             }
             //todo remove this
