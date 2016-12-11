@@ -1,7 +1,6 @@
 package retriever;
 
 import building.Building;
-import control.HeatingControl;
 import dao.BookingDAO;
 import dao.SetpointDAO;
 import org.apache.commons.io.IOUtils;
@@ -36,6 +35,7 @@ public class Beds24BookingRetriever implements Runnable {
     }
 
     void requestBeds24() {
+        System.out.println("Retrieving bed24");
         String responseBody = null;
         List<Building.Room> roomsNow = new ArrayList<>();
         List<Building.Room> roomsTonight = new ArrayList<>();
@@ -62,7 +62,7 @@ public class Beds24BookingRetriever implements Runnable {
                         }
                         if (booking.isBookedToday()) {
                             bookings.setTonight(room, name);
-                            roomsNow.add(room);
+                            roomsTonight.add(room);
                         }
                         if (booking.isBookedTomorrow()) {
                             bookings.setTomorrow(room, name);
