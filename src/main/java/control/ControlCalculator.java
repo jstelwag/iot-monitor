@@ -6,19 +6,11 @@ import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-public class ControlCalculator extends AbstractHandler {
+public class ControlCalculator implements Runnable {
 
     @Override
-    public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    public void run() {
         System.out.println("Calculating state");
 
         SetpointDAO setpoints = new SetpointDAO();
@@ -46,10 +38,5 @@ public class ControlCalculator extends AbstractHandler {
         IOUtils.closeQuietly(setpoints);
         IOUtils.closeQuietly(temperatures);
         IOUtils.closeQuietly(zoneStates);
-
-        response.setContentType("application/json");
-        response.getWriter().println("{\"status\"=\"OK\"}");
-        response.setStatus(HttpServletResponse.SC_OK);
-        baseRequest.setHandled(true);
     }
 }
