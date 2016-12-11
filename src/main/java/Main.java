@@ -19,42 +19,48 @@ public class Main {
     static final HeatingProperties prop = new HeatingProperties();
 
     public static void main(String[] args) throws IOException {
-        System.out.println("Booting");
-        LogstashLogger.INSTANCE.message("start");
-        new Thread(new IoTListener(prop.iotPort)).start();
-        try {
-            //speed things up, I need booking information in order to control things
-            new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
 
-        Server httpServer = new Server(prop.masterPort);
-        httpServer.setHandler(contexts());
-        removeHeaders(httpServer);
-        ErrorHandler errorHandler = new ErrorHandler();
-        errorHandler.setShowStacks(true);
-        httpServer.addBean(errorHandler);
-
-        try {
-            httpServer.start();
-            httpServer.join();
-        } catch (Exception e) {
-            LogstashLogger.INSTANCE.message("FATAL: failed to start http listeners " + e.toString());
-            System.out.println(e.toString());
-            System.exit(0);
-        }
-
-        while (true) {
+        if (args.length == 0) {
+            System.out.println("Booting Http server");
+            LogstashLogger.INSTANCE.message("start");
+            new Thread(new IoTListener(prop.iotPort)).start();
             try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {}
-            try {
-                //hello
+                //speed things up, I need booking information in order to control things
+                new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
             } catch (RuntimeException e) {
-                LogstashLogger.INSTANCE.message("ERROR: exception occurred at the regular speaker scheduling " + e.toString());
                 e.printStackTrace();
             }
+
+            Server httpServer = new Server(prop.masterPort);
+            httpServer.setHandler(contexts());
+            removeHeaders(httpServer);
+            ErrorHandler errorHandler = new ErrorHandler();
+            errorHandler.setShowStacks(true);
+            httpServer.addBean(errorHandler);
+
+            try {
+                httpServer.start();
+                httpServer.join();
+            } catch (Exception e) {
+                LogstashLogger.INSTANCE.message("FATAL: failed to start http listeners " + e.toString());
+                System.out.println(e.toString());
+                System.exit(0);
+            }
+
+            while (true) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                }
+                try {
+                    //hello
+                } catch (RuntimeException e) {
+                    LogstashLogger.INSTANCE.message("ERROR: exception occurred at the regular speaker scheduling " + e.toString());
+                    e.printStackTrace();
+                }
+            }
+        } else if ("setpoints".equals(args[0])) {
+            new SetpointSpeaker().run();
         }
     }
 
@@ -77,8 +83,6 @@ public class Main {
         stateSpeakerContext.setHandler(new StateSpeaker());
         ContextHandler roomTemperatureSpeakerContext = new ContextHandler("/roomTemperatureSpeaker");
         roomTemperatureSpeakerContext.setHandler(new RoomtemperatureSpeaker());
-        ContextHandler setpointContext = new ContextHandler("/setpointSpeaker");
-        setpointContext.setHandler(new SetpointSpeaker());
         ContextHandler furnaceContext = new ContextHandler("/furnace");
         furnaceContext.setHandler(new FurnaceHandler());
         ContextHandler valveGroupContext = new ContextHandler("/valvegroup");
@@ -90,7 +94,7 @@ public class Main {
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
                 , beds24Context, roomResetContext, roomTemperatureContext, controlContext, furnaceContext
-                , stateSpeakerContext, roomTemperatureSpeakerContext, setpointContext, echoContext});
+                , stateSpeakerContext, roomTemperatureSpeakerContext, echoContext});
         return contexts;
     }
 

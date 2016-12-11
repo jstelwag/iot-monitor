@@ -9,6 +9,6 @@ HOME=/home/pi
 * * * * * curl localhost:8000/control/
 * * * * * curl localhost:8000/stateSpeaker/
 * * * * * curl localhost:8000/roomTemperatureSpeaker/
-* * * * * curl localhost:8000/setpointSpeaker/
+* * * * * iot-runtime setpoint
 
 # needs newline at the end
