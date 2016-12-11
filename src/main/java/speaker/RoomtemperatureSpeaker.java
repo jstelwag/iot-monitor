@@ -2,23 +2,17 @@ package speaker;
 
 import building.Building;
 import dao.TemperatureDAO;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 import util.LineProtocolUtil;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * Publishes the controllableRoom temperature to InfluxDB
  */
-public class RoomtemperatureSpeaker extends AbstractHandler {
+public class RoomtemperatureSpeaker implements Runnable {
 
     @Override
-    public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    public void run() {
         int count = 0;
 
         try (FluxLogger flux = new FluxLogger(); TemperatureDAO temperatures = new TemperatureDAO()) {
@@ -30,11 +24,9 @@ public class RoomtemperatureSpeaker extends AbstractHandler {
                     count++;
                 }
             }
+        } catch (IOException e) {
+            LogstashLogger.INSTANCE.message("ERROR: failed logging temperatures " + e.getMessage());
         }
         System.out.println("Posted " + count + " room temperatures to InfluxDB");
-        response.setContentType("application/json");
-        response.getWriter().println("{\"status\"=\"OK\", \"count\"=\"" + count + "\"}");
-        response.setStatus(HttpServletResponse.SC_OK);
-        baseRequest.setHandled(true);
     }
 }

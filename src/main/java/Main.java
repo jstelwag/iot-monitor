@@ -6,7 +6,6 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ErrorHandler;
 import retriever.Beds24BookingRetriever;
-import retriever.KNXRoomTemperatures;
 import speaker.*;
 import util.HeatingProperties;
 
@@ -62,9 +61,10 @@ public class Main {
             }
         } else if ("setpoints".equals(args[0])) {
             new SetpointSpeaker().run();
-        } else if ("knxtemperatures".equals(args[0])) {
-            new KNXRoomTemperatures().run();
+        } else if ("fluxtemperatures".equals(args[0])) {
+            new RoomtemperatureSpeaker().run();
         }
+
     }
 
     private static ContextHandlerCollection contexts() {
@@ -82,20 +82,20 @@ public class Main {
         controlContext.setHandler(new ControlCalculator());
         ContextHandler stateSpeakerContext = new ContextHandler("/stateSpeaker");
         stateSpeakerContext.setHandler(new StateSpeaker());
-        ContextHandler roomTemperatureSpeakerContext = new ContextHandler("/roomTemperatureSpeaker");
-        roomTemperatureSpeakerContext.setHandler(new RoomtemperatureSpeaker());
         ContextHandler furnaceContext = new ContextHandler("/furnace");
         furnaceContext.setHandler(new FurnaceHandler());
         ContextHandler valveGroupContext = new ContextHandler("/valvegroup");
         valveGroupContext.setHandler(new ValveGroupHandler());
+        ContextHandler knxtemperatures = new ContextHandler("/knxtemperatures");
+        knxtemperatures.setHandler(new RoomTemperatureHandler());
 
         ContextHandler echoContext = new ContextHandler("/echo");
         echoContext.setHandler(new EchoHandler());
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
-                , beds24Context, roomResetContext, controlContext, furnaceContext
-                , stateSpeakerContext, roomTemperatureSpeakerContext, echoContext});
+                , beds24Context, roomResetContext, controlContext, furnaceContext, knxtemperatures
+                , stateSpeakerContext, echoContext});
         return contexts;
     }
 

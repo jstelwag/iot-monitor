@@ -5,10 +5,10 @@ HOME=/home/pi
 
 0 3 * * * (iot-upgrade && sudo reboot) > $HOME/upgrade.log 2>&1
 */10 * * * * curl localhost:8000/beds24/
-* * * * * iot-runtime knxtemperatures >> $HOME/runtime.log 2>&1
+* * * * * curl localhost:8000/knxtemperatures/
 * * * * * curl localhost:8000/control/
 * * * * * curl localhost:8000/stateSpeaker/
-* * * * * curl localhost:8000/roomTemperatureSpeaker/
+* * * * * iot-runtime fluxtemperatures >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime setpoints >> $HOME/runtime.log 2>&1
 
 # needs newline at the end
