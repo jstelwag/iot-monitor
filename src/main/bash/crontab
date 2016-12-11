@@ -5,6 +5,7 @@ HOME=/home/pi
 
 0 3 * * * (iot-upgrade && sudo reboot) > $HOME/upgrade.log 2>&1
 */10 * * * * curl localhost:8000/beds24/
+*/10 * * * * iot-runtime customerspeaker >> $HOME/runtime.log 2>&1
 * * * * * curl localhost:8000/knxtemperatures/
 * * * * * iot-runtime control >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime statespeaker >> $HOME/runtime.log 2>&1
