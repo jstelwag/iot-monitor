@@ -2,38 +2,30 @@ package speaker;
 
 import building.Building;
 import building.HeatZone;
-import control.HeatingControl;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
+import dao.HeatZoneStateDAO;
 import util.LineProtocolUtil;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Posts the ZoneState to Influx.
+ * Posts the HEatZone state to Influx.
  *
  * Run me periodically.
  */
-public class StateSpeaker extends AbstractHandler {
+public class StateSpeaker implements Runnable {
 
     @Override
-    public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+    public void run() {
         int count = 0;
-        try (FluxLogger flux = new FluxLogger()) {
+        try (FluxLogger flux = new FluxLogger(); HeatZoneStateDAO zoneStates = new HeatZoneStateDAO()) {
             for (HeatZone zone : Building.INSTANCE.zones) {
                 flux.message(LineProtocolUtil.protocolLine(zone, "state"
-                        , HeatingControl.INSTANCE.controlState.get(zone).peekLast().valve ? "1i" : "0i"));
+                        , zoneStates.get(zone) ? "1i" : "0i"));
                 count++;
             }
+        } catch (IOException e) {
+            LogstashLogger.INSTANCE.message("ERROR: sending state data to influx " + e.getMessage());
         }
         System.out.println("Posted " + count + " states to InfluxDB");
-        response.setContentType("application/json");
-        response.getWriter().println("{\"status\"=\"OK\", \"count\"=\"" + count + "\"}");
-        response.setStatus(HttpServletResponse.SC_OK);
-        baseRequest.setHandled(true);
     }
 }

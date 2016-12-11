@@ -53,7 +53,7 @@ public class HeatZone implements Comparable {
     }
 
     @Override
-    public String toString() {
+        public String toString() {
         return group + "." + groupSequence + (controllableRoom != null ? " " + controllableRoom : "") + (area != null ? " " + area : "");
     }
 

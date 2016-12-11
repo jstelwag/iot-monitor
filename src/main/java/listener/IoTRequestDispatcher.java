@@ -3,10 +3,11 @@ package listener;
 import building.Building;
 import building.HeatZone;
 import control.HeatingControl;
+import dao.HeatZoneStateDAO;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import speaker.FluxLogger;
 import speaker.LogstashLogger;
-import state.ZoneState;
 import util.LineProtocolUtil;
 
 import java.io.IOException;
@@ -64,13 +65,16 @@ public class IoTRequestDispatcher {
 
     public String actuatorsOut() {
         StringBuilder response = new StringBuilder();
-        for (ZoneState state : HeatingControl.INSTANCE.zoneStateByGroup(device(lineIn))) {
-            response.append(state.valve ? "1" : "0");
+
+        HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
+        for (HeatZone zone : Building.INSTANCE.zonesByGroup(device(lineIn))) {
+            response.append(zoneStates.get(zone) ? "1" : "0");
         }
+
         if (device(lineIn) == HeatZone.ValveGroup.koetshuis_trap_15) {
             int pumpDesire = 0;
-            for (ZoneState state : HeatingControl.INSTANCE.zoneStateByGroup(device(lineIn))) {
-                if (state.valve) pumpDesire++;
+            for (HeatZone zone : Building.INSTANCE.zonesByGroup(device(lineIn))) {
+                if (zoneStates.get(zone)) pumpDesire++;
             }
             int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(device(lineIn).furnace);
             boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(device(lineIn).furnace).control(furnaceDesire);
@@ -78,6 +82,7 @@ public class IoTRequestDispatcher {
             //TODO shut down pump as soon as furnace is in boiler mode
         }
         response.append("E");
+        IOUtils.closeQuietly(zoneStates);
         return response.toString();
     }
 }

@@ -63,6 +63,8 @@ public class Main {
             new SetpointSpeaker().run();
         } else if ("fluxtemperatures".equals(args[0])) {
             new RoomtemperatureSpeaker().run();
+        } else if ("statespeaker".equals(args[0])) {
+            new StateSpeaker().run();
         }
 
     }
@@ -80,8 +82,6 @@ public class Main {
         roomResetContext.setHandler(new RoomResetHandler());
         ContextHandler controlContext = new ContextHandler("/control");
         controlContext.setHandler(new ControlCalculator());
-        ContextHandler stateSpeakerContext = new ContextHandler("/stateSpeaker");
-        stateSpeakerContext.setHandler(new StateSpeaker());
         ContextHandler furnaceContext = new ContextHandler("/furnace");
         furnaceContext.setHandler(new FurnaceHandler());
         ContextHandler valveGroupContext = new ContextHandler("/valvegroup");
@@ -95,7 +95,7 @@ public class Main {
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
                 , beds24Context, roomResetContext, controlContext, furnaceContext, knxtemperatures
-                , stateSpeakerContext, echoContext});
+                , echoContext});
         return contexts;
     }
 

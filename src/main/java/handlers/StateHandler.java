@@ -1,12 +1,13 @@
 package handlers;
 
+import building.Building;
 import building.HeatZone;
-import control.HeatingControl;
+import dao.HeatZoneStateDAO;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import state.ZoneState;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,15 +25,21 @@ public class StateHandler extends AbstractHandler {
         System.out.println("State request");
         JSONArray stateResponse = new JSONArray();
 
+        HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
         for (HeatZone.ValveGroup group : HeatZone.ValveGroup.values()) {
             JSONObject groupsResponse = new JSONObject();
             stateResponse.put(groupsResponse);
             groupsResponse.put("name", group);
             groupsResponse.put("states", new JSONArray());
-            for (ZoneState state : HeatingControl.INSTANCE.zoneStateByGroup(group)) {
+            for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
+                JSONObject state = new JSONObject();
+                state.put("sequence", zone.groupSequence);
+                state.put("value", zoneStates.get(zone));
                 groupsResponse.getJSONArray("states").put(state);
             }
         }
+        IOUtils.closeQuietly(zoneStates);
+
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(new JSONObject().put("state", stateResponse).toString(2));

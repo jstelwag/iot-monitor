@@ -7,7 +7,7 @@ HOME=/home/pi
 */10 * * * * curl localhost:8000/beds24/
 * * * * * curl localhost:8000/knxtemperatures/
 * * * * * curl localhost:8000/control/
-* * * * * curl localhost:8000/stateSpeaker/
+* * * * * iot-runtime statespeaker >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime fluxtemperatures >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime setpoints >> $HOME/runtime.log 2>&1
 

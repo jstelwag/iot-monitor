@@ -1,105 +1,133 @@
-package state;
+package dao;
 
 import building.Building;
 import building.HeatZone;
-import util.FIFODeque;
+import redis.clients.jedis.Jedis;
 
-import java.util.*;
+import java.io.Closeable;
+import java.io.IOException;
 
-public class DefaultZoneState {
+/**
+ * Created by Jaap on 11-12-2016.
+ */
+public class HeatZoneStateDAO implements Closeable {
+    private final Jedis jedis;
 
-    public final static int QUEUE_LENGTH = 30;
+    final int TTL = 120;
 
-    public static SortedMap<HeatZone, Deque<ZoneState>> populate() {
-        SortedMap<HeatZone, Deque<ZoneState>> retVal = new TreeMap<>();
-        Building building = Building.INSTANCE;
+    public HeatZoneStateDAO() {
+        jedis = new Jedis("localhost");
+    }
 
-        for (HeatZone zone : building.zones) {
-            retVal.put(zone, new FIFODeque<ZoneState>(QUEUE_LENGTH));
+    public boolean get(HeatZone zone) {
+        if (jedis.exists(jedis.get(zone.group + "." + zone.groupSequence + ".state"))) {
+            return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state"));
         }
+        return getDefault(zone);
+    }
 
+    public boolean getDefault(HeatZone zone) {
+        return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-default"));
+    }
+
+    public HeatZoneStateDAO set(HeatZone zone, boolean state) {
+        jedis.setex(zone.group + "." + zone.groupSequence + ".state", TTL, state ? "T" : "F");
+        return this;
+    }
+
+    public HeatZoneStateDAO setDefault(HeatZone zone, boolean state) {
+        jedis.set(zone.group + "." + zone.groupSequence + ".state-default", state ? "T" : "F");
+        return this;
+    }
+
+    public HeatZoneStateDAO populateDefault() {
         HeatZone zone;
+        Building building = Building.INSTANCE;
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_kelder, 0);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_kelder, 1);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_kelder, 2);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_kelder, 3);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_kelder, 4);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_kelder, 5);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_kelder, 6);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_kelder, 7);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_kelder, 8);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
 
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 0);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 1);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 2);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 3);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 4);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 5);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 6);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 7);
-        retVal.get(zone).add(new ZoneState(zone, true));
-
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 8);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 9);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 10);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 11);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 12);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 13);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_15, 14);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
 
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_6, 0);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_6, 1);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_6, 2);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_6, 3);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_6, 4);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.koetshuis_trap_6, 5);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
 
         zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 0);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 1);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 2);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 3);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
         zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 4);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 5);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 6);
-        retVal.get(zone).add(new ZoneState(zone, false));
+        setDefault(zone, false);
         zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 7);
-        retVal.get(zone).add(new ZoneState(zone, true));
+        setDefault(zone, true);
 
-        return retVal;
+        return this;
+    }
+
+    @Override
+    public void close() throws IOException {
+        jedis.close();
     }
 }

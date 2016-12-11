@@ -143,7 +143,6 @@ public class Building {
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 5, true, ControllableRoom.room_d, HeatZone.Position.floor, "bathroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 6, false, ControllableRoom.room_c, HeatZone.Position.wall)); //todo not determined, must be wrong
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 7, false, ControllableRoom.room_d, HeatZone.Position.floor, "bedroom"));
-
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 8, false, ControllableRoom.apartment_III_bathroom, HeatZone.Position.wall, "small bedroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 9, false, ControllableRoom.room_c, HeatZone.Position.wall)); //todo seems OK
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 10, true, ControllableRoom.apartment_III_bathroom, HeatZone.Position.wall, "master bedroom"));

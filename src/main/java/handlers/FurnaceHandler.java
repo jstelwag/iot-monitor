@@ -3,6 +3,8 @@ package handlers;
 import building.Building;
 import building.HeatZone;
 import control.HeatingControl;
+import dao.HeatZoneStateDAO;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import speaker.FluxLogger;
@@ -33,11 +35,13 @@ public class FurnaceHandler extends AbstractHandler {
             System.out.println("/furnace request: " + furnace);
 
             int pumpDesire = 0; // TODO refactor this for every pump
+            HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
             for (HeatZone zone : Building.INSTANCE.zonesByGroup(HeatZone.ValveGroup.koetshuis_kelder)) {
-                if (HeatingControl.INSTANCE.controlState.get(zone).getLast().valve) {
+                if (zoneStates.get(zone)) {
                     pumpDesire++;
                 }
             }
+            IOUtils.closeQuietly(zoneStates);
 
             response.setStatus(HttpServletResponse.SC_OK);
             int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(furnace);

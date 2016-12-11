@@ -2,12 +2,11 @@ package control;
 
 import building.Building;
 import building.HeatZone;
+import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import knx.KNXLink;
 import org.apache.commons.io.IOUtils;
 import retriever.Booking;
-import state.DefaultZoneState;
-import state.ZoneState;
 
 import java.net.UnknownHostException;
 import java.util.*;
@@ -16,7 +15,6 @@ public class HeatingControl {
 
     public final static HeatingControl INSTANCE = new HeatingControl();
 
-    public final SortedMap<HeatZone, Deque<ZoneState>> controlState;
     public final SortedMap<HeatZone, Boolean> overrides = new TreeMap<>();
     public final Map<Building.Room, Booking> occupiedNow = new HashMap<>();
     public final Map<Building.Room, Booking> occupiedTonight = new HashMap<>();
@@ -29,7 +27,7 @@ public class HeatingControl {
     private HeatingControl() {
         occupiedNow.clear();
         System.out.println("Initializing HeatingControl");
-        controlState = DefaultZoneState.populate();
+        IOUtils.closeQuietly(new HeatZoneStateDAO().populateDefault());
         IOUtils.closeQuietly(new SetpointDAO().populateDefault());
         for (Building.Furnace furnace : Building.Furnace.values()) {
             furnaceModulation.put(furnace, new ControlModulation());
@@ -41,14 +39,6 @@ public class HeatingControl {
             System.out.println("Failed to setup KNX link");
             e.printStackTrace();
         }
-    }
-
-    public List<ZoneState> zoneStateByGroup(HeatZone.ValveGroup group) {
-        List<ZoneState> retVal = new LinkedList<>();
-        for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
-            retVal.add(controlState.get(zone).peekLast());
-        }
-        return retVal;
     }
 
     public List<HeatZone> overridesByRoom(Building.ControllableRoom room) {
@@ -77,13 +67,13 @@ public class HeatingControl {
     /** @return the number of open zones in reach of given furnace */
     public int furnaceDesire(Building.Furnace furnace) {
         int furnaceDesire = 0;
+        HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
         for (HeatZone.ValveGroup group : HeatingControl.INSTANCE.valveGroupsByFurnace(furnace)) {
             for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
-                if (HeatingControl.INSTANCE.controlState.get(zone).getLast().valve) {
-                    furnaceDesire++;
-                }
+                if (zoneStates.get(zone)) furnaceDesire++;
             }
         }
+        IOUtils.closeQuietly(zoneStates);
         return furnaceDesire;
     }
 }

@@ -3,6 +3,7 @@ package handlers;
 import building.Building;
 import building.HeatZone;
 import control.HeatingControl;
+import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
 import org.apache.commons.io.IOUtils;
@@ -11,7 +12,6 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import retriever.Booking;
-import state.ZoneState;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +34,7 @@ public class StatusHandler extends AbstractHandler {
 
         SetpointDAO setpoints = new SetpointDAO();
         TemperatureDAO temperatures = new TemperatureDAO();
+        HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
             JSONObject roomResponse = new JSONObject();
             statusResponse.getJSONArray("rooms").put(roomResponse);
@@ -57,12 +58,8 @@ public class StatusHandler extends AbstractHandler {
             for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableRoom)) {
                 JSONObject zoneResponse = new JSONObject();
                 zoneResponse.put("zone", zone);
+                zoneResponse.put("state", zoneStates.get(zone));
                 zones.put(zoneResponse);
-
-                ZoneState zoneState = HeatingControl.INSTANCE.controlState.get(zone).peekLast();
-                if (zoneState != null) {
-                    zoneResponse.put("state", zoneState.valve);
-                }
             }
 
             JSONArray overrides = new JSONArray();
@@ -76,6 +73,7 @@ public class StatusHandler extends AbstractHandler {
         }
         IOUtils.closeQuietly(setpoints);
         IOUtils.closeQuietly(temperatures);
+        IOUtils.closeQuietly(zoneStates);
 
         for (Building.Room room : Building.Room.values()) {
             Booking occupied = HeatingControl.INSTANCE.occupiedNow.get(room);
