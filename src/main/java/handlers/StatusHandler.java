@@ -3,7 +3,8 @@ package handlers;
 import building.Building;
 import building.HeatZone;
 import control.HeatingControl;
-import control.RoomSetpoint;
+import dao.SetpointDAO;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
@@ -31,15 +32,20 @@ public class StatusHandler extends AbstractHandler {
         statusResponse.put("occupiedNow", new JSONArray());
         statusResponse.put("occupiedTonight", new JSONArray());
 
+        SetpointDAO dao = new SetpointDAO();
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
             JSONObject roomResponse = new JSONObject();
             statusResponse.getJSONArray("rooms").put(roomResponse);
             roomResponse.put("controllableRoom", controllableRoom);
-
-            RoomSetpoint setpoint = HeatingControl.INSTANCE.setpoints.get(controllableRoom);
-            if (setpoint != null) {
-                roomResponse.put("setpoint", setpoint.getSetpoint());
+            roomResponse.put("setpoint", dao.get(controllableRoom));
+            if (dao.getUser(controllableRoom) != null) {
+                roomResponse.put("setpoint-user", dao.getUser(controllableRoom));
             }
+            if (dao.getKnx(controllableRoom) != null) {
+                roomResponse.put("setpoint-knx", dao.getKnx(controllableRoom));
+            }
+            roomResponse.put("setpoint-default", dao.getDefault(controllableRoom));
+            roomResponse.put("active", dao.isActive(controllableRoom));
 
             RoomTemperatureState roomTemperatureState = HeatingControl.INSTANCE.roomTemperatureState.get(controllableRoom).peekLast();
             if (roomTemperatureState != null) {
@@ -68,6 +74,7 @@ public class StatusHandler extends AbstractHandler {
                 zoneResponse.put("override", HeatingControl.INSTANCE.overrides.get(zone));
             }
         }
+        IOUtils.closeQuietly(dao);
 
         for (Building.Room room : Building.Room.values()) {
             Booking occupied = HeatingControl.INSTANCE.occupiedNow.get(room);

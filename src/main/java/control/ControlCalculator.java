@@ -2,6 +2,8 @@ package control;
 
 import building.Building;
 import building.HeatZone;
+import dao.SetpointDAO;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import state.ZoneState;
@@ -18,8 +20,9 @@ public class ControlCalculator extends AbstractHandler {
             throws IOException, ServletException {
         System.out.println("Calculating state");
 
+        SetpointDAO dao = new SetpointDAO();
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
-            double setpoint = HeatingControl.INSTANCE.setpoints.get(controllableRoom).getSetpoint();
+            double setpoint = dao.get(controllableRoom);
             double roomTemperature = HeatingControl.INSTANCE.getRoomTemperature(controllableRoom);
 
             for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableRoom)) {
@@ -37,6 +40,8 @@ public class ControlCalculator extends AbstractHandler {
                 }
             }
         }
+        IOUtils.closeQuietly(dao);
+
         response.setContentType("application/json");
         response.getWriter().println("{\"status\"=\"OK\"}");
         response.setStatus(HttpServletResponse.SC_OK);

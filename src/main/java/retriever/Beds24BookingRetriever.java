@@ -2,6 +2,8 @@ package retriever;
 
 import building.Building;
 import control.HeatingControl;
+import dao.SetpointDAO;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.http.HttpVersion;
@@ -90,17 +92,19 @@ public class Beds24BookingRetriever implements Runnable {
     void updateSetpoints() {
         Date now = new Date();
         Date heatingOffTime = DateUtils.addHours(HeatingProperties.checkoutTime(now), -2);
+        SetpointDAO dao = new SetpointDAO();
         for (Building.Room room : Building.Room.values()) {
             List<Building.ControllableRoom> rooms = Building.INSTANCE.findRooms(room);
             for (Building.ControllableRoom controlRoom : rooms) {
                 if (HeatingControl.INSTANCE.occupiedTonight.containsKey(room)) {
-                    HeatingControl.INSTANCE.setRoomActive(controlRoom, true);
+                    dao.setActive(controlRoom, true);
                 } else if (HeatingControl.INSTANCE.occupiedNow.containsKey(room) && now.before(heatingOffTime)) {
-                    HeatingControl.INSTANCE.setRoomActive(controlRoom, true);
+                    dao.setActive(controlRoom, true);
                 } else {
-                    HeatingControl.INSTANCE.setRoomActive(controlRoom, false);
+                    dao.setActive(controlRoom, false);
                 }
             }
         }
+        IOUtils.closeQuietly(dao);
     }
 }

@@ -3,6 +3,8 @@ package handlers;
 import building.Building;
 import building.HeatZone;
 import control.HeatingControl;
+import dao.SetpointDAO;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -45,18 +47,20 @@ public class RestHandler extends AbstractHandler {
         Pattern pattern = Pattern.compile(Pattern.quote("rest/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(lineIn + "/");
+        SetpointDAO dao = new SetpointDAO();
         if (matcher.find()) {
             System.out.println("/rest request for " + room);
             if ("toggle".equals(matcher.group(2))) {
-                HeatingControl.INSTANCE.setRoomActive(room, null);
-                out.println("Toggled room " + room + " to " + HeatingControl.INSTANCE.setpoints.get(room).isActive);
+                dao.setActive(room, !dao.isActive(room));
+                out.println("Toggled room " + room + " to " + dao.isActive(room));
             } else {
-                HeatingControl.INSTANCE.setRoomActive(room, "on".equals(matcher.group(2)));
-                out.println("Switched room " + room + " " + "on".equals(matcher.group(2)));
+                dao.setActive(room, "on".equals(matcher.group(2)));
+                out.println("Switched room " + room + " " + matcher.group(2));
             }
         } else {
             out.println(lineIn + "?");
         }
+        IOUtils.closeQuietly(dao);
     }
 
     /** /rest/valvegroup/sequence/on|off|remove/ */

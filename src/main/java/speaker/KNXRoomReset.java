@@ -1,8 +1,9 @@
 package speaker;
 
 import building.Building;
-import control.DefaultSetpoint;
 import control.HeatingControl;
+import dao.SetpointDAO;
+import org.apache.commons.io.IOUtils;
 import tuwien.auto.calimero.exception.KNXException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 
@@ -17,6 +18,7 @@ public class KNXRoomReset implements Runnable {
     public void run() {
 
         int setpointCount = 0, allOffCount = 0;
+        SetpointDAO dao = new SetpointDAO();
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
 
@@ -24,12 +26,12 @@ public class KNXRoomReset implements Runnable {
                 for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
                     if (!HeatingControl.INSTANCE.occupiedNow.containsKey(controllableRoom)) {
                         if (controllableRoom.setpoint != null) {
-                            pc.write(controllableRoom.setpoint, (float) DefaultSetpoint.populate().get(controllableRoom).setpoint, false);
+                            //pc.write(controllableRoom.setpoint, (float) DefaultSetpoint.populate().get(controllableRoom).setpoint, false);
                             setpointCount++;
                             System.out.println("-- " + controllableRoom);
                         } else System.out.println("++ " + controllableRoom);
                     }
-                    if (!HeatingControl.INSTANCE.setpoints.get(controllableRoom).isActive) {
+                    if (!dao.isActive(controllableRoom)) {
                         if (controllableRoom.allOffButton != null) {
                             pc.write(controllableRoom.allOffButton, false);
                             allOffCount++;
@@ -42,6 +44,8 @@ public class KNXRoomReset implements Runnable {
             System.out.println("error " + e);
             e.printStackTrace();
             HeatingControl.INSTANCE.knxLink.close();
+        } finally {
+            IOUtils.closeQuietly(dao);
         }
     }
 }
