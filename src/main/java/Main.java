@@ -67,8 +67,11 @@ public class Main {
             new StateSpeaker().run();
         } else if ("control".equals(args[0])) {
             new ControlCalculator().run();
+        } else if ("customerspeaker".equals(args[0])) {
+            new CustomerNameSpeaker().run();
+        } else if ("beds24".equals(args[0])) {
+            new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
         }
-
     }
 
     private static ContextHandlerCollection contexts() {
@@ -78,8 +81,6 @@ public class Main {
         statusContext.setHandler(new StatusHandler());
         ContextHandler restContext = new ContextHandler("/rest");
         restContext.setHandler(new RestHandler());
-        ContextHandler beds24Context = new ContextHandler("/beds24");
-        beds24Context.setHandler(new Beds24Handler());
         ContextHandler roomResetContext = new ContextHandler("/roomreset");
         roomResetContext.setHandler(new RoomResetHandler());
         ContextHandler furnaceContext = new ContextHandler("/furnace");
@@ -94,7 +95,7 @@ public class Main {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
-                , beds24Context, roomResetContext, furnaceContext, knxtemperatures
+                , roomResetContext, furnaceContext, knxtemperatures
                 , echoContext});
         return contexts;
     }

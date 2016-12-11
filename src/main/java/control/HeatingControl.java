@@ -6,7 +6,6 @@ import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import knx.KNXLink;
 import org.apache.commons.io.IOUtils;
-import retriever.Booking;
 
 import java.net.UnknownHostException;
 import java.util.*;
@@ -16,8 +15,6 @@ public class HeatingControl {
     public final static HeatingControl INSTANCE = new HeatingControl();
 
     public final SortedMap<HeatZone, Boolean> overrides = new TreeMap<>();
-    public final Map<Building.Room, Booking> occupiedNow = new HashMap<>();
-    public final Map<Building.Room, Booking> occupiedTonight = new HashMap<>();
     public final Map<Building.Furnace, ControlModulation> furnaceModulation = new HashMap<>();
 
     public KNXLink knxLink;
@@ -25,8 +22,6 @@ public class HeatingControl {
     public boolean hasUpdatedBookings = false;
 
     private HeatingControl() {
-        occupiedNow.clear();
-        System.out.println("Initializing HeatingControl");
         IOUtils.closeQuietly(new HeatZoneStateDAO().populateDefault());
         IOUtils.closeQuietly(new SetpointDAO().populateDefault());
         for (Building.Furnace furnace : Building.Furnace.values()) {

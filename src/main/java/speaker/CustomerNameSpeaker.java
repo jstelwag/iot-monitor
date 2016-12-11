@@ -1,8 +1,7 @@
 package speaker;
 
 import building.Building;
-import control.HeatingControl;
-import retriever.Booking;
+import dao.BookingDAO;
 import util.LineProtocolUtil;
 
 import java.io.IOException;
@@ -17,15 +16,10 @@ public class CustomerNameSpeaker implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Posting " +  HeatingControl.INSTANCE.occupiedNow.size() + " bookings to influx");
-        try (FluxLogger flux = new FluxLogger()) {
+        System.out.println("Posting bookings to influx");
+        try (FluxLogger flux = new FluxLogger(); BookingDAO bookings = new BookingDAO()) {
             for (Building.Room room : Building.Room.values()) {
-                Booking booking = HeatingControl.INSTANCE.occupiedNow.get(room);
-                if (booking != null) {
-                    flux.message(LineProtocolUtil.protocolLine(booking.room, booking.name));
-                } else {
-                    flux.message(LineProtocolUtil.protocolLine(room, "empty"));
-                }
+                flux.message(LineProtocolUtil.protocolLine(room, bookings.getNow(room)));
             }
         } catch (IOException e) {
             LogstashLogger.INSTANCE.message("ERROR: fail to post bookings to Influx " + e.getMessage());

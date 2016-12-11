@@ -3,6 +3,7 @@ package handlers;
 import building.Building;
 import building.HeatZone;
 import control.HeatingControl;
+import dao.BookingDAO;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
@@ -11,7 +12,6 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import retriever.Booking;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -75,22 +75,20 @@ public class StatusHandler extends AbstractHandler {
         IOUtils.closeQuietly(temperatures);
         IOUtils.closeQuietly(zoneStates);
 
+        BookingDAO bookings = new BookingDAO();
         for (Building.Room room : Building.Room.values()) {
-            Booking occupied = HeatingControl.INSTANCE.occupiedNow.get(room);
-            if (occupied != null) {
-                JSONObject booking = new JSONObject();
-                statusResponse.getJSONArray("occupiedNow").put(booking);
-                booking.put("name", occupied.name);
-                booking.put("room", occupied.room);
-            }
-            Booking booked = HeatingControl.INSTANCE.occupiedTonight.get(room);
-            if (booked != null) {
-                JSONObject booking = new JSONObject();
-                statusResponse.getJSONArray("occupiedTonight").put(booking);
-                booking.put("name", booked.name);
-                booking.put("room", booked.room);
-            }
+            JSONObject bookingNow = new JSONObject();
+            statusResponse.getJSONArray("occupiedNow").put(bookingNow);
+            bookingNow.put("name", bookings.getNow(room));
+            bookingNow.put("room", room);
+
+            JSONObject bookingTonight = new JSONObject();
+            statusResponse.getJSONArray("occupiedTonight").put(bookingTonight);
+            bookingTonight.put("name", bookings.getTonight(room));
+            bookingTonight.put("room", room);
         }
+        IOUtils.closeQuietly(bookings);
+
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(new JSONObject().put("status", statusResponse).toString(2));

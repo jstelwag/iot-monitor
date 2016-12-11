@@ -124,7 +124,6 @@ public class Building {
     }
 
     void makeZoneMap() {
-        System.out.println("Drawing the heat zone plan");
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 0, true, ControllableRoom.room_a, HeatZone.Position.floor, "bed- and bathroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 1, false, ControllableRoom.apartment_I, HeatZone.Position.floor, "kitchen"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 2, false, ControllableRoom.room_a, HeatZone.Position.wall, "west wall")); //todo: wrong?
