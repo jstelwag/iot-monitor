@@ -20,7 +20,7 @@ public class HeatZoneStateDAO implements Closeable {
     }
 
     public boolean get(HeatZone zone) {
-        if (jedis.exists(jedis.get(zone.group + "." + zone.groupSequence + ".state"))) {
+        if (jedis.exists(zone.group + "." + zone.groupSequence + ".state")) {
             return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state"));
         }
         return getDefault(zone);
