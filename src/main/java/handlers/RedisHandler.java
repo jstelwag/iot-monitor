@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class RedisHandler extends AbstractHandler {
     @Override
-    public void handle(String s, Request request, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException, ServletException {
+    public void handle(String s, Request request, HttpServletRequest httpServletRequest, HttpServletResponse response) throws IOException, ServletException {
         System.out.println("Redis request");
 
         Jedis jedis = new Jedis("localhost");
@@ -29,5 +29,9 @@ public class RedisHandler extends AbstractHandler {
         }
 
         IOUtils.closeQuietly(jedis);
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().println(new JSONObject().put("status", redisResponse).toString(2));
+        request.setHandled(true);
     }
 }
