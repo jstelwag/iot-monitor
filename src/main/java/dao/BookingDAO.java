@@ -2,6 +2,7 @@ package dao;
 
 import building.Building;
 import redis.clients.jedis.Jedis;
+import speaker.LogstashLogger;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -13,7 +14,7 @@ public class BookingDAO implements Closeable {
 
     private final Jedis jedis;
 
-    final int TTL_BOOKINGS = 60*30;
+    private final int TTL_BOOKINGS = 60*30;
 
     public BookingDAO() {
         jedis = new Jedis("localhost");
@@ -55,17 +56,19 @@ public class BookingDAO implements Closeable {
     }
 
     public boolean isOccupiedNow(Building.Room room) {
-        if (!jedis.exists(room + ".booking-now") || !"empty".equals(getNow(room))) {
+        if (!jedis.exists(room + ".booking-now")) {
+            LogstashLogger.INSTANCE.message("WARNING: " + room + ".booking-now is not available in Redis");
             return true;
         }
-        return false;
+        return !"empty".equals(getNow(room));
     }
 
     public boolean isOccupiedTonight(Building.Room room) {
-        if (!jedis.exists(room + ".booking-tonight") || !"empty".equals(getTonight(room))) {
+        if (!jedis.exists(room + ".booking-tonight")) {
+            LogstashLogger.INSTANCE.message("WARNING: " + room + ".booking-tonight is not available in Redis");
             return true;
         }
-        return false;
+        return !"empty".equals(getTonight(room));
     }
 
     @Override
