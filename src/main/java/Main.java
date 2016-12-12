@@ -22,14 +22,7 @@ public class Main {
 
         if (args.length == 0) {
             System.out.println("Booting Http server");
-            LogstashLogger.INSTANCE.message("start");
-            new Thread(new IoTListener(prop.iotPort)).start();
-            try {
-                //speed things up, I need booking information in order to control things
-                new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
+            LogstashLogger.INSTANCE.message("start http");
 
             Server httpServer = new Server(prop.masterPort);
             httpServer.setHandler(contexts());
@@ -71,6 +64,9 @@ public class Main {
             new CustomerNameSpeaker().run();
         } else if ("beds24".equals(args[0])) {
             new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
+        } else if ("iot".equals(args[0])) {
+            LogstashLogger.INSTANCE.message("start iot");
+            new IoTListener(prop.iotPort).run();
         }
     }
 
