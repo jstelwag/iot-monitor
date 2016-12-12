@@ -25,10 +25,12 @@ echo "[program:http_monitor]" >> supervisord.conf
 echo "command=/usr/local/bin/iot-runtime" >> supervisord.conf
 echo "redirect_stderr=true" >> supervisord.conf
 echo "stdout_logfile=/var/log/iot-monitor.log" >> supervisord.conf
+echo "process_name=http-monitor" >> supervisord.conf
 echo "[program:iot_monitor]" >> supervisord.conf
 echo "command=/usr/local/bin/iot-runtime iot" >> supervisord.conf
 echo "redirect_stderr=true" >> supervisord.conf
 echo "stdout_logfile=/var/log/iot-monitor.log" >> supervisord.conf
+echo "process_name=iot-monitor" >> supervisord.conf
 
 sudo mv supervisord.conf /etc
 

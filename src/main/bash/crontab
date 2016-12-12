@@ -4,7 +4,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 HOME=/home/pi
 
 0 3 * * * (iot-upgrade && sudo reboot) > $HOME/upgrade.log 2>&1
-*/10 * * * * curl localhost:8000/beds24/
+*/10 * * * * iot-runtime beds24 >> $HOME/runtime.log 2>&1
 */10 * * * * iot-runtime customerspeaker >> $HOME/runtime.log 2>&1
 * * * * * curl localhost:8000/knxtemperatures/
 * * * * * iot-runtime control >> $HOME/runtime.log 2>&1
