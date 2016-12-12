@@ -2,6 +2,7 @@ package dao;
 
 import building.Building;
 import redis.clients.jedis.Jedis;
+import speaker.LogstashLogger;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -67,7 +68,11 @@ public class SetpointDAO implements Closeable {
     }
 
     public boolean isActive(Building.ControllableRoom room) {
-        return !jedis.exists(room + ".active") || "T".equals(jedis.get(room + ".active"));
+        if (!jedis.exists(room + ".active")) {
+            LogstashLogger.INSTANCE.message("WARNING " + room + ".active not available in Redis");
+            return true;
+        }
+        return "T".equals(jedis.get(room + ".active"));
     }
 
     public SetpointDAO setActive(Building.ControllableRoom room, boolean active) {

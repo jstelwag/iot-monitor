@@ -1,4 +1,5 @@
 import control.ControlCalculator;
+import control.Setpoint;
 import handlers.*;
 import listener.IoTListener;
 import org.eclipse.jetty.server.*;
@@ -18,8 +19,10 @@ public class Main {
         HeatingProperties prop = new HeatingProperties();
         if (args.length == 0) {
             startHttp(prop.masterPort);
-        } else if ("setpoints".equals(args[0])) {
+        } else if ("setpointspeaker".equals(args[0])) {
             new SetpointSpeaker().run();
+        } else if ("setpoint".equals(args[0])) {
+            new Setpoint().run();
         } else if ("fluxtemperatures".equals(args[0])) {
             new RoomtemperatureSpeaker().run();
         } else if ("statespeaker".equals(args[0])) {

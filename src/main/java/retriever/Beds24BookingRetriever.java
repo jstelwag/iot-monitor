@@ -2,8 +2,6 @@ package retriever;
 
 import building.Building;
 import dao.BookingDAO;
-import dao.SetpointDAO;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.http.HttpVersion;
@@ -12,7 +10,6 @@ import org.apache.http.entity.ContentType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import speaker.LogstashLogger;
-import util.HeatingProperties;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,11 +27,6 @@ public class Beds24BookingRetriever implements Runnable {
 
     @Override
     public void run() {
-        requestBeds24();
-        updateSetpoints();
-    }
-
-    void requestBeds24() {
         System.out.println("Retrieving bed24");
         String responseBody = null;
         List<Building.Room> roomsNow = new ArrayList<>();
@@ -91,30 +83,5 @@ public class Beds24BookingRetriever implements Runnable {
             System.out.println("Unexpected response from beds24: " + responseBody);
             LogstashLogger.INSTANCE.message("ERROR: Unexpected response from beds24: " + responseBody);
         }
-    }
-
-    /**
-     * If a room is unused, turn off the heating
-     * When the room is occupied tonight or it is still 2 hours before checkout, the heating should be switched on
-     */
-    void updateSetpoints() {
-        Date now = new Date();
-        Date heatingOffTime = DateUtils.addHours(HeatingProperties.checkoutTime(now), -2);
-        SetpointDAO setpoints = new SetpointDAO();
-        BookingDAO bookings = new BookingDAO();
-        for (Building.Room room : Building.Room.values()) {
-            List<Building.ControllableRoom> rooms = Building.INSTANCE.findRooms(room);
-            for (Building.ControllableRoom controlRoom : rooms) {
-                if (bookings.isOccupiedTonight(room)) {
-                    setpoints.setActive(controlRoom, true);
-                } else if (bookings.isOccupiedNow(room) && now.before(heatingOffTime)) {
-                    setpoints.setActive(controlRoom, true);
-                } else {
-                    setpoints.setActive(controlRoom, false);
-                }
-            }
-        }
-        IOUtils.closeQuietly(setpoints);
-        IOUtils.closeQuietly(bookings);
     }
 }
