@@ -35,6 +35,7 @@ public class StatusHandler extends AbstractHandler {
         SetpointDAO setpoints = new SetpointDAO();
         TemperatureDAO temperatures = new TemperatureDAO();
         HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
+        BookingDAO bookings = new BookingDAO();
         for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
             JSONObject roomResponse = new JSONObject();
             statusResponse.getJSONArray("rooms").put(roomResponse);
@@ -48,6 +49,8 @@ public class StatusHandler extends AbstractHandler {
             }
             roomResponse.put("setpoint-default", setpoints.getDefault(controllableRoom));
             roomResponse.put("active", setpoints.isActive(controllableRoom));
+            roomResponse.put("booking-now", bookings.getNow(controllableRoom.room));
+            roomResponse.put("booking-tonight", bookings.getTonight(controllableRoom.room));
 
             if (temperatures.getActual(controllableRoom) != null) {
                 roomResponse.put("temperature", temperatures.getActual(controllableRoom));
@@ -75,7 +78,6 @@ public class StatusHandler extends AbstractHandler {
         IOUtils.closeQuietly(temperatures);
         IOUtils.closeQuietly(zoneStates);
 
-        BookingDAO bookings = new BookingDAO();
         for (Building.Room room : Building.Room.values()) {
             if (bookings.isOccupiedNow(room)) {
                 JSONObject bookingNow = new JSONObject();

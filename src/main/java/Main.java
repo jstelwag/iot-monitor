@@ -13,45 +13,11 @@ import java.io.IOException;
 
 public class Main {
 
-    /**
-     * Add a properties file (monitor.conf) in the jar directory
-     */
-    static final HeatingProperties prop = new HeatingProperties();
-
     public static void main(String[] args) throws IOException {
 
+        HeatingProperties prop = new HeatingProperties();
         if (args.length == 0) {
-            System.out.println("Booting Http server");
-            LogstashLogger.INSTANCE.message("start http");
-
-            Server httpServer = new Server(prop.masterPort);
-            httpServer.setHandler(contexts());
-            removeHeaders(httpServer);
-            ErrorHandler errorHandler = new ErrorHandler();
-            errorHandler.setShowStacks(true);
-            httpServer.addBean(errorHandler);
-
-            try {
-                httpServer.start();
-                httpServer.join();
-            } catch (Exception e) {
-                LogstashLogger.INSTANCE.message("FATAL: failed to start http listeners " + e.toString());
-                System.out.println(e.toString());
-                System.exit(0);
-            }
-
-            while (true) {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                }
-                try {
-                    //hello
-                } catch (RuntimeException e) {
-                    LogstashLogger.INSTANCE.message("ERROR: exception occurred at the regular speaker scheduling " + e.toString());
-                    e.printStackTrace();
-                }
-            }
+            startHttp(prop.masterPort);
         } else if ("setpoints".equals(args[0])) {
             new SetpointSpeaker().run();
         } else if ("fluxtemperatures".equals(args[0])) {
@@ -67,6 +33,40 @@ public class Main {
         } else if ("iot".equals(args[0])) {
             LogstashLogger.INSTANCE.message("start iot");
             new IoTListener(prop.iotPort).run();
+        }
+    }
+
+    private static void startHttp(int port) {
+        System.out.println("Booting Http server");
+        LogstashLogger.INSTANCE.message("start http");
+
+        Server httpServer = new Server(port);
+        httpServer.setHandler(contexts());
+        removeHeaders(httpServer);
+        ErrorHandler errorHandler = new ErrorHandler();
+        errorHandler.setShowStacks(true);
+        httpServer.addBean(errorHandler);
+
+        try {
+            httpServer.start();
+            httpServer.join();
+        } catch (Exception e) {
+            LogstashLogger.INSTANCE.message("FATAL: failed to start http listeners " + e.toString());
+            System.out.println(e.toString());
+            System.exit(0);
+        }
+
+        while (true) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+            }
+            try {
+                //hello
+            } catch (RuntimeException e) {
+                LogstashLogger.INSTANCE.message("ERROR: exception occurred at the regular speaker scheduling " + e.toString());
+                e.printStackTrace();
+            }
         }
     }
 
@@ -96,7 +96,7 @@ public class Main {
         return contexts;
     }
 
-    static void removeHeaders(Server server) {
+    private static void removeHeaders(Server server) {
         for(Connector y : server.getConnectors()) {
             for(ConnectionFactory x : y.getConnectionFactories()) {
                 if(x instanceof HttpConnectionFactory) {
