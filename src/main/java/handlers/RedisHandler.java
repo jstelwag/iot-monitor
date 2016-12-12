@@ -1,5 +1,6 @@
 package handlers;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -10,6 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,7 +25,8 @@ public class RedisHandler extends AbstractHandler {
         System.out.println("Redis request");
 
         Jedis jedis = new Jedis("localhost");
-        Set<String> all = jedis.keys("*");
+        List<String> all = new ArrayList<>(jedis.keys("*"));
+        Collections.sort(all);
 
         JSONObject redisResponse = new JSONObject();
         for (String key : all) {
@@ -31,7 +36,7 @@ public class RedisHandler extends AbstractHandler {
         IOUtils.closeQuietly(jedis);
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(new JSONObject().put("status", redisResponse).toString(2));
+        response.getWriter().println(new JSONObject().put("dump", redisResponse).toString(2));
         request.setHandled(true);
     }
 }

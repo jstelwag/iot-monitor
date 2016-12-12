@@ -68,15 +68,15 @@ public class SetpointDAO implements Closeable {
     }
 
     public boolean isActive(Building.ControllableRoom room) {
-        if (!jedis.exists(room + ".active")) {
-            LogstashLogger.INSTANCE.message("WARNING " + room + ".active not available in Redis");
+        if (!jedis.exists(room + ".heating-active")) {
+            LogstashLogger.INSTANCE.message("WARNING " + room + ".heating-active not available in Redis");
             return true;
         }
-        return "T".equals(jedis.get(room + ".active"));
+        return "T".equals(jedis.get(room + ".heating-active"));
     }
 
     public SetpointDAO setActive(Building.ControllableRoom room, boolean active) {
-        jedis.setex(room + ".active", TTL_BOOKINGS, active ? "T" : "F");
+        jedis.setex(room + ".heating-active", TTL_BOOKINGS, active ? "T" : "F");
         return this;
     }
 
