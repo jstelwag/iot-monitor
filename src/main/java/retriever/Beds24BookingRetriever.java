@@ -27,7 +27,6 @@ public class Beds24BookingRetriever implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Retrieving bed24");
         String responseBody = null;
         List<Room> roomsNow = new ArrayList<>();
         List<Room> roomsTonight = new ArrayList<>();
