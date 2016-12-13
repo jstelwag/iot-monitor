@@ -1,6 +1,6 @@
 package speaker;
 
-import building.Building;
+import building.ControllableArea;
 import dao.SetpointDAO;
 import util.LineProtocolUtil;
 
@@ -18,8 +18,8 @@ public class SetpointSpeaker implements Runnable {
         int count = 0;
 
         try (FluxLogger flux = new FluxLogger(); SetpointDAO dao = new SetpointDAO()) {
-            for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
-                flux.message(LineProtocolUtil.protocolLine(controllableRoom, "setpoint", Double.toString(dao.get(controllableRoom))));
+            for (ControllableArea controllableArea : ControllableArea.values()) {
+                flux.message(LineProtocolUtil.protocolLine(controllableArea, "setpoint", Double.toString(dao.get(controllableArea))));
                 count++;
             }
         } catch (UnknownHostException | SocketException e) {

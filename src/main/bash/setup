@@ -22,7 +22,7 @@ sudo update-rc.d supervisord defaults
 echo_supervisord_conf > supervisord.conf
 sed -i 's/tmp\/supervisord.log/var\/log\/supervisord.log/' supervisord.conf
 echo "[program:http_monitor]" >> supervisord.conf
-echo "command=/usr/local/bin/iot-runtime" >> supervisord.conf
+echo "command=/usr/local/bin/iot-runtime http" >> supervisord.conf
 echo "redirect_stderr=true" >> supervisord.conf
 echo "stdout_logfile=/var/log/iot-monitor.log" >> supervisord.conf
 echo "process_name=http-monitor" >> supervisord.conf

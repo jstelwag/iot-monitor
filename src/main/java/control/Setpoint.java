@@ -1,6 +1,8 @@
 package control;
 
 import building.Building;
+import building.ControllableArea;
+import building.Room;
 import dao.BookingDAO;
 import dao.SetpointDAO;
 import org.apache.commons.io.IOUtils;
@@ -23,16 +25,12 @@ public class Setpoint implements Runnable {
         Date heatingOffTime = DateUtils.addHours(HeatingProperties.checkoutTime(now), -2);
         SetpointDAO setpoints = new SetpointDAO();
         BookingDAO bookings = new BookingDAO();
-        for (Building.Room room : Building.Room.values()) {
-            List<Building.ControllableRoom> rooms = Building.INSTANCE.findRooms(room);
-            for (Building.ControllableRoom controlRoom : rooms) {
-                if (bookings.isOccupiedTonight(room)) {
-                    setpoints.setActive(controlRoom, true);
-                } else if (bookings.isOccupiedNow(room) && now.before(heatingOffTime)) {
-                    setpoints.setActive(controlRoom, true);
-                } else {
-                    setpoints.setActive(controlRoom, false);
-                }
+        for (Room room : Room.values()) {
+            boolean active = bookings.isOccupiedTonight(room)
+                    || (bookings.isOccupiedNow(room) && now.before(heatingOffTime));
+            List<ControllableArea> rooms = Building.INSTANCE.findRooms(room);
+            for (ControllableArea controlRoom : rooms) {
+                setpoints.setActive(controlRoom, active);
             }
         }
         IOUtils.closeQuietly(setpoints);

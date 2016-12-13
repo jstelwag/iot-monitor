@@ -1,6 +1,6 @@
 package retriever;
 
-import building.Building;
+import building.Room;
 import org.apache.commons.lang3.time.DateUtils;
 import util.HeatingProperties;
 
@@ -10,14 +10,14 @@ public class Booking {
 
     public final Date firstNight;
     public final Date lastNight;
-    public final Building.Room room;
+    public final Room room;
 
     public final Date checkoutTime;
     public final Date checkinTime;
 
     private final Date now;
 
-    public Booking(Date firstNight, Date lastNight, Building.Room room) {
+    public Booking(Date firstNight, Date lastNight, Room room) {
         this.firstNight = firstNight;
         this.lastNight = lastNight;
         this.room = room;
@@ -48,8 +48,8 @@ public class Booking {
 
     public boolean isOccupied() {return now.after(checkinTime) && now.before(checkoutTime);}
 
-    public static Building.Room roomById(long id) {
-        for (Building.Room room : Building.Room.values()) {
+    public static Room roomById(long id) {
+        for (Room room : Room.values()) {
             if (room.beds24Id == id) {
                 return room;
             }

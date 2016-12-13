@@ -1,6 +1,7 @@
 package handlers;
 
 import building.Building;
+import building.ControllableArea;
 import building.HeatZone;
 import control.HeatingControl;
 import dao.SetpointDAO;
@@ -8,7 +9,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +43,7 @@ public class RestHandler extends AbstractHandler {
 
     /** /rest/room/on|off|toggle/ */
     void matchRoom(String roomText, String lineIn, PrintWriter out) throws IllegalArgumentException {
-        Building.ControllableRoom room = Building.ControllableRoom.valueOf(roomText);
+        ControllableArea room = ControllableArea.valueOf(roomText);
         Pattern pattern = Pattern.compile(Pattern.quote("rest/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(lineIn + "/");

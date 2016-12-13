@@ -1,6 +1,7 @@
 package handlers;
 
 import building.Building;
+import building.Furnace;
 import building.HeatZone;
 import control.HeatingControl;
 import dao.HeatZoneStateDAO;
@@ -31,7 +32,7 @@ public class FurnaceHandler extends AbstractHandler {
         response.setContentType("application/json");
         if (matcher.find()) {
             String rawFurnace = matcher.group(1);
-            Building.Furnace furnace = Building.Furnace.valueOf(rawFurnace);
+            Furnace furnace = Furnace.valueOf(rawFurnace);
             System.out.println("/furnace request: " + furnace);
 
             int pumpDesire = 0; // TODO refactor this for every pump

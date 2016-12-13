@@ -1,6 +1,6 @@
 package handlers;
 
-import building.Building;
+import building.ControllableArea;
 import control.HeatingControl;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
@@ -30,21 +30,21 @@ public class RoomTemperatureHandler extends AbstractHandler {
 
         try (SetpointDAO setpoints = new SetpointDAO(); TemperatureDAO temperatures = new TemperatureDAO()) {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
-            for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
+            for (ControllableArea controllableArea : ControllableArea.values()) {
                 try {
-                    float value = pc.readFloat(controllableRoom.temperatureSensor, false);
-                    temperatures.set(controllableRoom, value);
+                    float value = pc.readFloat(controllableArea.temperatureSensor, false);
+                    temperatures.set(controllableArea, value);
                     countT++;
                 } catch (KNXTimeoutException e) {
-                    System.out.println("Timeout retrieving " + controllableRoom + " temperature");
+                    System.out.println("Timeout retrieving " + controllableArea + " temperature");
                 }
-                if (controllableRoom.setpoint != null) {
+                if (controllableArea.setpoint != null) {
                     try {
-                        setpoints.setKnx(controllableRoom, pc.readFloat(controllableRoom.setpoint, false));
+                        setpoints.setKnx(controllableArea, pc.readFloat(controllableArea.setpoint, false));
                         countSP++;
                     } catch (KNXTimeoutException e) {
-                        LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableRoom + " setpoint");
-                        System.out.println("Timeout retrieving " + controllableRoom + " setpoint");
+                        LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " setpoint");
+                        System.out.println("Timeout retrieving " + controllableArea + " setpoint");
                     }
                 }
             }

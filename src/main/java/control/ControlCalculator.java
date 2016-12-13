@@ -1,6 +1,7 @@
 package control;
 
 import building.Building;
+import building.ControllableArea;
 import building.HeatZone;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
@@ -16,11 +17,11 @@ public class ControlCalculator implements Runnable {
         SetpointDAO setpoints = new SetpointDAO();
         TemperatureDAO temperatures = new TemperatureDAO();
         HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
-        for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
-            double setpoint = setpoints.get(controllableRoom);
-            double roomTemperature = temperatures.get(controllableRoom);
+        for (ControllableArea controllableArea : ControllableArea.values()) {
+            double setpoint = setpoints.get(controllableArea);
+            double roomTemperature = temperatures.get(controllableArea);
 
-            for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableRoom)) {
+            for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
                 if (HeatingControl.INSTANCE.overrides.containsKey(zone)) {
                     zoneStates.set(zone, HeatingControl.INSTANCE.overrides.get(zone));
                 } else {

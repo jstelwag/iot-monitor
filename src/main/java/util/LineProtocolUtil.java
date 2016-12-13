@@ -1,7 +1,6 @@
 package util;
 
-import building.Building;
-import building.HeatZone;
+import building.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,8 +31,8 @@ public class LineProtocolUtil {
 
     public static String protocolLine(HeatZone zone, String type, String value) {
         StringBuilder retVal = new StringBuilder();
-        if (zone.controllableRoom != null) {
-            retVal.append(zone.controllableRoom).append(",position=").append(zone.position);
+        if (zone.controllableArea != null) {
+            retVal.append(zone.controllableArea).append(",position=").append(zone.position);
             if (zone.area != null) {
                 retVal.append(",area=").append(escape(zone.area));
             }
@@ -46,20 +45,20 @@ public class LineProtocolUtil {
         return retVal.toString();
     }
 
-    public static String protocolLine(Building.ControllableRoom controllableRoom, String type, String value) {
+    public static String protocolLine(ControllableArea controllableArea, String type, String value) {
         StringBuilder retVal = new StringBuilder();
-        retVal.append(controllableRoom).append(",position=room");
+        retVal.append(controllableArea).append(",position=room");
         retVal.append(' ').append(type).append('=').append(value);
 
         return retVal.toString();
     }
 
-    public static String protocolLine(Building.Room room, String customer) {
+    public static String protocolLine(Room room, String customer) {
         return "booking,room=" + room + " customer=\"" + customer.replace("\"", " ") +"\"";
     }
 
 
-    public static String protocolLine(Building.Furnace furnace, String type, String value) {
+    public static String protocolLine(Furnace furnace, String type, String value) {
         StringBuilder retVal = new StringBuilder();
         retVal.append(furnace).append(' ').append(type).append('=').append(value);
 

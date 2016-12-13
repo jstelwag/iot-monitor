@@ -3,14 +3,14 @@ package building;
 public class HeatZone implements Comparable {
 
     public enum ValveGroup {
-        koetshuis_kelder(Building.Furnace.koetshuis_kelder),
-        koetshuis_trap_15(Building.Furnace.koetshuis_kelder),
-        koetshuis_trap_6(Building.Furnace.koetshuis_kelder),
+        koetshuis_kelder(Furnace.koetshuis_kelder),
+        koetshuis_trap_15(Furnace.koetshuis_kelder),
+        koetshuis_trap_6(Furnace.koetshuis_kelder),
         koetshuis_electric(null),
-        kasteel_zolder(Building.Furnace.kasteel_zolder);
+        kasteel_zolder(Furnace.kasteel_zolder);
 
-        ValveGroup(Building.Furnace furnace) {this.furnace = furnace;}
-        public final Building.Furnace furnace;
+        ValveGroup(Furnace furnace) {this.furnace = furnace;}
+        public final Furnace furnace;
     }
 
     public enum Position {
@@ -22,7 +22,7 @@ public class HeatZone implements Comparable {
     public final ValveGroup group;
     public final Integer groupSequence;
 
-    public Building.ControllableRoom controllableRoom;
+    public ControllableArea controllableArea;
     public Position position;
     public String area;
 
@@ -35,26 +35,26 @@ public class HeatZone implements Comparable {
         this.isPreferred = isPreferred;
     }
 
-    public HeatZone(ValveGroup group, Integer groupSequence, boolean isPreferred, Building.ControllableRoom controllableRoom, Position position) {
+    public HeatZone(ValveGroup group, Integer groupSequence, boolean isPreferred, ControllableArea controllableArea, Position position) {
         this.group = group;
         this.groupSequence = groupSequence;
         this.isPreferred = isPreferred;
-        this.controllableRoom = controllableRoom;
+        this.controllableArea = controllableArea;
         this.position = position;
     }
 
-    public HeatZone(ValveGroup group, Integer groupSequence, boolean isPreferred, Building.ControllableRoom controllableRoom, Position position, String area) {
+    public HeatZone(ValveGroup group, Integer groupSequence, boolean isPreferred, ControllableArea controllableArea, Position position, String area) {
         this.group = group;
         this.groupSequence = groupSequence;
         this.isPreferred = isPreferred;
-        this.controllableRoom = controllableRoom;
+        this.controllableArea = controllableArea;
         this.position = position;
         this.area = area;
     }
 
     @Override
         public String toString() {
-        return group + "." + groupSequence + (controllableRoom != null ? " " + controllableRoom : "") + (area != null ? " " + area : "");
+        return group + "." + groupSequence + (controllableArea != null ? " " + controllableArea : "") + (area != null ? " " + area : "");
     }
 
     @Override

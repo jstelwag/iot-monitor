@@ -1,6 +1,6 @@
 package dao;
 
-import building.Building;
+import building.ControllableArea;
 import redis.clients.jedis.Jedis;
 
 import java.io.Closeable;
@@ -18,21 +18,21 @@ public class TemperatureDAO implements Closeable {
         jedis = new Jedis("localhost");
     }
 
-    public double get(Building.ControllableRoom room) {
+    public double get(ControllableArea room) {
         if (!jedis.exists(room + ".temperature")) {
             return 19.5;
         }
         return Double.valueOf(jedis.get(room + ".temperature"));
     }
 
-    public Double getActual(Building.ControllableRoom room) {
+    public Double getActual(ControllableArea room) {
         if (!jedis.exists(room + ".temperature")) {
             return null;
         }
         return Double.valueOf(jedis.get(room + ".temperature"));
     }
 
-    public TemperatureDAO set(Building.ControllableRoom room, double value) {
+    public TemperatureDAO set(ControllableArea room, double value) {
         jedis.setex(room + ".temperature", TTL_KNX, Double.toString(value));
         return this;
     }

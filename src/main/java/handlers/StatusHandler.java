@@ -1,7 +1,9 @@
 package handlers;
 
 import building.Building;
+import building.ControllableArea;
 import building.HeatZone;
+import building.Room;
 import control.HeatingControl;
 import dao.BookingDAO;
 import dao.HeatZoneStateDAO;
@@ -36,29 +38,29 @@ public class StatusHandler extends AbstractHandler {
         TemperatureDAO temperatures = new TemperatureDAO();
         HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
         BookingDAO bookings = new BookingDAO();
-        for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
+        for (ControllableArea controllableArea : ControllableArea.values()) {
             JSONObject roomResponse = new JSONObject();
             statusResponse.getJSONArray("rooms").put(roomResponse);
-            roomResponse.put("controllableRoom", controllableRoom);
-            roomResponse.put("setpoint", setpoints.get(controllableRoom));
-            if (setpoints.getUser(controllableRoom) != null) {
-                roomResponse.put("setpoint-user", setpoints.getUser(controllableRoom));
+            roomResponse.put("controllableArea", controllableArea);
+            roomResponse.put("setpoint", setpoints.get(controllableArea));
+            if (setpoints.getUser(controllableArea) != null) {
+                roomResponse.put("setpoint-user", setpoints.getUser(controllableArea));
             }
-            if (setpoints.getKnx(controllableRoom) != null) {
-                roomResponse.put("setpoint-knx", setpoints.getKnx(controllableRoom));
+            if (setpoints.getKnx(controllableArea) != null) {
+                roomResponse.put("setpoint-knx", setpoints.getKnx(controllableArea));
             }
-            roomResponse.put("setpoint-default", setpoints.getDefault(controllableRoom));
-            roomResponse.put("active", setpoints.isActive(controllableRoom));
-            roomResponse.put("booking-now", bookings.getNow(controllableRoom.room));
-            roomResponse.put("booking-tonight", bookings.getTonight(controllableRoom.room));
+            roomResponse.put("setpoint-default", setpoints.getDefault(controllableArea));
+            roomResponse.put("active", setpoints.isActive(controllableArea));
+            roomResponse.put("booking-now", bookings.getNow(controllableArea.room));
+            roomResponse.put("booking-tonight", bookings.getTonight(controllableArea.room));
 
-            if (temperatures.getActual(controllableRoom) != null) {
-                roomResponse.put("temperature", temperatures.getActual(controllableRoom));
+            if (temperatures.getActual(controllableArea) != null) {
+                roomResponse.put("temperature", temperatures.getActual(controllableArea));
             }
 
             JSONArray zones = new JSONArray();
             roomResponse.put("zones", zones);
-            for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableRoom)) {
+            for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
                 JSONObject zoneResponse = new JSONObject();
                 zoneResponse.put("zone", zone);
                 zoneResponse.put("state", zoneStates.get(zone));
@@ -67,7 +69,7 @@ public class StatusHandler extends AbstractHandler {
 
             JSONArray overrides = new JSONArray();
             roomResponse.put("overrides", overrides);
-            for (HeatZone zone : HeatingControl.INSTANCE.overridesByRoom(controllableRoom)) {
+            for (HeatZone zone : HeatingControl.INSTANCE.overridesByRoom(controllableArea)) {
                 JSONObject zoneResponse = new JSONObject();
                 zoneResponse.put("zone", zone);
                 overrides.put(zoneResponse);
@@ -78,7 +80,7 @@ public class StatusHandler extends AbstractHandler {
         IOUtils.closeQuietly(temperatures);
         IOUtils.closeQuietly(zoneStates);
 
-        for (Building.Room room : Building.Room.values()) {
+        for (Room room : Room.values()) {
             if (bookings.isOccupiedNow(room)) {
                 JSONObject bookingNow = new JSONObject();
                 statusResponse.getJSONArray("occupiedNow").put(bookingNow);

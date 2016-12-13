@@ -1,10 +1,9 @@
 package speaker;
 
-import building.Building;
+import building.ControllableArea;
 import control.HeatingControl;
 import dao.BookingDAO;
 import dao.SetpointDAO;
-import org.apache.commons.io.IOUtils;
 import tuwien.auto.calimero.exception.KNXException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 
@@ -25,17 +24,17 @@ public class KNXRoomReset implements Runnable {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
 
             if (HeatingControl.INSTANCE.hasUpdatedBookings) {
-                for (Building.ControllableRoom controllableRoom : Building.ControllableRoom.values()) {
-                    if (!bookings.isOccupiedNow(controllableRoom.room)) {
-                        if (controllableRoom.setpoint != null) {
-                            //pc.write(controllableRoom.setpoint, (float) DefaultSetpoint.populate().get(controllableRoom).setpoint, false);
+                for (ControllableArea controllableArea : ControllableArea.values()) {
+                    if (!bookings.isOccupiedNow(controllableArea.room)) {
+                        if (controllableArea.setpoint != null) {
+                            //pc.write(controllableArea.setpoint, (float) DefaultSetpoint.populate().get(controllableArea).setpoint, false);
                             setpointCount++;
-                            System.out.println("-- " + controllableRoom);
-                        } else System.out.println("++ " + controllableRoom);
+                            System.out.println("-- " + controllableArea);
+                        } else System.out.println("++ " + controllableArea);
                     }
-                    if (!dao.isActive(controllableRoom)) {
-                        if (controllableRoom.allOffButton != null) {
-                            pc.write(controllableRoom.allOffButton, false);
+                    if (!dao.isActive(controllableArea)) {
+                        if (controllableArea.allOffButton != null) {
+                            pc.write(controllableArea.allOffButton, false);
                             allOffCount++;
                         }
                     }

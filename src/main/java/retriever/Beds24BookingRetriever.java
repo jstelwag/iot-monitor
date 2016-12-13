@@ -1,6 +1,6 @@
 package retriever;
 
-import building.Building;
+import building.Room;
 import dao.BookingDAO;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -29,8 +29,8 @@ public class Beds24BookingRetriever implements Runnable {
     public void run() {
         System.out.println("Retrieving bed24");
         String responseBody = null;
-        List<Building.Room> roomsNow = new ArrayList<>();
-        List<Building.Room> roomsTonight = new ArrayList<>();
+        List<Room> roomsNow = new ArrayList<>();
+        List<Room> roomsTonight = new ArrayList<>();
         try (BookingDAO bookings = new BookingDAO()) {
             responseBody = Request.Post("https://www.beds24.com/api/json/getBookings")
                     .version(HttpVersion.HTTP_1_1)
@@ -41,7 +41,7 @@ public class Beds24BookingRetriever implements Runnable {
                 JSONObject bedsBooking = response.getJSONObject(i);
                 if (bedsBooking.getInt("status") != 0) {
                     String name = (bedsBooking.getString("guestFirstName") + " " + bedsBooking.getString("guestName")).trim();
-                    Building.Room room = Booking.roomById(bedsBooking.getLong("roomId"));
+                    Room room = Booking.roomById(bedsBooking.getLong("roomId"));
 
                     if (room != null) {
                         Booking booking = new Booking(DateUtils.parseDate(bedsBooking.getString("firstNight"), "yyyy-MM-dd")
@@ -66,7 +66,7 @@ public class Beds24BookingRetriever implements Runnable {
                 }
             }
 
-            for (Building.Room room : Building.Room.values()) {
+            for (Room room : Room.values()) {
                 if (!roomsNow.contains(room)) {
                     bookings.setNow(room, null);
                 }
@@ -75,8 +75,8 @@ public class Beds24BookingRetriever implements Runnable {
                 }
             }
             //todo remove this
-            bookings.setNow(Building.Room.room_3, "Lynn, Anna en Jaap");
-            bookings.setTonight(Building.Room.room_3, "Lynn, Anna en Jaap");
+            bookings.setNow(Room.room_3, "Lynn, Anna en Jaap");
+            bookings.setTonight(Room.room_3, "Lynn, Anna en Jaap");
 
             System.out.println("Retrieved " + response.length() + " bookings");
         } catch (IOException | ParseException e) {

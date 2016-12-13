@@ -1,6 +1,6 @@
 package dao;
 
-import building.Building;
+import building.Room;
 import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
 
@@ -20,7 +20,7 @@ public class BookingDAO implements Closeable {
         jedis = new Jedis("localhost");
     }
 
-    public BookingDAO setNow(Building.Room room, String name) {
+    public BookingDAO setNow(Room room, String name) {
         if (name == null) {
             jedis.setex(room + ".booking-now", TTL_BOOKINGS, "empty");
         } else {
@@ -29,7 +29,7 @@ public class BookingDAO implements Closeable {
         return this;
     }
 
-    public BookingDAO setTonight(Building.Room room, String name) {
+    public BookingDAO setTonight(Room room, String name) {
         if (name == null) {
             jedis.setex(room + ".booking-tonight", TTL_BOOKINGS, "empty");
         } else {
@@ -38,15 +38,15 @@ public class BookingDAO implements Closeable {
         return this;
     }
 
-    public String getNow(Building.Room room) {
+    public String getNow(Room room) {
         return jedis.get(room + ".booking-now");
     }
 
-    public String getTonight(Building.Room room) {
+    public String getTonight(Room room) {
         return jedis.get(room + ".booking-tonight");
     }
 
-    public BookingDAO setTomorrow(Building.Room room, String name) {
+    public BookingDAO setTomorrow(Room room, String name) {
         if (name == null) {
             jedis.setex(room + ".booking-tomorrow", TTL_BOOKINGS, "empty");
         } else {
@@ -55,7 +55,7 @@ public class BookingDAO implements Closeable {
         return this;
     }
 
-    public boolean isOccupiedNow(Building.Room room) {
+    public boolean isOccupiedNow(Room room) {
         if (!jedis.exists(room + ".booking-now")) {
             LogstashLogger.INSTANCE.message("WARNING: " + room + ".booking-now is not available in Redis");
             return true;
@@ -63,7 +63,7 @@ public class BookingDAO implements Closeable {
         return !"empty".equals(getNow(room));
     }
 
-    public boolean isOccupiedTonight(Building.Room room) {
+    public boolean isOccupiedTonight(Room room) {
         if (!jedis.exists(room + ".booking-tonight")) {
             LogstashLogger.INSTANCE.message("WARNING: " + room + ".booking-tonight is not available in Redis");
             return true;

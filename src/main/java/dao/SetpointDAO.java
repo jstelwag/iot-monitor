@@ -1,6 +1,6 @@
 package dao;
 
-import building.Building;
+import building.ControllableArea;
 import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
 
@@ -14,40 +14,40 @@ import java.util.Calendar;
 public class SetpointDAO implements Closeable {
     private final Jedis jedis;
 
-    final int TTL_KNX = 120;
-    final int TTL_BOOKINGS = 60*30;
+    private final int TTL_KNX = 120;
+    private final int TTL_BOOKINGS = 1800;
 
     public SetpointDAO() {
         jedis = new Jedis("localhost");
     }
 
-    public SetpointDAO setKnx(Building.ControllableRoom room, double value) {
+    public SetpointDAO setKnx(ControllableArea room, double value) {
         jedis.setex(room.name() + ".setpoint-knx", TTL_KNX, Double.toString(value));
         return this;
     }
 
-    public Double getUser(Building.ControllableRoom room) {
+    public Double getUser(ControllableArea room) {
         if (!jedis.exists(room + ".setpoint-user")) {
             return null;
         }
         return Double.valueOf(jedis.get(room + ".setpoint-user"));
     }
 
-    public Double getKnx(Building.ControllableRoom room) {
+    public Double getKnx(ControllableArea room) {
         if (!jedis.exists(room + ".setpoint-knx")) {
             return null;
         }
         return Double.valueOf(jedis.get(room + ".setpoint-knx"));
     }
 
-    public double getDefault(Building.ControllableRoom room) {
+    public double getDefault(ControllableArea room) {
         if (!jedis.exists(room + ".setpoint-default")) {
             return 20.0;
         }
         return Double.parseDouble(jedis.get(room + ".setpoint-default"));
     }
 
-    public double get(Building.ControllableRoom room) {
+    public double get(ControllableArea room) {
         if (isActive(room)) {
             Double setpoint = getKnx(room);
             if (setpoint == null) {
@@ -62,12 +62,12 @@ public class SetpointDAO implements Closeable {
         return 14.0;
     }
 
-    public SetpointDAO setDefault(Building.ControllableRoom room, double value) {
+    public SetpointDAO setDefault(ControllableArea room, double value) {
         jedis.set(room + ".setpoint-default", Double.toString(value));
         return this;
     }
 
-    public boolean isActive(Building.ControllableRoom room) {
+    public boolean isActive(ControllableArea room) {
         if (!jedis.exists(room + ".heating-active")) {
             LogstashLogger.INSTANCE.message("WARNING " + room + ".heating-active not available in Redis");
             return true;
@@ -75,15 +75,15 @@ public class SetpointDAO implements Closeable {
         return "T".equals(jedis.get(room + ".heating-active"));
     }
 
-    public SetpointDAO setActive(Building.ControllableRoom room, boolean active) {
+    public SetpointDAO setActive(ControllableArea room, boolean active) {
         jedis.setex(room + ".heating-active", TTL_BOOKINGS, active ? "T" : "F");
         return this;
     }
 
     public SetpointDAO populateDefault() {
-        setDefault(Building.ControllableRoom.apartment_II_bedroom, 19.0);
-        setDefault(Building.ControllableRoom.apartment_III_bathroom, 19.0);
-        setDefault(Building.ControllableRoom.room_1, 19.0);
+        setDefault(ControllableArea.apartment_II_bedroom, 19.0);
+        setDefault(ControllableArea.apartment_III_bathroom, 19.0);
+        setDefault(ControllableArea.room_1, 19.0);
         return this;
     }
 

@@ -15,9 +15,9 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-
+        System.out.println("Monitor " + args[0]);
         HeatingProperties prop = new HeatingProperties();
-        if (args.length == 0) {
+        if ("http".equals(args[0])) {
             startHttp(prop.masterPort);
         } else if ("setpointspeaker".equals(args[0])) {
             new SetpointSpeaker().run();
@@ -40,7 +40,6 @@ public class Main {
     }
 
     private static void startHttp(int port) {
-        System.out.println("Booting Http server");
         LogstashLogger.INSTANCE.message("start http");
 
         Server httpServer = new Server(port);

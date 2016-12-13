@@ -1,6 +1,6 @@
 package speaker;
 
-import building.Building;
+import building.Room;
 import dao.BookingDAO;
 import util.LineProtocolUtil;
 
@@ -18,7 +18,7 @@ public class CustomerNameSpeaker implements Runnable {
     public void run() {
         System.out.println("Posting bookings to influx");
         try (FluxLogger flux = new FluxLogger(); BookingDAO bookings = new BookingDAO()) {
-            for (Building.Room room : Building.Room.values()) {
+            for (Room room : Room.values()) {
                 flux.message(LineProtocolUtil.protocolLine(room, bookings.getNow(room)));
             }
         } catch (IOException e) {

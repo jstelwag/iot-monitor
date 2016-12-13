@@ -1,6 +1,8 @@
 package control;
 
 import building.Building;
+import building.ControllableArea;
+import building.Furnace;
 import building.HeatZone;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
@@ -15,7 +17,7 @@ public class HeatingControl {
     public final static HeatingControl INSTANCE = new HeatingControl();
 
     public final SortedMap<HeatZone, Boolean> overrides = new TreeMap<>();
-    public final Map<Building.Furnace, ControlModulation> furnaceModulation = new HashMap<>();
+    public final Map<Furnace, ControlModulation> furnaceModulation = new HashMap<>();
 
     public KNXLink knxLink;
 
@@ -24,7 +26,7 @@ public class HeatingControl {
     private HeatingControl() {
         IOUtils.closeQuietly(new HeatZoneStateDAO().populateDefault());
         IOUtils.closeQuietly(new SetpointDAO().populateDefault());
-        for (Building.Furnace furnace : Building.Furnace.values()) {
+        for (Furnace furnace : Furnace.values()) {
             furnaceModulation.put(furnace, new ControlModulation());
         }
 
@@ -36,10 +38,10 @@ public class HeatingControl {
         }
     }
 
-    public List<HeatZone> overridesByRoom(Building.ControllableRoom room) {
+    public List<HeatZone> overridesByRoom(ControllableArea room) {
         List<HeatZone> retVal = new ArrayList<>();
         for (HeatZone zone : overrides.keySet()) {
-            if (zone.controllableRoom == room) {
+            if (zone.controllableArea == room) {
                 retVal.add(zone);
             }
         }
@@ -47,7 +49,7 @@ public class HeatingControl {
         return retVal;
     }
 
-    public List<HeatZone.ValveGroup> valveGroupsByFurnace(Building.Furnace furnace) {
+    public List<HeatZone.ValveGroup> valveGroupsByFurnace(Furnace furnace) {
         List<HeatZone.ValveGroup> retVal = new LinkedList<>();
 
         for (HeatZone.ValveGroup group : HeatZone.ValveGroup.values()) {
@@ -60,7 +62,7 @@ public class HeatingControl {
     }
 
     /** @return the number of open zones in reach of given furnace */
-    public int furnaceDesire(Building.Furnace furnace) {
+    public int furnaceDesire(Furnace furnace) {
         int furnaceDesire = 0;
         HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
         for (HeatZone.ValveGroup group : HeatingControl.INSTANCE.valveGroupsByFurnace(furnace)) {
