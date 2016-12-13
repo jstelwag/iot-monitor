@@ -1,17 +1,11 @@
 package handlers;
 
-import building.ControllableArea;
 import control.HeatingControl;
-import dao.SetpointDAO;
-import dao.TemperatureDAO;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
-import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.exception.KNXException;
-import tuwien.auto.calimero.exception.KNXFormatException;
-import tuwien.auto.calimero.exception.KNXTimeoutException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 
 import javax.servlet.ServletException;
@@ -40,13 +34,9 @@ public class KNXHandler extends AbstractHandler {
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(s);
 
-        JSONObject knxResponse = new JSONObject();
-        try {
-            GroupAddress address = new GroupAddress(matcher.group(1) + ", " + matcher.group(2) + ", " + matcher.group(3));
-            knxResponse = process(matcher.group(0), address);
-        } catch (KNXException e) {
-            knxResponse.put("error", e.getMessage());
-        }
+        GroupAddress address = new GroupAddress(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
+        JSONObject knxResponse = process(matcher.group(1), address);
+
         response.getWriter().println(knxResponse.toString(2));
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);

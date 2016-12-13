@@ -36,8 +36,6 @@ public class Main {
         } else if ("iot".equals(args[0])) {
             LogstashLogger.INSTANCE.message("start iot");
             new IoTListener(prop.iotPort).run();
-        } else if ("knx".equals(args[0])) {
-            new KNXHandler().run(args);
         }
     }
 
