@@ -89,13 +89,15 @@ public class Main {
         knxtemperatures.setHandler(new RoomTemperatureHandler());
         ContextHandler redisContext = new ContextHandler("/redis");
         redisContext.setHandler(new RedisHandler());
+        ContextHandler knxContext = new ContextHandler("/knx");
+        knxContext.setHandler(new KNXHandler());
 
         ContextHandler echoContext = new ContextHandler("/echo");
         echoContext.setHandler(new EchoHandler());
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
-                , roomResetContext, furnaceContext, knxtemperatures, redisContext
+                , roomResetContext, furnaceContext, knxtemperatures, redisContext, knxContext
                 , echoContext});
         return contexts;
     }
