@@ -27,12 +27,8 @@ import java.util.regex.Pattern;
 public class KNXHandler extends AbstractHandler {
 
     public void run(String[] args) {
-        try {
-            JSONObject knxResponse = process(args[1], new GroupAddress(args[2] + ", " + args[3] + ", " + args[4]));
-            System.out.println(knxResponse.toString(4));
-        } catch (KNXFormatException e) {
-            e.printStackTrace();
-        }
+        JSONObject knxResponse = process(args[1], new GroupAddress(Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4])));
+        System.out.println(knxResponse.toString(4));
     }
 
     @Override
