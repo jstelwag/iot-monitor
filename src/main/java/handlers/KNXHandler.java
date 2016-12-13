@@ -30,14 +30,20 @@ public class KNXHandler extends AbstractHandler {
             throws IOException, ServletException {
         System.out.println("KNX request " + s);
         response.setContentType("application/json");
-        Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
-                + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
-        Matcher matcher = pattern.matcher(s);
+        Matcher matcher = null;
+        try {
+            Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "([0-9]+)"
+                    + Pattern.quote("/") + "([0-9]+)" + Pattern.quote("/") + "([0-9]+)" + Pattern.quote("/"));
+            matcher = pattern.matcher(s);
+        } catch (IllegalStateException e) {
+            response.getWriter().println("Match of " + s + " failed " + e.getMessage());
+        }
 
-        GroupAddress address = new GroupAddress(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
-        JSONObject knxResponse = process(matcher.group(1), address);
-
-        response.getWriter().println(knxResponse.toString(2));
+        if (matcher != null) {
+            GroupAddress address = new GroupAddress(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
+            JSONObject knxResponse = process(matcher.group(1), address);
+            response.getWriter().println(knxResponse.toString(4));
+        }
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
     }
