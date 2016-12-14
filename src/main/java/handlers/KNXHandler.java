@@ -37,6 +37,12 @@ public class KNXHandler extends AbstractHandler {
                 case "float":
                     knxResponse = getFloat(address);
                     break;
+                case "int":
+                    knxResponse = getInt(address);
+                    break;
+                case "boolean":
+                    knxResponse = getBoolean(address);
+                    break;
                 case "writeFloat":
                     Pattern pat = Pattern.compile(Pattern.quote("/") + "(.*?" + Pattern.quote("/") + "\\d+"
                             + Pattern.quote("/") + "\\d+" + Pattern.quote("/") + "\\d+)" + Pattern.quote("/")
@@ -65,6 +71,38 @@ public class KNXHandler extends AbstractHandler {
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
             float value = pc.readFloat(address, false);
+            retVal.put("knx return value", value);
+        } catch (KNXException | InterruptedException e) {
+            retVal.put("error", e.getMessage());
+        }
+
+        return retVal;
+    }
+
+    private JSONObject getBoolean(GroupAddress address) {
+        JSONObject retVal = new JSONObject();
+
+        retVal.put("command", "getBoolean");
+        retVal.put("group", address.toString());
+        try {
+            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            boolean value = pc.readBool(address);
+            retVal.put("knx return value", value);
+        } catch (KNXException | InterruptedException e) {
+            retVal.put("error", e.getMessage());
+        }
+
+        return retVal;
+    }
+
+    private JSONObject getInt(GroupAddress address) {
+        JSONObject retVal = new JSONObject();
+
+        retVal.put("command", "getInt");
+        retVal.put("group", address.toString());
+        try {
+            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            int value = pc.readUnsigned(address, ProcessCommunicator.UNSCALED);
             retVal.put("knx return value", value);
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
