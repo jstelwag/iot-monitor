@@ -38,6 +38,7 @@ public class KNXThermostatReset implements Runnable {
                                     + controllableArea + ": " + response);
                         } else {
                             setpointCount++;
+                            LogstashLogger.INSTANCE.message("Reset thermostat in " + controllableArea);
                         }
                     }
                 }
