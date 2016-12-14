@@ -37,13 +37,13 @@ public class KNXHandler extends AbstractHandler {
                 case "read":
                     switch (matcher.group(5)) {
                         case "int":
-                            knxResponse = getInt(address);
+                            knxResponse = readInt(address);
                             break;
                         case "float":
-                            knxResponse = getFloat(address);
+                            knxResponse = readFloat(address);
                             break;
                         case "boolean":
-                            knxResponse = getBoolean(address);
+                            knxResponse = readBoolean(address);
                             break;
                         default:
                             knxResponse.put("error", "Unknown type " + matcher.group(4) + " @" + s);
@@ -90,7 +90,7 @@ public class KNXHandler extends AbstractHandler {
         baseRequest.setHandled(true);
     }
 
-    private JSONObject getFloat(GroupAddress address) {
+    private JSONObject readFloat(GroupAddress address) {
         JSONObject retVal = new JSONObject();
 
         retVal.put("command", "read/float");
@@ -106,7 +106,7 @@ public class KNXHandler extends AbstractHandler {
         return retVal;
     }
 
-    private JSONObject getBoolean(GroupAddress address) {
+    private JSONObject readBoolean(GroupAddress address) {
         JSONObject retVal = new JSONObject();
 
         retVal.put("command", "read/boolean");
@@ -122,7 +122,7 @@ public class KNXHandler extends AbstractHandler {
         return retVal;
     }
 
-    private JSONObject getInt(GroupAddress address) {
+    private JSONObject readInt(GroupAddress address) {
         JSONObject retVal = new JSONObject();
 
         retVal.put("command", "read/int");
@@ -147,6 +147,7 @@ public class KNXHandler extends AbstractHandler {
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
             pc.write(address, soll, true);
+            retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
         }
@@ -163,6 +164,7 @@ public class KNXHandler extends AbstractHandler {
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
             pc.write(address, soll);
+            retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
         }
@@ -179,6 +181,7 @@ public class KNXHandler extends AbstractHandler {
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
             pc.write(address, soll, ProcessCommunicator.UNSCALED);
+            retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
         }

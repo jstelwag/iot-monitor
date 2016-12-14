@@ -36,6 +36,8 @@ public class Main {
         } else if ("iot".equals(args[0])) {
             LogstashLogger.INSTANCE.message("start iot");
             new IoTListener(prop.iotPort).run();
+        } else if ("thermostatreset".equals(args[0])) {
+            new KNXThermostatReset().run();
         }
     }
 
@@ -79,8 +81,6 @@ public class Main {
         statusContext.setHandler(new StatusHandler());
         ContextHandler restContext = new ContextHandler("/rest");
         restContext.setHandler(new RestHandler());
-        ContextHandler roomResetContext = new ContextHandler("/roomreset");
-        roomResetContext.setHandler(new RoomResetHandler());
         ContextHandler furnaceContext = new ContextHandler("/furnace");
         furnaceContext.setHandler(new FurnaceHandler());
         ContextHandler valveGroupContext = new ContextHandler("/valvegroup");
@@ -97,7 +97,7 @@ public class Main {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
-                , roomResetContext, furnaceContext, knxtemperatures, redisContext, knxContext
+                , furnaceContext, knxtemperatures, redisContext, knxContext
                 , echoContext});
         return contexts;
     }

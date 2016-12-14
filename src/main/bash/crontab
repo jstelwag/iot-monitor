@@ -12,5 +12,6 @@ HOME=/home/pi
 * * * * * iot-runtime statespeaker >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime fluxtemperatures >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime setpointspeaker >> $HOME/runtime.log 2>&1
+01 12 * * * iot-runtime thermostatreset >> $HOME/runtime.log 2>&1
 
 # needs newline at the end
