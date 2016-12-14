@@ -25,42 +25,49 @@ public class KNXHandler extends AbstractHandler {
             throws IOException, ServletException {
         System.out.println("KNX request " + s);
         response.setContentType("application/json");
-        Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(\\d+)"
-                + Pattern.quote("/") + "(\\d+)" + Pattern.quote("/") + "(\\d+)" + Pattern.quote("/") + ".*");
+        Pattern pattern = Pattern.compile(Pattern.quote("/") + "(\\d+)" + Pattern.quote("/") + "(\\d+)"
+                + Pattern.quote("/") + "(\\d+)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") );
         Matcher matcher = pattern.matcher(s);
         JSONObject knxResponse = null;
         if (matcher.find()) {
             GroupAddress address = new GroupAddress(Integer.parseInt(matcher.group(2))
                     , Integer.parseInt(matcher.group(3))
                     , Integer.parseInt(matcher.group(4)));
-            switch (matcher.group(1)) {
-                case "float":
-                    knxResponse = getFloat(address);
-                    break;
-                case "int":
-                    knxResponse = getInt(address);
-                    break;
-                case "boolean":
-                    knxResponse = getBoolean(address);
-                    break;
-                case "writeFloat":
-                    Pattern floatPat = Pattern.compile(Pattern.quote("/") + "(.*?" + Pattern.quote("/") + "\\d+"
-                            + Pattern.quote("/") + "\\d+" + Pattern.quote("/") + "\\d+)" + Pattern.quote("/")
-                            + Pattern.quote("/") + "(([0-9]*\\.?[0-9]+)" + Pattern.quote("/"));
-                    Matcher floatMatch = floatPat.matcher(s);
-                    if (floatMatch.find()) {
-                        float soll = Float.parseFloat(floatMatch.group(2));
-                        knxResponse = writeFloat(address, soll);
+            switch (matcher.group(4)) {
+                case "read":
+                    switch (matcher.group(5)) {
+                        case "int":
+                            knxResponse = getInt(address);
+                            break;
+                        case "float":
+                            knxResponse = getFloat(address);
+                            break;
+                        case "boolean":
+                            knxResponse = getBoolean(address);
+                            break;
                     }
                     break;
-                case "writeBoolean":
-                    Pattern boolPat = Pattern.compile(Pattern.quote("/") + "(.*?" + Pattern.quote("/") + "\\d+"
-                            + Pattern.quote("/") + "\\d+" + Pattern.quote("/") + "\\d+)" + Pattern.quote("/")
-                            + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
-                    Matcher boolMatch = boolPat.matcher(s);
-                    if (boolMatch.find()) {
-                        boolean soll = Boolean.parseBoolean(boolMatch.group(2));
-                        knxResponse = writeBoolean(address, soll);
+                case "write":
+                    Pattern writePat = Pattern.compile(Pattern.quote("/") + "(\\d+"
+                            + Pattern.quote("/") + "\\d+" + Pattern.quote("/") + "\\d+" + Pattern.quote("/")
+                            + Pattern.quote("/") + ".*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/")
+                            + "(.*?)" + Pattern.quote("/"));
+                    Matcher writeMatch = writePat.matcher(s);
+                    if (writeMatch.find()) {
+                        switch (writeMatch.group(2)) {
+                            case "int":
+                                int sollInt = Integer.parseInt(writeMatch.group(3));
+                                knxResponse = writeInt(address, sollInt);
+                                break;
+                            case "float":
+                                float sollFloat = Float.parseFloat(writeMatch.group(3));
+                                knxResponse = writeFloat(address, sollFloat);
+                                break;
+                            case "boolean":
+                                boolean sollBool = Boolean.parseBoolean(writeMatch.group(3));
+                                knxResponse = writeBoolean(address, sollBool);
+                                break;
+                        }
                     }
                     break;
             }
@@ -92,7 +99,7 @@ public class KNXHandler extends AbstractHandler {
     private JSONObject getBoolean(GroupAddress address) {
         JSONObject retVal = new JSONObject();
 
-        retVal.put("command", "getBoolean");
+        retVal.put("command", "read/boolean");
         retVal.put("group", address.toString());
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
@@ -108,7 +115,7 @@ public class KNXHandler extends AbstractHandler {
     private JSONObject getInt(GroupAddress address) {
         JSONObject retVal = new JSONObject();
 
-        retVal.put("command", "getInt");
+        retVal.put("command", "read/int");
         retVal.put("group", address.toString());
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
@@ -124,7 +131,7 @@ public class KNXHandler extends AbstractHandler {
     private JSONObject writeFloat(GroupAddress address, float soll) {
         JSONObject retVal = new JSONObject();
 
-        retVal.put("command", "writeFloat");
+        retVal.put("command", "write/float");
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
@@ -140,12 +147,28 @@ public class KNXHandler extends AbstractHandler {
     private JSONObject writeBoolean(GroupAddress address, boolean soll) {
         JSONObject retVal = new JSONObject();
 
-        retVal.put("command", "writeBoolean");
+        retVal.put("command", "write/boolean");
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
             pc.write(address, soll);
+        } catch (KNXException | InterruptedException e) {
+            retVal.put("error", e.getMessage());
+        }
+
+        return retVal;
+    }
+
+    private JSONObject writeInt(GroupAddress address, int soll) {
+        JSONObject retVal = new JSONObject();
+
+        retVal.put("command", "write/int");
+        retVal.put("group", address.toString());
+        retVal.put("value", soll);
+        try {
+            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            pc.write(address, soll, ProcessCommunicator.UNSCALED);
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
         }
