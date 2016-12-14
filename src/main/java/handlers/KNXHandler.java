@@ -44,13 +44,23 @@ public class KNXHandler extends AbstractHandler {
                     knxResponse = getBoolean(address);
                     break;
                 case "writeFloat":
-                    Pattern pat = Pattern.compile(Pattern.quote("/") + "(.*?" + Pattern.quote("/") + "\\d+"
+                    Pattern floatPat = Pattern.compile(Pattern.quote("/") + "(.*?" + Pattern.quote("/") + "\\d+"
                             + Pattern.quote("/") + "\\d+" + Pattern.quote("/") + "\\d+)" + Pattern.quote("/")
                             + Pattern.quote("/") + "(([0-9]*\\.?[0-9]+)" + Pattern.quote("/"));
-                    Matcher mat = pat.matcher(s);
-                    if (mat.find()) {
-                        float soll = Float.parseFloat(mat.group(2));
+                    Matcher floatMatch = floatPat.matcher(s);
+                    if (floatMatch.find()) {
+                        float soll = Float.parseFloat(floatMatch.group(2));
                         knxResponse = writeFloat(address, soll);
+                    }
+                    break;
+                case "writeBoolean":
+                    Pattern boolPat = Pattern.compile(Pattern.quote("/") + "(.*?" + Pattern.quote("/") + "\\d+"
+                            + Pattern.quote("/") + "\\d+" + Pattern.quote("/") + "\\d+)" + Pattern.quote("/")
+                            + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
+                    Matcher boolMatch = boolPat.matcher(s);
+                    if (boolMatch.find()) {
+                        boolean soll = Boolean.parseBoolean(boolMatch.group(2));
+                        knxResponse = writeBoolean(address, soll);
                     }
                     break;
             }
@@ -120,6 +130,22 @@ public class KNXHandler extends AbstractHandler {
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
             pc.write(address, soll, true);
+        } catch (KNXException | InterruptedException e) {
+            retVal.put("error", e.getMessage());
+        }
+
+        return retVal;
+    }
+
+    private JSONObject writeBoolean(GroupAddress address, boolean soll) {
+        JSONObject retVal = new JSONObject();
+
+        retVal.put("command", "writeBoolean");
+        retVal.put("group", address.toString());
+        retVal.put("value", soll);
+        try {
+            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            pc.write(address, soll);
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
         }
