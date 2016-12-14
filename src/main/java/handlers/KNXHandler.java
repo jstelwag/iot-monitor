@@ -30,9 +30,9 @@ public class KNXHandler extends AbstractHandler {
         Matcher matcher = pattern.matcher(s);
         JSONObject knxResponse = null;
         if (matcher.find()) {
-            GroupAddress address = new GroupAddress(Integer.parseInt(matcher.group(2))
-                    , Integer.parseInt(matcher.group(3))
-                    , Integer.parseInt(matcher.group(4)));
+            GroupAddress address = new GroupAddress(Integer.parseInt(matcher.group(1))
+                    , Integer.parseInt(matcher.group(2))
+                    , Integer.parseInt(matcher.group(3)));
             switch (matcher.group(4)) {
                 case "read":
                     switch (matcher.group(5)) {
