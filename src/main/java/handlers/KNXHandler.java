@@ -28,7 +28,7 @@ public class KNXHandler extends AbstractHandler {
         Pattern pattern = Pattern.compile(Pattern.quote("/") + "(\\d+)" + Pattern.quote("/") + "(\\d+)"
                 + Pattern.quote("/") + "(\\d+)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") );
         Matcher matcher = pattern.matcher(s);
-        JSONObject knxResponse = null;
+        JSONObject knxResponse = new JSONObject();
         if (matcher.find()) {
             GroupAddress address = new GroupAddress(Integer.parseInt(matcher.group(1))
                     , Integer.parseInt(matcher.group(2))
@@ -45,13 +45,15 @@ public class KNXHandler extends AbstractHandler {
                         case "boolean":
                             knxResponse = getBoolean(address);
                             break;
+                        default:
+                            knxResponse.put("error", "Unknown type " + matcher.group(4) + " @" + s);
+                            break;
                     }
                     break;
                 case "write":
                     Pattern writePat = Pattern.compile(Pattern.quote("/") + "(\\d+"
-                            + Pattern.quote("/") + "\\d+" + Pattern.quote("/") + "\\d+" + Pattern.quote("/")
-                            + Pattern.quote("/") + ".*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/")
-                            + "(.*?)" + Pattern.quote("/"));
+                            + Pattern.quote("/") + "\\d+" + Pattern.quote("/") + "\\d+" + Pattern.quote("/") + ".*?)"
+                            + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
                     Matcher writeMatch = writePat.matcher(s);
                     if (writeMatch.find()) {
                         switch (writeMatch.group(2)) {
@@ -67,15 +69,23 @@ public class KNXHandler extends AbstractHandler {
                                 boolean sollBool = Boolean.parseBoolean(writeMatch.group(3));
                                 knxResponse = writeBoolean(address, sollBool);
                                 break;
+                            default:
+                                knxResponse.put("error", "Unknown type " + writeMatch.group(2) + " @" + s);
+                                break;
                         }
+                    } else {
+                        knxResponse.put("error", "Unrecognized write command " + s);
                     }
                     break;
+                default:
+                    knxResponse.put("error", "Unknown command " + matcher.group(4) + " @" + s);
+                    break;
             }
+        } else {
+            knxResponse.put("error", "Syntax not recognized for " + s);
         }
 
-        if (knxResponse != null) {
-            response.getWriter().println(knxResponse.toString(4));
-        }
+        response.getWriter().println(knxResponse.toString(4));
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
     }
@@ -83,7 +93,7 @@ public class KNXHandler extends AbstractHandler {
     private JSONObject getFloat(GroupAddress address) {
         JSONObject retVal = new JSONObject();
 
-        retVal.put("command", "getFloat");
+        retVal.put("command", "read/float");
         retVal.put("group", address.toString());
         try {
             ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
