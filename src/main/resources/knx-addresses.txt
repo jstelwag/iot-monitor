@@ -1,0 +1,40 @@
+1/0/0	button	koetshuis	room_b	Plafondstraler
+1/0/4	button	koetshuis	apartment_II	Woonkamer spots
+1/0/5	button	koetshuis	room_d	Plafondstraler
+1/0/6	button	koetshuis	room_d	Dakkapel spots
+1/0/3	button	koetshuis	apartment_II	Slaap- & badkamer spots
+1/0/100	button	koetshuis	room_b	Bedlamp midden
+1/0/101	button	koetshuis	room_b	Lamp toilet
+1/0/102	button	koetshuis	room_b	Ventilator douche en toilet
+1/0/104	button	koetshuis	room_b	Bedlamp rechts
+1/0/105	button	koetshuis	room_b	Bedlamp links
+1/0/107	button	koetshuis	room_b	Spiegel douche
+1/0/108	button	koetshuis	hall_center	Spots op verdieping
+1/0/109	button	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, tafellamp zithoek
+1/0/110	button	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, douche, wandlamp
+1/0/111	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, bedlamp
+1/0/112	button	koetshuis	room_c	22-b, verd. kamer c, toilet oost, spots
+1/0/113	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, douche, wandlamp
+1/0/114	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, leeslamp links
+1/0/115	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, leeslamp rechts
+1/0/116	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, vloerlamp zithoek
+1/0/117	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, wastafel spiegel
+1/0/118	button	koetshuis	apartment_II	22-b, bg, kamer 2, badkamer, spiegel
+1/0/119	button	koetshuis	apartment_II	22-b, bg, kamer 2, toilet, afzuiging
+1/0/120	button	koetshuis	apartment_II	22-b, bg, kamer 2, slaapkamer, leeslamp links
+1/0/121	button	koetshuis	apartment_II	22-b, bg, kamer 2, slaapkamer, leeslamp rechts
+1/0/122	button	koetshuis	apartment_II	22-b, bg, kamer 2, toilet, spots
+1/0/123	button	koetshuis	apartment_II	22-b, bg, kamer 2, slaapkamer, bedlamp
+1/0/124	button	koetshuis	apartment_II	22-b, bg, kamer 2, slaapkamer, muurlamp
+1/0/125	button	koetshuis	apartment_II	22-b, bg, kamer 2, hal, muurlamp
+1/0/126	button	koetshuis	apartment_II	22-b, bg, kamer 2, woonkamer, vloerlamp zithoek
+1/0/127	button	koetshuis	apartment_II	22-b, bg, kamer 2, keuken, kastverlichting
+1/0/128	button	koetshuis	apartment_II	22-b, bg, kamer 2, keuken, plafondlamp
+1/0/129	button	koetshuis	apartment_II	22-b, bg, kamer 2, eetkamer, plafondlamp
+1/0/130	button	koetshuis	apartment_II	22-b, bg, kamer 2, serre, muurlamp
+1/0/131	button	koetshuis	apartment_II	22-b, bg, kamer 2, woonkamer, tafellamp TV
+1/0/132	button	koetshuis	hall_center	22-b, bg, koetshuis algemeen, spots onderaan trap
+1/0/133	button	koetshuis	hall_center	22-b, bg, koetshuis algemeen, spots plafond
+1/0/103	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, afzuiging
+1/0/1	button	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, spots plafond
+1/0/2	button	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, plafondstraler
