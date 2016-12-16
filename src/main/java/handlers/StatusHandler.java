@@ -80,7 +80,7 @@ public class StatusHandler extends AbstractHandler {
         IOUtils.closeQuietly(temperatures);
         IOUtils.closeQuietly(zoneStates);
 
-        for (Room room : Room.values()) {
+        for (Room room : Building.INSTANCE.allControllableRooms()) {
             if (bookings.isOccupiedNow(room)) {
                 JSONObject bookingNow = new JSONObject();
                 statusResponse.getJSONArray("occupiedNow").put(bookingNow);

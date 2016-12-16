@@ -1,5 +1,6 @@
 package retriever;
 
+import building.Building;
 import building.Room;
 import dao.BookingDAO;
 import org.apache.commons.lang3.time.DateUtils;
@@ -65,7 +66,7 @@ public class Beds24BookingRetriever implements Runnable {
                 }
             }
 
-            for (Room room : Room.values()) {
+            for (Room room : Building.INSTANCE.bookableRooms()) {
                 if (!roomsNow.contains(room)) {
                     bookings.setNow(room, null);
                 }

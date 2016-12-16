@@ -13,7 +13,9 @@ public enum Room {
     , room_d(Building.Construction.koetshuis, 20638)
     , room_1(Building.Construction.kasteel, 23102)
     , room_2(Building.Construction.kasteel, 22164)
-    , room_3(Building.Construction.kasteel, 0);
+    , room_3(Building.Construction.kasteel, 0)
+    , hall_left(Building.Construction.koetshuis, 0)
+    , hall_center(Building.Construction.koetshuis, 0);
 
     Room(Building.Construction construction, long beds24Id) {
         this.construction = construction;

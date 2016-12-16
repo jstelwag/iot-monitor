@@ -1,7 +1,9 @@
 package building;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The heat controller is created for my situation / building. To make the controller working for another building
@@ -57,6 +59,24 @@ public class Building {
         for (ControllableArea controlRoom : ControllableArea.values()) {
             if (controlRoom.room == room) {
                 retVal.add(controlRoom);
+            }
+        }
+        return retVal;
+    }
+
+    public Set<Room> allControllableRooms() {
+        Set<Room> retVal = new HashSet<>();
+        for (ControllableArea area : ControllableArea.values()) {
+            retVal.add(area.room);
+        }
+        return retVal;
+    }
+
+    public List<Room> bookableRooms() {
+        List<Room> retVal = new ArrayList<>();
+        for (Room room : Room.values()) {
+            if (room.beds24Id > 0) {
+                retVal.add(room);
             }
         }
         return retVal;

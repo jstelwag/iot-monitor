@@ -25,7 +25,7 @@ public class Setpoint implements Runnable {
         Date heatingOffTime = DateUtils.addHours(HeatingProperties.checkoutTime(now), -2);
         SetpointDAO setpoints = new SetpointDAO();
         BookingDAO bookings = new BookingDAO();
-        for (Room room : Room.values()) {
+        for (Room room : Building.INSTANCE.allControllableRooms()) {
             boolean active = bookings.isOccupiedTonight(room)
                     || (bookings.isOccupiedNow(room) && now.before(heatingOffTime));
             List<ControllableArea> rooms = Building.INSTANCE.findRooms(room);
