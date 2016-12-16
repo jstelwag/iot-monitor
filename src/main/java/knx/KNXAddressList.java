@@ -7,9 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.IOUtils;
 import speaker.LogstashLogger;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class KNXAddressList {
         ClassLoader classLoader = getClass().getClassLoader();
         Reader in = null;
         try {
-            in = new FileReader(classLoader.getResource("knx-addresses.txt").getFile());
+            in = new InputStreamReader(classLoader.getResourceAsStream("knx-addresses.txt"));
             Iterable<CSVRecord> records = CSVFormat.TDF.parse(in);
             for (CSVRecord record : records) {
                 addresses.add(new KNXAddress(record.get(0), KNXAddress.Type.valueOf(record.get(1))
