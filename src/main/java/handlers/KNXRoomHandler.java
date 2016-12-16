@@ -38,13 +38,17 @@ public class KNXRoomHandler extends AbstractHandler {
             switch (matcher.group(2)) {
                 case "all-off":
                     KNXAddressList knxList = new KNXAddressList();
+                    int switchCount = 0;
                     for (KNXAddress address : knxList.addressesByRoom(room, KNXAddress.Type.button)) {
                         try {
                             writeBoolean(new GroupAddress(address.address), false);
+                            switchCount++;
                         } catch (KNXFormatException e) {
                             e.printStackTrace();
                         }
                     }
+                    knxResponse.put("status", "OK");
+                    knxResponse.put("switches", switchCount);
                     break;
                 default:
                     knxResponse.put("error", "Unknown command " + matcher.group(2) + " @" + s);

@@ -12,6 +12,8 @@ import java.io.IOException;
  */
 public class KNXThermostatReset implements Runnable {
 
+    private final HeatingProperties prop = new HeatingProperties();
+
     public KNXThermostatReset() {}
 
     @Override
@@ -23,7 +25,6 @@ public class KNXThermostatReset implements Runnable {
                     //Thermostat can be reset
                     if ("empty".equals(bookings.getTonight(controllableArea.room))
                             || !bookings.getTonight(controllableArea.room).equals(bookings.getNow(controllableArea.room))) {
-                        HeatingProperties prop = new HeatingProperties();
                         String response = Request.Get("http://" + prop.localIp + ":" + prop.masterPort + "/knx/"
                                 + controllableArea.modusAddress + "/write/int/" + controllableArea.defaultModus
                                 + "/").execute().returnContent().asString();

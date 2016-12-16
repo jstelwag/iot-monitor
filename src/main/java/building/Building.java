@@ -15,7 +15,9 @@ public class Building {
 
     public enum Construction {
         koetshuis,
-        kasteel
+        kasteel,
+        garden,
+        misc
     }
 
     public final List<HeatZone> zones = new ArrayList<>();

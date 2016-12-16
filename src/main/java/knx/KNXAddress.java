@@ -14,7 +14,15 @@ public class KNXAddress {
     public final String description;
 
     public enum Type {
-        button;
+        button
+        , button_status
+        , window
+        , dimmer_relative
+        , dimmer_absolute
+        , dimmer_status
+        , climate
+        , P1
+        , homeserver
     }
 
     public KNXAddress(String address, Type type, Building.Construction construction, Room room, String description) {

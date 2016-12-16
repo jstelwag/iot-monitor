@@ -11,12 +11,12 @@
 1/0/107	button	koetshuis	room_b	Spiegel douche
 1/0/108	button	koetshuis	hall_center	Spots op verdieping
 1/0/109	button	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, tafellamp zithoek
-1/0/110	button	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, douche, wandlamp
-1/0/111	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, bedlamp
-1/0/112	button	koetshuis	room_c	22-b, verd. kamer c, toilet oost, spots
-1/0/113	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, douche, wandlamp
-1/0/114	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, leeslamp links
-1/0/115	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, leeslamp rechts
+1/0/110	button	koetshuis	room_b	Wandlamp douche
+1/0/111	button	koetshuis	room_c	Bedlamp midden
+1/0/112	button	koetshuis	room_c	Lamp toilet
+1/0/113	button	koetshuis	room_c	Wandlamp douche
+1/0/114	button	koetshuis	room_c	Bedlamp links
+1/0/115	button	koetshuis	room_c	Bedlamp rechts
 1/0/116	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, vloerlamp zithoek
 1/0/117	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, wastafel spiegel
 1/0/118	button	koetshuis	apartment_II	22-b, bg, kamer 2, badkamer, spiegel
@@ -38,3 +38,414 @@
 1/0/103	button	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, afzuiging
 1/0/1	button	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, spots plafond
 1/0/2	button	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, plafondstraler
+1/0/7	button	koetshuis	apartment_III	22c, bg, keuken & woonkamer, spots plafond
+1/0/8	button	koetshuis	apartment_III	22c, bg, woonkamer, spots plafond bij TV
+1/0/9	button	koetshuis	apartment_III	22c, bg, slaapkamer, spots plafond
+1/0/10	button	koetshuis	apartment_III	22c, bg, badkamer, spots plafond
+1/0/134	button	koetshuis	apartment_III	22c, bg, TV kamer, wandlamp zuidmuur
+1/0/135	button	koetshuis	plein	22c, buiten, gevel bij voordeur
+1/0/136	button	koetshuis	apartment_III	22c, bg, woonkamer, staande lamp bij keueken/serre
+1/0/137	button	koetshuis	apartment_III	22c, bg, eetkamer, tafellamp
+1/0/138	button	koetshuis	apartment_III	22c, bg, badkamer, in toilet
+1/0/139	button	koetshuis	apartment_III	22c, bg, hal, spots plafond
+1/0/140	button	koetshuis	apartment_III	22c, bg, eetkamer, boven tafel
+1/0/141	button	koetshuis	apartment_III	22c, bg, badkamer, bij wastafel
+1/0/142	button	koetshuis	apartment_III	22c, bg, toilet, spots plafond
+1/0/143	button	koetshuis	apartment_III	22c, bg, keuken, plafond boven aanrecht
+1/0/144	button	koetshuis	apartment_III	22c, bg, hal, spots
+1/0/145	button	koetshuis	room_b	22-b, verd., kamer B, slaapkamer west, westmuur links
+1/0/11	button	koetshuis	room_b	22-B, verd. kamer B, slaapkamer west, spots
+1/0/12	button	koetshuis	apartment_III	appartement 3, serre, spots
+1/0/13	button	koetshuis	apartment_II	appartement 2, serre, spots
+1/0/146	button	koetshuis	room_d	kamer D, WCD a
+1/0/147	button	koetshuis	room_d	kamer D, WCD b
+1/0/148	button	koetshuis	hall_center	algemeen, verdieping, trap
+1/0/149	button	koetshuis	room_d	kamer D, badkamer, spots & wastafel
+1/6/0	window	koetshuis	apartment_III	app.3, serre, raam 1 move
+1/6/1	window	koetshuis	apartment_III	app.3, serre, raam 1 stop
+1/6/2	window	koetshuis	apartment_III	app.3, serre, raam 2 move
+1/6/4	window	koetshuis	apartment_III	app.3, serre, raam 3 move
+1/6/6	window	koetshuis	apartment_III	app.3, serre, raam 4 move
+1/6/3	window	koetshuis	apartment_III	app.3, serre, raam 2 stop
+1/6/5	window	koetshuis	apartment_III	app.3, serre, raam 3 stop
+1/6/7	window	koetshuis	apartment_III	app.3, serre, raam 4 stop
+1/6/8	window	koetshuis	apartment_III	app.3, serre, ramen, move
+1/6/9	window	koetshuis	apartment_III	app.3, serre, ramen, stop
+1/6/21	window	koetshuis	apartment_II	app.2, serre, raam 1 move
+1/6/23	window	koetshuis	apartment_II	app.2, serre, raam 2 move
+1/6/25	window	koetshuis	apartment_II	app.2, serre, raam 3 move
+1/6/27	window	koetshuis	apartment_II	app.2, serre, raam 4 move
+1/6/22	window	koetshuis	apartment_II	app.2, serre, raam 1 stop
+1/6/24	window	koetshuis	apartment_II	app.2, serre, raam 2 stop
+1/6/26	window	koetshuis	apartment_II	app.2, serre, raam 3 stop
+1/6/28	window	koetshuis	apartment_II	app.2, serre, raam 4 stop
+1/6/29	window	koetshuis	apartment_II	app.2, serre, ramen, move
+1/6/30	window	koetshuis	apartment_II	app.2, serre, ramen, stop
+1/1/0	button_status	koetshuis	room_b	22-B, verd. kamer B, slaapkamer west, plafonstraler
+1/1/4	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, woonk. & hal, spots
+1/1/5	button_status	koetshuis	room_d	22-c, verd. kamer 3, woonkamer, plafondstraler
+1/1/6	button_status	koetshuis	room_d	22-c, verd. kamer 3, woonkamer & keuken, spots
+1/1/3	button_status	koetshuis	yet_unknown	22-b, bg, kamer 2, slaapkamer & badkamer, spots
+1/1/100	button_status	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, bedlamp
+1/1/101	button_status	koetshuis	room_b	22-b, verd. kamer b, toilet west, spot
+1/1/102	button_status	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, afzuiging
+1/1/104	button_status	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, leeslamp rechts
+1/1/105	button_status	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, leeslamp links
+1/1/107	button_status	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, badkamer, spiegel
+1/1/108	button_status	koetshuis	hall_center	22-b, verd. algemeen, LED spots plafond
+1/1/109	button_status	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, tafellamp zithoek
+1/1/110	button_status	koetshuis	room_b	22-b, verd. kamer b, slaapk. west, douche, wandlamp
+1/1/111	button_status	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, bedlamp
+1/1/112	button_status	koetshuis	room_c	22-b, verd. kamer c, toilet oost, spots
+1/1/113	button_status	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, douche, wandlamp
+1/1/114	button_status	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, leeslamp links
+1/1/115	button_status	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, leeslamp rechts
+1/1/116	button_status	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, vloerlamp zithoek
+1/1/117	button_status	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, wastafel spiegel
+1/1/118	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, badkamer, spiegel
+1/1/119	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, toilet, afzuiging
+1/1/120	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, slaapkamer, leeslamp links
+1/1/121	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, slaapkamer, leeslamp rechts
+1/1/122	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, toilet, spots
+1/1/123	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, slaapkamer, bedlamp
+1/1/124	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, slaapkamer, muurlamp
+1/1/125	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, hal, muurlamp
+1/1/126	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, woonkamer, vloerlamp zithoek
+1/1/127	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, keuken, kastverlichting
+1/1/128	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, keuken, plafondlamp
+1/1/129	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, eetkamer, plafondlamp
+1/1/130	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, serre, muurlamp
+1/1/131	button_status	koetshuis	apartment_II	22-b, bg, kamer 2, woonkamer, tafellamp TV
+1/1/132	button_status	koetshuis	apartment_II	22-b, bg, koetshuis algemeen, spots onderaan trap
+1/1/133	button_status	koetshuis	apartment_II	22-b, bg, koetshuis algemeen, spots plafond
+1/1/103	button_status	koetshuis	room_c	22-b, verd. kamer c, slaapk. oost, afzuiging
+1/1/1	button_status	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, spots plafond
+1/1/2	button_status	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, plafondstraler
+1/1/134	button_status	koetshuis	apartment_III	22c, bg, TV kamer, wandlamp zuidmuur
+1/1/135	button_status	koetshuis	plein	22c, buiten, gevel bij voordeur
+1/1/136	button_status	koetshuis	apartment_III	22c, bg, woonkamer, staande lamp bij keueken/serre
+1/1/137	button_status	koetshuis	apartment_III	22c, bg, eetkamer, tafellamp
+1/1/138	button_status	koetshuis	apartment_III	22c, bg, badkamer, in toilet
+1/1/139	button_status	koetshuis	apartment_III	22c, bg, hal, spots plafond
+1/1/140	button_status	koetshuis	apartment_III	22c, bg, eetkamer, boven tafel
+1/1/141	button_status	koetshuis	apartment_III	22c, bg, badkamer, bij wastafel
+1/1/142	button_status	koetshuis	apartment_III	22c, bg, toilet, spots plafond
+1/1/143	button_status	koetshuis	apartment_III	22c, bg, keuken, plafond boven aanrecht
+1/1/7	button_status	koetshuis	apartment_III	22c, bg, keuken & woonkamer, spots plafond
+1/1/8	button_status	koetshuis	apartment_III	22c, bg, woonkamer, spots plafond bij TV
+1/1/9	button_status	koetshuis	apartment_III	22c, bg, slaapkamer, spots plafond
+1/1/144	button_status	koetshuis	apartment_III	22c, bg, hal, spots
+1/1/145	button_status	koetshuis	room_b	22-b, verd., kamer B, slaapkamer west, westmuur links
+1/1/11	button_status	koetshuis	room_b	22-B, verd. kamer B, slaapkamer west, spots
+1/1/12	button_status	koetshuis	apartment_III	appartement 3, serre, spots
+1/1/10	button_status	koetshuis	apartment_III	22c, bg, badkamer, spots plafond
+1/1/13	button_status	koetshuis	apartment_II	appartement 2, serre, spots
+1/1/147	button_status	koetshuis	room_d	kamer D, WCD b
+1/1/146	button_status	koetshuis	room_d	kamer D, WCD a
+1/1/148	button_status	koetshuis	hall_center	algemeen, verdieping, trap
+1/1/149	button_status	koetshuis	room_d	kamer D, badkamer, spots & wastafel
+1/2/0	dimmer_relative	koetshuis	room_b	22-B, verd. kamer B, slaapkamer west, plafonstraler
+1/2/3	dimmer_relative	koetshuis	yet_unknown	22-b, bg, kamer 2, slaapkamer & badkamer, spots
+1/2/4	dimmer_relative	koetshuis	yet_unknown	22-b, bg, kamer 2, woonk. & hal, spots
+1/2/5	dimmer_relative	koetshuis	room_d	22-c, verd. kamer 3, woonkamer, plafondstraler
+1/2/6	dimmer_relative	koetshuis	room_d	22-c, verd. kamer 3, woonkamer & keuken, spots
+1/2/1	dimmer_relative	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, spots plafond
+1/2/2	dimmer_relative	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, plafondstraler
+1/2/7	dimmer_relative	koetshuis	apartment_III	22c, bg, keuken & woonkamer, spots plafond
+1/2/8	dimmer_relative	koetshuis	apartment_III	22c, bg, woonkamer, spots plafond bij TV
+1/2/9	dimmer_relative	koetshuis	apartment_III	22c, bg, slaapkamer, spots plafond
+1/2/11	dimmer_relative	koetshuis	room_b	22-B, verd. kamer B, slaapkamer west, spots
+1/2/12	dimmer_relative	koetshuis	apartment_III	appartement 3, serre, spots
+1/2/10	dimmer_relative	koetshuis	apartment_III	22c, bg, badkamer, spots plafond
+1/2/13	dimmer_relative	koetshuis	apartment_II	appartement 2, serre, spots
+1/3/0	dimmer_absolute	koetshuis	room_b	22-B, verd. kamer B, slaapkamer west, plafonstraler
+1/3/3	dimmer_absolute	koetshuis	yet_unknown	22-b, bg, kamer 2, slaapkamer & badkamer, spots
+1/3/5	dimmer_absolute	koetshuis	room_d	22-c, verd. kamer 3, woonkamer, plafondstraler
+1/3/6	dimmer_absolute	koetshuis	room_d	22-c, verd. kamer 3, woonkamer & keuken, spots
+1/3/1	dimmer_absolute	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, spots plafond
+1/3/2	dimmer_absolute	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, plafondstraler
+1/3/7	dimmer_absolute	koetshuis	apartment_III	22c, bg, keuken & woonkamer, spots plafond
+1/3/8	dimmer_absolute	koetshuis	apartment_III	22c, bg, woonkamer, spots plafond bij TV
+1/3/11	dimmer_absolute	koetshuis	room_b	22-B, verd. kamer B, slaapkamer west, spots
+1/3/12	dimmer_absolute	koetshuis	apartment_III	appartement 3, serre, spots
+1/3/9	dimmer_absolute	koetshuis	apartment_III	22c, bg, slaapkamer, spots plafond
+1/3/10	dimmer_absolute	koetshuis	apartment_III	22c, bg, badkamer, spots plafond
+1/3/13	dimmer_absolute	koetshuis	apartment_II	appartement 2, serre, spots
+1/4/0	dimmer_status	koetshuis	room_b	22-B, verd. kamer B, slaapkamer west, plafonstraler
+1/4/3	dimmer_status	koetshuis	yet_unknown	22-b, bg, kamer 2, slaapkamer & badkamer, spots
+1/4/5	dimmer_status	koetshuis	room_d	22-c, verd. kamer 3, woonkamer, plafondstraler
+1/4/6	dimmer_status	koetshuis	room_d	22-c, verd. kamer 3, woonkamer & keuken, spots
+1/4/1	dimmer_status	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, spots plafond
+1/4/2	dimmer_status	koetshuis	room_c	22-B, verd. kamer C, slaapkamer oost, plafondstraler
+1/4/7	dimmer_status	koetshuis	apartment_III	22c, bg, keuken & woonkamer, spots plafond
+1/4/8	dimmer_status	koetshuis	apartment_III	22c, bg, woonkamer, spots plafond bij TV
+1/4/11	dimmer_status	koetshuis	room_b	22-B, verd. kamer B, slaapkamer west, spots
+1/4/4	dimmer_status	koetshuis	yet_unknown	22-b, bg, kamer 2, woonk. & hal, spots
+1/4/12	dimmer_status	koetshuis	apartment_III	appartement 3, serre, spots
+1/4/9	dimmer_status	koetshuis	apartment_III	22c, bg, slaapkamer, spots plafond
+1/4/10	dimmer_status	koetshuis	apartment_III	22c, bg, badkamer, spots plafond
+1/4/13	dimmer_status	koetshuis	apartment_II	appartement 2, serre, spots
+1/7/1	homeserver	koetshuis	room_b	kamer B (west)
+1/7/3	homeserver	koetshuis	room_d	kamer 3
+1/7/2	homeserver	koetshuis	room_c	kamer C (oost)
+1/7/102	homeserver	koetshuis	room_b	scenes kamer B
+1/7/101	homeserver	koetshuis	apartment_II	scenes apartement 2
+1/7/103	homeserver	koetshuis	room_c	scenes kamer C
+1/7/4	homeserver	koetshuis	apartment_III	appartement 3
+1/7/5	homeserver	koetshuis	apartment_III	appartement 3, badkamer
+1/7/104	homeserver	koetshuis	apartment_III	appartement 3, scenes
+1/7/0	homeserver	koetshuis	apartment_II	appartement 2 (bg)
+1/7/6	homeserver	koetshuis	room_d	kamer D
+1/7/105	homeserver	koetshuis	room_d	scenes kamer D
+1/5/0	climate	koetshuis	apartment_II	22-b, bg, kamer 2, toilet
+1/5/1	climate	koetshuis	apartment_II	appartement 2, actueel
+1/5/11	climate	koetshuis	apartment_III	appartement 3, actueel
+1/5/21	climate	koetshuis	room_b	kamer B, actueel
+1/5/31	climate	koetshuis	room_c	kamer C, actueel
+1/5/41	climate	koetshuis	room_d	kamer D, actueel
+1/5/51	climate	koetshuis	apartment_III	appartement 3, badkamer, actueel
+1/5/12	climate	koetshuis	apartment_III	appartement 3, soll-basis
+1/5/13	climate	koetshuis	apartment_III	appartement 3, modus
+1/5/14	climate	koetshuis	apartment_III	appartement 3, status
+1/5/15	climate	koetshuis	apartment_III	appartement 3, stelgrootte
+1/5/16	climate	koetshuis	apartment_III	appartement 3, soll temperatuur
+1/5/2	climate	koetshuis	apartment_II	appartement 2, soll-basis
+1/5/3	climate	koetshuis	apartment_II	appartement 2, modus
+1/5/4	climate	koetshuis	apartment_II	appartement 2, status
+1/5/5	climate	koetshuis	apartment_II	appartement 2, stelgrootte
+1/5/6	climate	koetshuis	apartment_II	appartement 2, soll temperatuur
+1/5/61	climate	koetshuis	apartment_II	appartement 2, badkamer, actueel
+2/0/0	button	koetshuis	room_a	22a, verd. zithoek, spots plaf. uitbouw zijde
+2/0/1	button	koetshuis	room_a	22a, verd, badkamer, spots plafond
+2/0/2	button	koetshuis	apartment_I	22a, bg, eetkamer, spots plafond
+2/0/3	button	koetshuis	apartment_I	22a, bg, woonkamer, spots plafond, noord
+2/0/4	button	koetshuis	room_a	22a, verd. slaapkamer, spots plafond, uitbouw westzijde
+2/0/5	button	koetshuis	room_a	22a, verd. slaapkamer, schijnwerper plafond
+2/0/101	button	koetshuis	apartment_I	22a, bg, eetkamer, staande lamp bij trapkast
+2/0/102	button	koetshuis	apartment_I	22a, bg, keuken, spots in kast
+2/0/105	button	koetshuis	apartment_I	22a, bg, eetkamer, plafond
+2/0/106	button	koetshuis	apartment_I	22a, bg, woonkamer, spots muur oost
+2/0/107	button	koetshuis	room_a	22a, verd. toilet
+2/0/112	button	koetshuis	room_a	22a, verd. slaapkamer, bij bed links
+2/0/113	button	koetshuis	room_a	22a, verd. slaapkamer, bij bed rechts
+2/0/108	button	koetshuis	apartment_I	22a, bg, slaapkamer, plafond
+2/0/109	button	koetshuis	hall_left	22a, verd. trap, spots plafond
+2/0/110	button	koetshuis	room_a	22a, verd., toilet, ventilator
+2/0/111	button	koetshuis	room_a	22a, verd. zithoek, staande lamp
+2/0/103	button	koetshuis	apartment_I	22a, bg, slaapkamer, staande lamp bij raam links
+2/0/104	button	koetshuis	apartment_I	22a, bg, woonkamer, staande lamp bij terrasdeur
+2/0/114	button	koetshuis	apartment_I	22a, bg, toilet, lamp
+2/0/115	button	koetshuis	apartment_I	22a, bg, muur bj trap, rechts
+2/0/116	button	koetshuis	apartment_I	22a, bg, toilet, ventilator
+2/0/117	button	koetshuis	apartment_I	22a, bg, terras, lichtpunt
+2/0/118	button	koetshuis	plein	22a, bg, voordeur buiten
+2/0/119	button	koetshuis	hall_left	22a, bg, hal, plafond
+2/0/120	button	koetshuis	room_a	22a, verd. slaapkamer, bij bed midden
+2/0/121	button	koetshuis	room_a	22a, verd. slaapkamer, staande lamp
+2/0/122	button	koetshuis	room_a	22a, verd. woonkamer, tafellamp
+2/1/0	button_status	koetshuis	room_a	22a, verd. zithoek, spots plaf. uitbouw zijde
+2/1/1	button_status	koetshuis	room_a	22a, verd, badkamer, spots plafond
+2/1/2	button_status	koetshuis	apartment_I	22a, bg, eetkamer, spots plafond
+2/1/3	button_status	koetshuis	apartment_I	22a, bg, woonkamer, spots plafond, noord
+2/1/4	button_status	koetshuis	room_a	22a, verd. slaapkamer, spots plafond, uitbouw westzijde
+2/1/5	button_status	koetshuis	room_a	22a, verd. slaapkamer, schijnwerper plafond
+2/1/101	button_status	koetshuis	apartment_I	22a, bg, eetkamer, staande lamp bij trapkast
+2/1/102	button_status	koetshuis	apartment_I	22a, bg, keuken, spots in kast
+2/1/105	button_status	koetshuis	apartment_I	22a, bg, eetkamer, plafond
+2/1/106	button_status	koetshuis	apartment_I	22a, bg, woonkamer, spots muur oost
+2/1/107	button_status	koetshuis	room_a	22a, verd. toilet
+2/1/108	button_status	koetshuis	apartment_I	22a, bg, slaapkamer, plafond
+2/1/109	button_status	koetshuis	room_a	22a, verd. trap, spots plafond
+2/1/110	button_status	koetshuis	room_a	22a, verd., toilet, ventilator
+2/1/111	button_status	koetshuis	room_a	22a, verd. zithoek, staande lamp
+2/1/112	button_status	koetshuis	room_a	22a, verd. slaapkamer, bij bed links
+2/1/113	button_status	koetshuis	room_a	22a, verd. slaapkamer, bij bed rechts
+2/1/103	button_status	koetshuis	apartment_I	22a, bg, slaapkamer, staande lamp bij raam links
+2/1/104	button_status	koetshuis	apartment_I	22a, bg, woonkamer, staande lamp bij terrasdeur
+2/1/114	button_status	koetshuis	apartment_I	22a, bg, toilet, lamp
+2/1/115	button_status	koetshuis	apartment_I	22a, bg, muur bj trap, rechts
+2/1/116	button_status	koetshuis	apartment_I	22a, bg, toilet, ventilator
+2/1/117	button_status	koetshuis	apartment_I	22a, bg, terras, lichtpunt
+2/1/118	button_status	koetshuis	apartment_I	22a, bg, voordeur buiten
+2/1/119	button_status	koetshuis	hall_left	22a, bg, hal, plafond
+2/1/120	button_status	koetshuis	room_a	22a, verd. slaapkamer, bij bed midden
+2/1/121	button_status	koetshuis	room_a	22a, verd. slaapkamer, staande lamp
+2/1/122	button_status	koetshuis	room_a	22a, verd. woonkamer, tafellamp
+2/2/0	dimmer_relative	koetshuis	room_a	22a, verd. zithoek, spots plaf. uitbouw zijde
+2/2/1	dimmer_relative	koetshuis	room_a	22a, verd, badkamer, spots plafond
+2/2/2	dimmer_relative	koetshuis	apartment_I	22a, bg, eetkamer, spots plafond
+2/2/3	dimmer_relative	koetshuis	apartment_I	22a, bg, woonkamer, spots plafond, noord
+2/2/4	dimmer_relative	koetshuis	room_a	22a, verd. slaapkamer, spots plafond, uitbouw westzijde
+2/2/5	dimmer_relative	koetshuis	room_a	22a, verd. slaapkamer, schijnwerper plafond
+2/3/0	dimmer_absolute	koetshuis	room_a	22a, verd. zithoek, spots plaf. uitbouw zijde
+2/3/1	dimmer_absolute	koetshuis	room_a	22a, verd, badkamer, spots plafond
+2/3/2	dimmer_absolute	koetshuis	apartment_I	22a, bg, eetkamer, spots plafond
+2/3/3	dimmer_absolute	koetshuis	apartment_I	22a, bg, woonkamer, spots plafond, noord
+2/3/4	dimmer_absolute	koetshuis	room_a	22a, verd. slaapkamer, spots plafond, uitbouw westzijde
+2/3/5	dimmer_absolute	koetshuis	room_a	22a, verd. slaapkamer, schijnwerper plafond
+2/4/0	dimmer_status	koetshuis	room_a	22a, verd. zithoek, spots plaf. uitbouw zijde
+2/4/1	dimmer_status	koetshuis	room_a	22a, verd, badkamer, spots plafond
+2/4/2	dimmer_status	koetshuis	apartment_I	22a, bg, eetkamer, spots plafond
+2/4/3	dimmer_status	koetshuis	apartment_I	22a, bg, woonkamer, spots plafond, noord
+2/4/4	dimmer_status	koetshuis	room_a	22a, verd. slaapkamer, spots plafond, uitbouw westzijde
+2/4/5	dimmer_status	koetshuis	room_a	22a, verd. slaapkamer, schijnwerper plafond
+2/7/101	homeserver	koetshuis	apartment_I	22a, bgg, scenes
+2/7/1	homeserver	koetshuis	apartment_I	22a, bgg
+2/7/2	homeserver	koetshuis	room_a	22a, verdieping
+2/7/102	homeserver	koetshuis	room_a	22a, verd. scenes
+2/5/1	climate	koetshuis	apartment_I	appartement 1, actueel
+2/5/11	climate	koetshuis	room_a	kamer A, actueel
+2/5/12	climate	koetshuis	room_a	kamer A, soll-basis
+2/5/13	climate	koetshuis	room_a	kamer A, modus
+2/5/14	climate	koetshuis	room_a	kamer A, status
+2/5/15	climate	koetshuis	room_a	kamer A, stelgrootte
+2/5/16	climate	koetshuis	room_a	kamer A, soll temperatuur
+2/5/17	climate	koetshuis	room_a	kamer A, verschuiving actueel
+2/5/18	climate	koetshuis	room_a	kamer A, verschuiving gewenst
+0/0/2	homeserver	koetshuis	yet_unknown	tijd
+0/2/1	P1	misc	yet_unknown	DSMR version nr
+0/2/2	P1	misc	yet_unknown	P1G2 version nr
+0/2/3	P1	misc	yet_unknown	P1 error counter
+0/2/4	P1	misc	yet_unknown	last P1 message timestamp
+0/2/11	P1	misc	yet_unknown	aantal aangesloten M-bus devic
+0/2/12	P1	misc	yet_unknown	G-meter type
+0/2/13	P1	misc	yet_unknown	stand gasklep
+0/2/14	P1	misc	yet_unknown	datum laatste gasstand
+0/2/15	P1	misc	yet_unknown	tijd laatste gasstand
+0/2/16	P1	misc	yet_unknown	gas verbruikt (m3)
+0/2/21	P1	misc	yet_unknown	E-meter type
+0/2/31	P1	misc	yet_unknown	laaste lange uitval, duur(s)
+0/2/29	P1	misc	yet_unknown	laaste lange uitval, datum
+0/2/30	P1	misc	yet_unknown	laaste lange uitval, tijd
+0/2/26	P1	misc	yet_unknown	actueel tarief (1=laag,2=hoog)
+0/2/25	P1	misc	yet_unknown	laag tarief actief
+0/2/24	P1	misc	yet_unknown	stand switchaar
+0/2/41	P1	misc	yet_unknown	actuele stroom L1 (A)
+0/2/42	P1	misc	yet_unknown	actuele stroom L2 (A)
+0/2/43	P1	misc	yet_unknown	actuele stroom L3 (A)
+0/2/51	P1	misc	yet_unknown	actueel verbruik (kW)
+0/2/52	P1	misc	yet_unknown	actueel verbruik L1 (kW)
+0/2/53	P1	misc	yet_unknown	actueel verbruik L2 (kW)
+0/2/54	P1	misc	yet_unknown	actueel verbruik L3 (kW)
+0/2/61	P1	misc	yet_unknown	actueel geleverd (kW)
+0/2/62	P1	misc	yet_unknown	actueel geleverd L1 (kW)
+0/2/63	P1	misc	yet_unknown	actueel geleverd L2 (kW)
+0/2/64	P1	misc	yet_unknown	actueel geleverd L3 (kW)
+0/2/71	P1	misc	yet_unknown	verbruik laag (kWh)
+0/2/72	P1	misc	yet_unknown	verbruik hoog (kWh)
+0/2/73	P1	misc	yet_unknown	verbruik totaal (kWh)
+0/2/81	P1	misc	yet_unknown	geleverd laag (kWh)
+0/2/82	P1	misc	yet_unknown	geleverd hoog (kWh)
+0/2/83	P1	misc	yet_unknown	geleverd totaal (kWh)
+0/2/91	P1	misc	yet_unknown	verschil laag (kWh)
+0/2/92	P1	misc	yet_unknown	verschil hoog (kWh)
+0/2/93	P1	misc	yet_unknown	verschil totaal (kWh)
+0/2/151	P1	misc	yet_unknown	actueel verbruik (W)
+0/2/152	P1	misc	yet_unknown	actueel verbruik L1 (W)
+0/2/153	P1	misc	yet_unknown	actueel verbruik L2 (W)
+0/2/154	P1	misc	yet_unknown	actueel verbruik L3 (W)
+0/2/161	P1	misc	yet_unknown	actueel geleverd (W)
+0/2/162	P1	misc	yet_unknown	actueel geleverd L1 (W)
+0/2/163	P1	misc	yet_unknown	actueel geleverd L2 (W)
+0/2/164	P1	misc	yet_unknown	actueel geleverd L3 (W)
+0/2/171	P1	misc	yet_unknown	verbruik laag (Wh)
+0/2/172	P1	misc	yet_unknown	verbruik hoog (Wh)
+0/2/173	P1	misc	yet_unknown	verbruik totaal (Wh)
+0/2/181	P1	misc	yet_unknown	geleverd laag (Wh)
+0/2/182	P1	misc	yet_unknown	geleverd hoog (Wh)
+0/2/183	P1	misc	yet_unknown	geleverd totaal (Wh)
+0/2/191	P1	misc	yet_unknown	verschil laag (Wh)
+0/2/192	P1	misc	yet_unknown	verschil hoog (Wh)
+0/2/193	P1	misc	yet_unknown	verschil totaal (Wh)
+0/2/36	P1	misc	yet_unknown	spanningsdips L2
+0/2/37	P1	misc	yet_unknown	spanningsdips L3
+0/2/35	P1	misc	yet_unknown	spanningsdips L1
+0/2/32	P1	misc	yet_unknown	spanningspieken L1
+0/2/33	P1	misc	yet_unknown	spanningspieken L2
+0/2/34	P1	misc	yet_unknown	spanningspieken L3
+0/2/22	P1	misc	yet_unknown	max power (kW)
+0/2/23	P1	misc	yet_unknown	max current (A)
+0/2/27	P1	misc	yet_unknown	aantal uitvallen
+0/2/28	P1	misc	yet_unknown	aantal lange uitvallen
+3/1/105	button_status	koetshuis	plein	buitenlamp, wasruimte rechts
+3/1/104	button_status	koetshuis	plein	buitenlamp, plataan entree
+3/1/102	button_status	koetshuis	plein	buitenlamp, wasruimte links
+3/1/101	button_status	koetshuis	plein	buitenlamp, wasruimte, poort
+3/1/103	button_status	koetshuis	laundry	TL schuur
+3/1/106	button_status	garden	yet_unknown	koetshuis, buitenlamp lindeboom
+3/0/105	button	koetshuis	plein	buitenlamp, wasruimte rechts
+3/0/104	button	koetshuis	plein	buitenlamp, plataan entree
+3/0/102	button	koetshuis	plein	buitenlamp, wasruimte links
+3/0/101	button	koetshuis	plein	buitenlamp, wasruimte, poort
+3/0/103	button	koetshuis	laundry	TL schuur
+3/0/106	button	garden	yet_unknown	koetshuis, buitenlamp lindeboom
+4/0/101	button	kasteel	room_1	kamer 1, badkamer lampen
+4/0/102	button	kasteel	room_1	kamer 1, bergruimte
+4/0/103	button	kasteel	room_1	kamer 1, badkamer, afzuiging
+4/0/106	button	kasteel	room_1	kamer 1, slaapkamer, afzuiging
+4/0/107	button	kasteel	room_1	kamer 1, buitenlamp voordeur
+4/0/108	button	kasteel	room_1	kamer 1, staande lamp 1
+4/0/109	button	kasteel	room_1	kamer 1, staande lamp 2
+4/0/1	button	kasteel	room_1	kamer 1, gang wand
+4/0/104	button	kasteel	room_1	kamer 1, slaapkamer, bed links
+4/0/105	button	kasteel	room_1	kamer 1, slaapkamer, bed rechts
+4/0/2	button	kasteel	room_1	kamer 1, vloerspots
+4/1/101	button_status	kasteel	room_1	kamer 1, badkamer lampen
+4/1/102	button_status	kasteel	room_1	kamer 1, bergruimte
+4/1/103	button_status	kasteel	room_1	kamer 1, badkamer, afzuiging
+4/1/106	button_status	kasteel	room_1	kamer 1, slaapkamer, afzuiging
+4/1/107	button_status	kasteel	room_1	kamer 1, buitenlamp voordeur
+4/1/108	button_status	kasteel	room_1	kamer 1, staande lamp 1
+4/1/109	button_status	kasteel	room_1	kamer 1, staande lamp 2
+4/1/1	button_status	kasteel	room_1	kamer 1, gang wand
+4/1/104	button_status	kasteel	room_1	kamer 1, slaapkamer, bed links
+4/1/105	button_status	kasteel	room_1	kamer 1, slaapkamer , bed rechts
+4/1/2	button_status	kasteel	room_1	kamer 1, vloerspots
+4/7/0	homeserver	kasteel	room_1	kamer 1, centraal
+4/7/1	homeserver	kasteel	room_1	kamer 1, scenes
+4/2/1	dimmer_relative	kasteel	room_1	kamer 1, gang wand
+4/2/2	dimmer_relative	kasteel	room_1	kamer 1, vloerspots
+4/3/1	dimmer_absolute	kasteel	room_1	kamer 1, gang wand
+4/3/2	dimmer_absolute	kasteel	room_1	kamer 1, vloerspots
+4/4/1	dimmer_status	kasteel	room_1	kamer 1, gang wand
+4/4/2	dimmer_status	kasteel	room_1	kamer 1, vloerspots
+4/5/1	climate	kasteel	room_1	kamer 1, actueel
+4/5/2	climate	kasteel	room_1	kamer 1, soll-basis
+4/5/3	climate	kasteel	room_1	kamer 1, modus
+4/5/4	climate	kasteel	room_1	kamer 1, status
+4/5/5	climate	kasteel	room_1	kamer 1, stelgrootte
+4/5/6	climate	kasteel	room_1	kamer 1, soll temperatuur
+4/5/7	climate	kasteel	room_1	kamer 1, verschuiving actueel
+4/5/8	climate	kasteel	room_1	kamer 1, verschuiving gewenst
+6/0/101	button	kasteel	room_2	kamer 2, badkamer lampen
+6/0/102	button	kasteel	room_2	kamer 2, badkamer, afzuiging
+6/0/103	button	kasteel	room_2	kamer 2, badkamer, spiegel
+6/0/104	button	kasteel	room_2	kamer 2, badkamer, TV
+6/0/105	button	kasteel	room_2	kamer 3, badkamer lampen
+6/0/106	button	kasteel	room_2	kamer 3, badkamer, afzuiging
+6/5/1	climate	kasteel	room_2	kamer 2, badkamer, actueel
+6/5/2	climate	kasteel	room_2	kamer 2, badkamer, soll-basis
+6/5/3	climate	kasteel	room_2	kamer 2, badkamer, modus
+6/5/4	climate	kasteel	room_2	kamer 2, badkamer, status
+6/5/5	climate	kasteel	room_2	kamer 2, badkamer, stelgrootte
+6/5/6	climate	kasteel	room_2	kamer 2, badkamer, soll temperatuur
+6/5/7	climate	kasteel	room_2	kamer 2, badkamer, verschuiving actueel
+6/5/8	climate	kasteel	room_2	kamer 2, badkamer, verschuiving gewenst
+6/5/11	climate	kasteel	room_3	kamer 3, badkamer, actueel
+6/5/12	climate	kasteel	room_3	kamer 3, badkamer, soll-basis
+6/5/13	climate	kasteel	room_3	kamer 3, badkamer, modus
+6/5/14	climate	kasteel	room_3	kamer 3, badkamer, status
+6/5/15	climate	kasteel	room_3	kamer 3, badkamer, stelgrootte
+6/5/16	climate	kasteel	room_3	kamer 3, badkamer, soll temperatuur
+6/5/17	climate	kasteel	room_3	kamer 3, badkamer, verschuiving actueel
+6/5/18	climate	kasteel	room_3	kamer 3, badkamer, verschuiving gewenst
+6/5/201	climate	kasteel	yet_unknown	kamer 2 & 3, CV ketel
+6/5/202	climate	kasteel	yet_unknown	kamer 2 & 3, CV ketel (status)
+6/7/0	homeserver	kasteel	room_2	kamer 2, centraal
+6/7/2	homeserver	kasteel	room_3	kamer 3, centraal
+6/1/101	button_status	kasteel	room_2	kamer 2, badkamer lampen
+6/1/102	button_status	kasteel	room_2	kamer 2, badkamer, afzuiging
+6/1/103	button_status	kasteel	room_2	kamer 2, badkamer, spiegel
+6/1/104	button_status	kasteel	room_2	kamer 2, badkamer, TV
+6/1/105	button_status	kasteel	room_3	kamer 3, badkamer lampen
+6/1/106	button_status	kasteel	room_3	kamer 3, badkamer, afzuiging

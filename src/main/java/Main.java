@@ -38,6 +38,8 @@ public class Main {
             new IoTListener(prop.iotPort).run();
         } else if ("thermostatreset".equals(args[0])) {
             new KNXThermostatReset().run();
+        } else if ("roomreset".equals(args[0])) {
+            new KNXRoomReset().run();
         }
     }
 
