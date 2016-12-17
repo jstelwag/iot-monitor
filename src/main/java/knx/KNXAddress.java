@@ -32,4 +32,10 @@ public class KNXAddress {
         this.room = room;
         this.description = description;
     }
+
+
+    @Override
+    public String toString() {
+        return room + " (" + type + ") " + description;
+    }
 }
