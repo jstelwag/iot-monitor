@@ -1,0 +1,87 @@
+#!/bin/bash
+# elk stack server setup script
+# first run git clone https://github.com/jstelwag/iot-monitor
+# then sh iot-monitor/src/main/bash/elk-server-setup
+
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get -y upgrade
+sudo apt-get -y install oracle-java8-installer
+#sudo apt-get -y install collectd
+
+cat <<EOF >interfaces
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto enp0s3
+iface enp0s3 inet static
+ address 192.168.178.101
+ netmask 255.255.255.0
+ gateway 192.168.178.1
+dns-nameservers 8.8.8.8
+EOF
+sudo mv interfaces /etc/network
+
+# Elastic
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+sudo apt-get -y install apt-transport-https
+echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-5.x.list
+sudo apt-get update
+sudo apt-get -y install elasticsearch
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable elasticsearch.service
+
+echo "cluster.name: kasteel-nijswiller" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
+echo "node.name: nijswiller-1" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
+echo "node.rack: kasteel-brix" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
+
+# Logstash
+sudo apt-get -y install logstash
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable logstash.service
+
+cat <<EOF > udp-9001-knx.conf
+input {
+  udp { port => 9001 }
+}
+filter {
+  grok {
+    match => { "message" => "(?<receiver>receiver: \[.*?\]) (?<knx_from>\d{1,3}\.\d{1,3}\.\d{1,3}) to (?<knx_to>\d{1,3}\/\d{1,3}\/\d{1,3}), (?<knx_priority>\b.*\b) priority hop count (?<knx_hopcount>\d) tpdu (?<knx_tpdu>[0-9a-f]{2} [0-9a-f][0-9a-f] [0-9a-f][0-9a-f] [0-9a-f][0-9a-f])" }
+  }
+}
+output {
+  elasticsearch {
+    hosts => "localhost:9200"
+    index => "knx-%{+YYYY.MM.dd}"
+  }
+}
+EOF
+sudo mv udp-9001-knx.conf /etc/logstash/conf.d/
+
+cat <<EOF > udp-9000.conf
+input {
+  udp { port => 9000 }
+}
+filter {
+  grok {
+    match => { "message" => "(?<application>.*?): (?<message>.*)"}
+  }
+}
+output {
+  stdout {}
+  elasticsearch {
+    hosts => "localhost:9200"
+  }
+}
+EOF
+sudo mv udp-9000.conf /etc/logstash/conf.d/
+
+#Kibana
+sudo apt-get -y install kibana
+sudo /bin/systemctl daemon-reload
+sudo /bin/systemctl enable kibana.service
+echo 'server.host: "0.0.0.0"' | sudo tee -a /etc/kibana/kibana.yml
+
+exit 0

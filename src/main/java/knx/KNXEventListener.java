@@ -31,7 +31,9 @@ public class KNXEventListener implements NetworkLinkListener {
         Matcher matcher = pattern.matcher(in);
         if (matcher.find()) {
             KNXAddressList address = new KNXAddressList();
-            return "receiver: [" + address.addresses.get(matcher.group(1)) + "] " + in;
+            return "receiver: " + address.addresses.get(matcher.group(1)) + ", " + in;
+        } else {
+            LogstashLogger.INSTANCE.message("WARNING: matcher miss, no address (d/d/d) found in knx event " + in);
         }
         return in;
     }
