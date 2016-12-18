@@ -25,6 +25,8 @@ public class KNXLink {
     private KNXNetworkLinkIP knxLink = null;
     private ProcessCommunicator pc = null;
 
+    private KNXEventListener listener = new KNXEventListener();
+
     public KNXLink() {
         HeatingProperties prop = new HeatingProperties();
         try {
@@ -33,6 +35,7 @@ public class KNXLink {
         } catch (UnknownHostException e) {
             LogstashLogger.INSTANCE.message("ERROR: could not initialize KNX link settings " + e.getMessage());
         }
+        LogstashLogger.INSTANCE.message("INFO: KNXLink has begun");
     }
 
     public ProcessCommunicator pc() throws KNXException, InterruptedException {
@@ -49,31 +52,25 @@ public class KNXLink {
                 , knxIP, false
                 , KNXMediumSettings.create(KNXMediumSettings.MEDIUM_KNXIP, null));
         pc = new ProcessCommunicatorImpl(knxLink);
-        addEventListener();
-        addShutdownHook();
-        System.out.println("Connecting to knx " + knxIP);
-    }
-
-    public void close() {
-        System.out.println("Closing knx connection");
-        if (pc != null) {
-            pc.detach();
-        }
-        if (knxLink != null) {
-            knxLink.close();
-        }
-    }
-
-    private void addEventListener() {
-        knxLink.addLinkListener(new KNXEventListener());
-    }
-
-    private void addShutdownHook() {
+        knxLink.addLinkListener(listener);
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
                 close();
             }
         });
+        LogstashLogger.INSTANCE.message("INFO: KNXLink established");
+        System.out.println("Connecting to knx " + knxIP + " @" + knxLink.getKNXMedium().getDeviceAddress());
+    }
+
+    public void close() {
+        System.out.println("Closing knx connection");
+        knxLink.removeLinkListener(listener);
+        if (pc != null) {
+            pc.detach();
+        }
+        if (knxLink != null) {
+            knxLink.close();
+        }
     }
 }

@@ -24,7 +24,9 @@ public class KNXEventListener implements NetworkLinkListener {
     }
 
     @Override
-    public void linkClosed(CloseEvent closeEvent) {}
+    public void linkClosed(CloseEvent closeEvent) {
+        LogstashLogger.INSTANCE.message("INFO: KNXLink closing");
+    }
 
     private String replaceReceiverAddress(String in) {
         Pattern pattern = Pattern.compile("\\d{1,3}" + Pattern.quote("/") + "\\d{1,3}" + Pattern.quote("/") + "\\d{1,3}");
