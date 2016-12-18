@@ -4,6 +4,7 @@ import building.ControllableArea;
 import control.HeatingControl;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
+import knx.KNXLink;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import speaker.LogstashLogger;
@@ -29,7 +30,7 @@ public class RoomTemperatureHandler extends AbstractHandler {
         int countSP = 0;
 
         try (SetpointDAO setpoints = new SetpointDAO(); TemperatureDAO temperatures = new TemperatureDAO()) {
-            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
             for (ControllableArea controllableArea : ControllableArea.values()) {
                 try {
                     float value = pc.readFloat(controllableArea.temperatureSensor, false);
@@ -49,9 +50,9 @@ public class RoomTemperatureHandler extends AbstractHandler {
                 }
             }
         } catch (IOException | KNXException | InterruptedException e) {
+            LogstashLogger.INSTANCE.message("ERROR: closing KNX link, it is giving exceptions " + e.getMessage());
             System.out.println("error " + e);
-            e.printStackTrace();
-            HeatingControl.INSTANCE.knxLink.close();
+            KNXLink.INSTANCE.close();
         }
 
         System.out.println("Retrieved (knx) " + countT + " room temperatures and " + countSP + " setpoints");

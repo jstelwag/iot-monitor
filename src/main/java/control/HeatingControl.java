@@ -6,10 +6,8 @@ import building.Furnace;
 import building.HeatZone;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
-import knx.KNXLink;
 import org.apache.commons.io.IOUtils;
 
-import java.net.UnknownHostException;
 import java.util.*;
 
 public class HeatingControl {
@@ -19,22 +17,11 @@ public class HeatingControl {
     public final SortedMap<HeatZone, Boolean> overrides = new TreeMap<>();
     public final Map<Furnace, ControlModulation> furnaceModulation = new HashMap<>();
 
-    public KNXLink knxLink;
-
-    public boolean hasUpdatedBookings = false;
-
     private HeatingControl() {
         IOUtils.closeQuietly(new HeatZoneStateDAO().populateDefault());
         IOUtils.closeQuietly(new SetpointDAO().populateDefault());
         for (Furnace furnace : Furnace.values()) {
             furnaceModulation.put(furnace, new ControlModulation());
-        }
-
-        try {
-            knxLink = new KNXLink();
-        } catch (UnknownHostException e) {
-            System.out.println("Failed to setup KNX link");
-            e.printStackTrace();
         }
     }
 

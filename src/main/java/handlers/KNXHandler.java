@@ -1,6 +1,7 @@
 package handlers;
 
 import control.HeatingControl;
+import knx.KNXLink;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
@@ -96,7 +97,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/float");
         retVal.put("group", address.toString());
         try {
-            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
             float value = pc.readFloat(address, false);
             retVal.put("knx return value", value);
         } catch (KNXException | InterruptedException e) {
@@ -112,7 +113,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/boolean");
         retVal.put("group", address.toString());
         try {
-            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
             boolean value = pc.readBool(address);
             retVal.put("knx return value", value);
         } catch (KNXException | InterruptedException e) {
@@ -128,7 +129,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/int");
         retVal.put("group", address.toString());
         try {
-            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
             int value = pc.readUnsigned(address, ProcessCommunicator.UNSCALED);
             retVal.put("knx return value", value);
         } catch (KNXException | InterruptedException e) {
@@ -145,7 +146,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
-            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
             pc.write(address, soll, true);
             retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
@@ -162,7 +163,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
-            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
             pc.write(address, soll);
             retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
@@ -179,7 +180,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
-            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
             pc.write(address, soll, ProcessCommunicator.UNSCALED);
             retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {

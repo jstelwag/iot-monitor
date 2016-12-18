@@ -4,6 +4,7 @@ import building.Room;
 import control.HeatingControl;
 import knx.KNXAddress;
 import knx.KNXAddressList;
+import knx.KNXLink;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
@@ -66,7 +67,7 @@ public class KNXRoomHandler extends AbstractHandler {
     private boolean writeBoolean(GroupAddress address, boolean soll) {
         boolean retVal = false;
         try {
-            ProcessCommunicator pc = HeatingControl.INSTANCE.knxLink.pc();
+            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
             pc.write(address, soll);
             retVal = true;
         } catch (KNXException | InterruptedException e) {

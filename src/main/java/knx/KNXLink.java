@@ -1,8 +1,7 @@
 package knx;
 
-import control.HeatingControl;
+import speaker.LogstashLogger;
 import tuwien.auto.calimero.exception.KNXException;
-import tuwien.auto.calimero.link.KNXNetworkLink;
 import tuwien.auto.calimero.link.KNXNetworkLinkIP;
 import tuwien.auto.calimero.link.medium.KNXMediumSettings;
 import tuwien.auto.calimero.process.ProcessCommunicator;
@@ -18,16 +17,22 @@ import java.net.UnknownHostException;
  */
 public class KNXLink {
 
-    private final InetSocketAddress knxIP;
-    private final InetSocketAddress localIp;
+    public final static KNXLink INSTANCE = new KNXLink();
+
+    private InetSocketAddress knxIP;
+    private InetSocketAddress localIp;
 
     private KNXNetworkLinkIP knxLink = null;
     private ProcessCommunicator pc = null;
 
-    public KNXLink() throws UnknownHostException {
+    public KNXLink() {
         HeatingProperties prop = new HeatingProperties();
-        this.knxIP = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
-        this.localIp = new InetSocketAddress(InetAddress.getByName(prop.localIp), prop.localPort);
+        try {
+            this.knxIP = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
+            this.localIp = new InetSocketAddress(InetAddress.getByName(prop.localIp), prop.localPort);
+        } catch (UnknownHostException e) {
+            LogstashLogger.INSTANCE.message("ERROR: could not initialize KNX link settings " + e.getMessage());
+        }
     }
 
     public ProcessCommunicator pc() throws KNXException, InterruptedException {

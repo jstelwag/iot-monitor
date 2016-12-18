@@ -48,13 +48,12 @@ input {
 }
 filter {
   grok {
-    match => { "message" => "(?<receiver>receiver: \[.*?\]) (?<knx_from>\d{1,3}\.\d{1,3}\.\d{1,3}) to (?<knx_to>\d{1,3}\/\d{1,3}\/\d{1,3}), (?<knx_priority>\b.*\b) priority hop count (?<knx_hopcount>\d) tpdu (?<knx_tpdu>[0-9a-f]{2} [0-9a-f][0-9a-f] [0-9a-f][0-9a-f] [0-9a-f][0-9a-f])" }
+    match => { "message" => "%{WORD:one}: %{WORD:two}: %{DATA:receiver}, %{DATA:three} (?<knx_from>\d{1,3}\.\d{1,3}\.\d{1,3}) to (?<knx_to>\d{1,3}\/\d{1,3}\/\d{1,3}), (?<knx_priority>\b.*\b) priority hop count (?<knx_hopcount>\d) tpdu (?<knx_tpdu>[0-9a-f]{2} [0-9a-f][0-9a-f] [0-9a-f][0-9a-f] [0-9a-f][0-9a-f])" }
   }
 }
 output {
   elasticsearch {
     hosts => "localhost:9200"
-    index => "knx-%{+YYYY.MM.dd}"
   }
 }
 EOF
@@ -70,7 +69,6 @@ filter {
   }
 }
 output {
-  stdout {}
   elasticsearch {
     hosts => "localhost:9200"
   }
