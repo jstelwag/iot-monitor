@@ -3,6 +3,7 @@ package handlers;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import redis.clients.jedis.Jedis;
 
@@ -28,7 +29,7 @@ public class RedisHandler extends AbstractHandler {
 
         JSONObject redisResponse = new JSONObject();
         for (String key : all) {
-            redisResponse.put(key, jedis.get(key));
+            redisResponse.put(key, new JSONArray().put(jedis.get(key)).put(jedis.ttl(key)));
         }
 
         IOUtils.closeQuietly(jedis);
