@@ -1,0 +1,51 @@
+#!/bin/bash
+# InfluxDB + Grafana server setup script
+# first run git clone https://github.com/jstelwag/iot-monitor
+# then sh iot-monitor/src/main/bash/influx-server-setup
+
+sudo apt-get update
+sudo apt-get -y upgrade
+sudo apt-get -y install curl
+
+cat <<EOF >interfaces
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto enp0s3
+iface enp0s3 inet static
+ address 192.168.178.102
+ netmask 255.255.255.0
+ gateway 192.168.178.1
+ dns-nameservers 8.8.8.8
+EOF
+sudo mv interfaces /etc/network
+
+
+# setup InfluxDB
+curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
+source /etc/lsb-release
+echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+sudo apt-get update && sudo apt-get -y install influxdb
+
+sed -i '/[[udp]]/s/^/#/' /etc/influxdb/influxdb.conf
+cat <<EOF >udp
+[[udp]]
+ enabled = true
+ bind-address = ":8087"
+ database = "domotica"
+EOF
+sudo bash -c "cat udp >> /etc/influxdb/influxdb.conf"
+
+sudo service influxdb start
+sudo update-rc.d influxdb defaults
+influx -execute "create database domotica"
+
+# setup grafana
+sudo apt-get -y install libfontconfig fontconfig-config fonts-dejavu-core
+
+wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.3.1_amd64.deb 
+sudo dpkg -i grafana_4.3.1_amd64.deb
+sudo systemctl enable grafana-server.service
+

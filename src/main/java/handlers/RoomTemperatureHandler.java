@@ -1,7 +1,6 @@
 package handlers;
 
 import building.ControllableArea;
-import control.HeatingControl;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
 import knx.KNXLink;
@@ -25,9 +24,6 @@ public class RoomTemperatureHandler extends AbstractHandler {
     @Override
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        System.out.println("RoomTemperature request");
-        int countT = 0;
-        int countSP = 0;
 
         try (SetpointDAO setpoints = new SetpointDAO(); TemperatureDAO temperatures = new TemperatureDAO()) {
             ProcessCommunicator pc = KNXLink.INSTANCE.pc();
@@ -35,28 +31,21 @@ public class RoomTemperatureHandler extends AbstractHandler {
                 try {
                     float value = pc.readFloat(controllableArea.temperatureSensor, false);
                     temperatures.set(controllableArea, value);
-                    countT++;
                 } catch (KNXTimeoutException e) {
-                    System.out.println("Timeout retrieving " + controllableArea + " temperature");
+                    LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " temperature");
                 }
                 if (controllableArea.setpoint != null) {
                     try {
                         setpoints.setKnx(controllableArea, pc.readFloat(controllableArea.setpoint, false));
-                        countSP++;
                     } catch (KNXTimeoutException e) {
                         LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " setpoint");
-                        System.out.println("Timeout retrieving " + controllableArea + " setpoint");
                     }
                 }
             }
         } catch (IOException | KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.message("ERROR: closing KNX link, it is giving exceptions " + e.getMessage());
-            System.out.println("error " + e);
             KNXLink.INSTANCE.close();
         }
-
-        System.out.println("Retrieved (knx) " + countT + " room temperatures and " + countSP + " setpoints");
-
 
         response.setContentType("application/json");
         response.getWriter().println("{\"status\"=\"OK\"}");

@@ -18,8 +18,13 @@ public class KNXEventListener implements NetworkLinkListener {
 
     @Override
     public void indication(FrameEvent frameEvent) {
+        LogstashLogger.INSTANCE.message("knx-event", ((CEMILData) frameEvent.getFrame()).getDestination().toString()
+                + " " + frameEvent.getFrame().toString());
         if (!((CEMILData) frameEvent.getFrame()).getDestination().toString().startsWith("0")) {
             LogstashLogger.INSTANCE.message("knx-event", replaceReceiverAddress(frameEvent.getFrame().toString()));
+        } else {
+            LogstashLogger.INSTANCE.message("knx-p1", ((CEMILData) frameEvent.getFrame()).getDestination().toString()
+                    + " " + frameEvent.getFrame().toString());
         }
     }
 

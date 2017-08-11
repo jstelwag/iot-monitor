@@ -1,0 +1,27 @@
+#script to create the storage pool on the Synology
+
+cat > ~/iscsi.xml <<EOF
+<pool type='iscsi'>
+    <name>synology_iscsi</name>
+    <source>
+        <host name='192.168.178.12' />
+        <device path='iqn.2000-01.com.synology:DiskStation.Target-1.cfc27db544' />
+<!--
+        <auth type='chap' username='fluxer'>
+            <secret usage='fluxmenowowow'/>
+        </auth>
+-->
+    </source>
+    <target>
+        <path>/dev/disk/by-path</path>
+    </target>
+</pool>
+EOF
+
+sudo virsh pool-define ~/iscsi.xml
+sudo virsh pool-start synology_iscsi
+sudo virsh pool-autostart synology_iscsi
+
+# some commands you will need later on
+sudo virsh pool-list --all
+sudo virsh vol-list synology_iscsi

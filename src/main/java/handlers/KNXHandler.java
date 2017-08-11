@@ -1,10 +1,10 @@
 package handlers;
 
-import control.HeatingControl;
 import knx.KNXLink;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
+import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.exception.KNXException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
@@ -17,14 +17,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Jaap on 27-5-2016.
+ * Interface to KNX. Use case
+ * /knx/group address/[read|write]/[int|float|boolean]/[value/]
  */
 public class KNXHandler extends AbstractHandler {
 
     @Override
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        System.out.println("KNX request " + s);
         response.setContentType("application/json");
         Pattern pattern = Pattern.compile(Pattern.quote("/") + "(\\d+)" + Pattern.quote("/") + "(\\d+)"
                 + Pattern.quote("/") + "(\\d+)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") );
@@ -86,6 +86,7 @@ public class KNXHandler extends AbstractHandler {
             knxResponse.put("error", "Syntax not recognized for " + s);
         }
 
+        LogstashLogger.INSTANCE.message("KNX request " + s + " => " + knxResponse.toString(4));
         response.getWriter().println(knxResponse.toString(4));
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);

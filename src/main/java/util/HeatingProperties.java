@@ -20,7 +20,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import tuwien.auto.calimero.knxnetip.KNXnetIPConnection;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;

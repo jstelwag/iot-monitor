@@ -1,7 +1,7 @@
 #!/bin/bash
 #usage: guest-install name memsize disksize
 
-IMAGES_HOME=/home/qemu/images
+IMAGES_HOME=/home/qemu/images	
 
 sudo fallocate -l $3M $IMAGES_HOME/$1.img
 sudo virt-install \

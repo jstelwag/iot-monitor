@@ -25,9 +25,9 @@ public class KNXLink {
     private KNXNetworkLinkIP knxLink = null;
     private ProcessCommunicator pc = null;
 
-    private KNXEventListener listener = new KNXEventListener();
+    private final KNXEventListener listener = new KNXEventListener();
 
-    public KNXLink() {
+    private KNXLink() {
         HeatingProperties prop = new HeatingProperties();
         try {
             this.knxIP = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
@@ -42,7 +42,8 @@ public class KNXLink {
         if (knxLink == null || !knxLink.isOpen()) {
             connect();
         }
-        
+
+
         return pc;
     }
 
@@ -65,11 +66,11 @@ public class KNXLink {
 
     public void close() {
         System.out.println("Closing knx connection");
-        knxLink.removeLinkListener(listener);
         if (pc != null) {
             pc.detach();
         }
         if (knxLink != null) {
+            knxLink.removeLinkListener(listener);
             knxLink.close();
         }
     }

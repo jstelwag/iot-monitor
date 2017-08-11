@@ -27,9 +27,12 @@ public class RedisHandler extends AbstractHandler {
         List<String> all = new ArrayList<>(jedis.keys("*"));
         Collections.sort(all);
 
-        JSONObject redisResponse = new JSONObject();
+        JSONArray redisResponse = new JSONArray();
         for (String key : all) {
-            redisResponse.put(key, new JSONArray().put(jedis.get(key)).put(jedis.ttl(key)));
+            redisResponse.put(new JSONObject()
+                    .put("key", key)
+                    .put("value", jedis.get(key))
+                    .put("ttl", jedis.ttl(key)));
         }
 
         IOUtils.closeQuietly(jedis);

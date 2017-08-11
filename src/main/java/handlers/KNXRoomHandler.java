@@ -1,7 +1,6 @@
 package handlers;
 
 import building.Room;
-import control.HeatingControl;
 import knx.KNXAddress;
 import knx.KNXAddressList;
 import knx.KNXLink;
@@ -21,7 +20,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Jaap on 27-5-2016.
+ * Interfacing to KNX functions of given room. Use case:
+ * /room/room-id/[all-off]/
  */
 public class KNXRoomHandler extends AbstractHandler {
 
