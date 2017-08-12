@@ -12,13 +12,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Jaap on 15-12-2016.
  */
 public class KNXAddressList {
 
-    public Map<String, KNXAddress> addresses = new HashMap<>();
+    final Map<String, KNXAddress> addresses = new HashMap<>();
+    final Pattern pattern = Pattern.compile("\\d{1,3}" + Pattern.quote("/") + "\\d{1,3}" + Pattern.quote("/") + "\\d{1,3}");
 
     public KNXAddressList() {
         ClassLoader classLoader = getClass().getClassLoader();
@@ -40,6 +43,17 @@ public class KNXAddressList {
         } finally {
             IOUtils.closeQuietly(in);
         }
+    }
+
+    public String replaceReceiverAddress(String in) {
+        Matcher matcher = pattern.matcher(in);
+        if (matcher.find()) {
+            KNXAddressList address = new KNXAddressList();
+            return "receiver: " + address.addresses.get(matcher.group(1)) + ", " + in;
+        } else {
+            LogstashLogger.INSTANCE.message("WARNING: matcher miss, no address (d/d/d) found in knx event " + in);
+        }
+        return in;
     }
 
     public List<KNXAddress> addressesByRoom(Room room, KNXAddress.Type type) {

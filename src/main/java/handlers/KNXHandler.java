@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
+import tuwien.auto.calimero.datapoint.StateDP;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 
 import javax.servlet.ServletException;
@@ -46,6 +47,8 @@ public class KNXHandler extends AbstractHandler {
                         case "boolean":
                             knxResponse = readBoolean(address);
                             break;
+                        case "test":
+                            knxResponse = readTest(address);
                         default:
                             knxResponse.put("error", "Unknown type " + matcher.group(4) + " @" + s);
                             break;
@@ -140,6 +143,22 @@ public class KNXHandler extends AbstractHandler {
         return retVal;
     }
 
+    private JSONObject readTest(GroupAddress address) {
+        JSONObject retVal = new JSONObject();
+
+        retVal.put("command", "read/test");
+        retVal.put("group", address.toString());
+        try {
+            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
+            StateDP dp = new StateDP(address, "test");
+            String value = pc.read(dp);
+            retVal.put("knx return value", value);
+        } catch (KNXException | InterruptedException e) {
+            retVal.put("error", e.getMessage());
+        }
+
+        return retVal;
+    }
     private JSONObject writeFloat(GroupAddress address, float soll) {
         JSONObject retVal = new JSONObject();
 
