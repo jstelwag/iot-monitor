@@ -6,7 +6,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
-import tuwien.auto.calimero.exception.KNXException;
+import tuwien.auto.calimero.KNXException;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 
 import javax.servlet.ServletException;
@@ -99,7 +99,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         try {
             ProcessCommunicator pc = KNXLink.INSTANCE.pc();
-            float value = pc.readFloat(address, false);
+            double value = pc.readFloat(address, false);
             retVal.put("knx return value", value);
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());

@@ -1,7 +1,7 @@
 package knx;
 
 import speaker.LogstashLogger;
-import tuwien.auto.calimero.exception.KNXException;
+import tuwien.auto.calimero.KNXException;
 import tuwien.auto.calimero.link.KNXNetworkLinkIP;
 import tuwien.auto.calimero.link.medium.KNXMediumSettings;
 import tuwien.auto.calimero.process.ProcessCommunicator;
@@ -48,8 +48,7 @@ public class KNXLink {
     }
 
     private void connect() throws KNXException, InterruptedException {
-        knxLink = new KNXNetworkLinkIP(KNXNetworkLinkIP.TUNNELING
-                , localIp
+        knxLink = KNXNetworkLinkIP.newTunnelingLink(localIp
                 , knxIP, false
                 , KNXMediumSettings.create(KNXMediumSettings.MEDIUM_KNXIP, null));
         pc = new ProcessCommunicatorImpl(knxLink);
