@@ -95,13 +95,15 @@ public class Main {
         knxContext.setHandler(new KNXHandler());
         ContextHandler roomContext = new ContextHandler("/room");
         roomContext.setHandler(new KNXRoomHandler());
+        ContextHandler p1Context = new ContextHandler("/P1");
+        p1Context.setHandler(new P1Handler());
 
         ContextHandler echoContext = new ContextHandler("/echo");
         echoContext.setHandler(new EchoHandler());
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
-                , furnaceContext, knxtemperatures, redisContext, knxContext, roomContext
+                , furnaceContext, knxtemperatures, redisContext, knxContext, roomContext, p1Context
                 , echoContext});
         return contexts;
     }
