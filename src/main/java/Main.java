@@ -34,7 +34,7 @@ public class Main {
         } else if ("beds24".equals(args[0])) {
             new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
         } else if ("iot".equals(args[0])) {
-            LogstashLogger.INSTANCE.message("start iot");
+            LogstashLogger.INSTANCE.message("starting iot listener");
             new IoTListener(prop.iotPort).run();
         } else if ("thermostatreset".equals(args[0])) {
             new KNXThermostatReset().run();
@@ -57,7 +57,7 @@ public class Main {
             httpServer.start();
             httpServer.join();
         } catch (Exception e) {
-            LogstashLogger.INSTANCE.message("FATAL: failed to start http listeners " + e.toString());
+            LogstashLogger.INSTANCE.message("FATAL: failed to start http listener " + e.toString());
             System.out.println(e.toString());
             System.exit(0);
         }
@@ -107,9 +107,9 @@ public class Main {
     }
 
     private static void removeHeaders(Server server) {
-        for(Connector y : server.getConnectors()) {
-            for(ConnectionFactory x : y.getConnectionFactories()) {
-                if(x instanceof HttpConnectionFactory) {
+        for (Connector y : server.getConnectors()) {
+            for (ConnectionFactory x : y.getConnectionFactories()) {
+                if (x instanceof HttpConnectionFactory) {
                     ((HttpConnectionFactory)x).getHttpConfiguration().setSendServerVersion(false);
                     ((HttpConnectionFactory)x).getHttpConfiguration().setSendDateHeader(false);
                 }

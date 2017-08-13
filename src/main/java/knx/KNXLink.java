@@ -1,6 +1,7 @@
 package knx;
 
 import speaker.LogstashLogger;
+import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
 import tuwien.auto.calimero.link.KNXNetworkLinkIP;
 import tuwien.auto.calimero.link.medium.KNXMediumSettings;
@@ -35,7 +36,7 @@ public class KNXLink {
         } catch (UnknownHostException e) {
             LogstashLogger.INSTANCE.message("ERROR: could not initialize KNX link settings " + e.getMessage());
         }
-        LogstashLogger.INSTANCE.message("INFO: KNXLink has begun");
+        LogstashLogger.INSTANCE.message("INFO: KNXLink initialized");
     }
 
     public ProcessCommunicator pc() throws KNXException, InterruptedException {
@@ -52,19 +53,41 @@ public class KNXLink {
                 , knxIP, false
                 , KNXMediumSettings.create(KNXMediumSettings.MEDIUM_KNXIP, null));
         pc = new ProcessCommunicatorImpl(knxLink);
-        knxLink.addLinkListener(listener);
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                close();
+        if (testConnection()) {
+            knxLink.addLinkListener(listener);
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    close();
+                }
+            });
+            LogstashLogger.INSTANCE.message("INFO: connected to knx " + knxIP + " @" + knxLink.getKNXMedium().getDeviceAddress());
+        } else {
+            close();
+        }
+    }
+
+    /** Check the status of a device on the KNX bus, if it responds, it it OK */
+    public boolean testConnection() {
+        //Bathroom room 1, ventilation
+        GroupAddress address = new GroupAddress(4, 1, 103);
+        try {
+            pc.readBool(address);
+        } catch (KNXException | InterruptedException e) {
+            //Bathroom room 2, ventilation
+            address = new GroupAddress(6, 1, 102);
+            try {
+                pc.readBool(address);
+            } catch (KNXException | InterruptedException e1) {
+                LogstashLogger.INSTANCE.message("WARNING: KNXLink not connected, thw requests failed");
+                return false;
             }
-        });
-        LogstashLogger.INSTANCE.message("INFO: KNXLink established");
-        System.out.println("Connecting to knx " + knxIP + " @" + knxLink.getKNXMedium().getDeviceAddress());
+        }
+        return true;
     }
 
     public void close() {
-        System.out.println("Closing knx connection");
+        LogstashLogger.INSTANCE.message("INFO: Closing knx connection");
         if (pc != null) {
             pc.detach();
         }
