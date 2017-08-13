@@ -17,9 +17,17 @@ public class KNXEventListener implements NetworkLinkListener {
     @Override
     public void indication(FrameEvent frameEvent) {
         String event = frameEvent.getFrame().toString();
-        //Ignore events to the P1 gateway
-        if (!event.contains("->0/2/")) {
-            LogstashLogger.INSTANCE.message("knx-event", addressList.replaceReceiverAddress(frameEvent.getFrame().toString()));
+        KNXAddress knx = addressList.findInString(event);
+        if (knx != null) {
+            switch (knx.type) {
+                case P1: //ignore
+                    break;
+                case climate: //ignore
+                    break;
+                default:
+                    LogstashLogger.INSTANCE.message("knx-event", addressList.replaceReceiverAddress(frameEvent.getFrame().toString()));
+                    break;
+            }
         }
     }
 

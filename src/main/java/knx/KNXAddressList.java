@@ -45,14 +45,26 @@ public class KNXAddressList {
         }
     }
 
-    public String replaceReceiverAddress(String in) {
+    public KNXAddress findInString(String in) {
         Matcher matcher = pattern.matcher(in);
         if (matcher.find()) {
             KNXAddressList address = new KNXAddressList();
-            return "receiver: " + address.addresses.get(matcher.group(0)) + ", " + in;
-        } else {
-            LogstashLogger.INSTANCE.message("WARNING: matcher miss, no address (d/d/d) found in knx event " + in);
+            if (address.addresses.get(matcher.group(0)) != null) {
+                return address.addresses.get(matcher.group(0));
+            } else {
+                LogstashLogger.INSTANCE.message("WARNING: Address " + matcher.group(0) + " not found in knx devices list.");
+            }
         }
+        return null;
+    }
+
+    public String replaceReceiverAddress(String in) {
+        KNXAddress knx = findInString(in);
+        if (knx != null) {
+            return "receiver: " + knx.toString() + ", " + in;
+        }
+
+        LogstashLogger.INSTANCE.message("WARNING: matcher miss, no address (d/d/d) found in knx event " + in);
         return in;
     }
 
