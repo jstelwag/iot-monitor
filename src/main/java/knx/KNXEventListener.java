@@ -3,7 +3,6 @@ package knx;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.CloseEvent;
 import tuwien.auto.calimero.FrameEvent;
-import tuwien.auto.calimero.cemi.CEMILData;
 import tuwien.auto.calimero.link.NetworkLinkListener;
 
 /**
@@ -17,17 +16,11 @@ public class KNXEventListener implements NetworkLinkListener {
 
     @Override
     public void indication(FrameEvent frameEvent) {
-        LogstashLogger.INSTANCE.message("knx-event", addressList.replaceReceiverAddress(frameEvent.getFrame().toString()));
-/*
-        LogstashLogger.INSTANCE.message("knx-event", ((CEMILData) frameEvent.getFrame()).getDestination().toString()
-                + " " + frameEvent.getFrame().toString());
-        if (!((CEMILData) frameEvent.getFrame()).getDestination().toString().startsWith("0")) {
+        String event = frameEvent.getFrame().toString();
+        //Ignore events to the P1 gateway
+        if (!event.contains("->0/2/")) {
             LogstashLogger.INSTANCE.message("knx-event", addressList.replaceReceiverAddress(frameEvent.getFrame().toString()));
-        } else {
-            LogstashLogger.INSTANCE.message("knx-p1", ((CEMILData) frameEvent.getFrame()).getDestination().toString()
-                    + " " + frameEvent.getFrame().toString());
         }
-*/
     }
 
     @Override

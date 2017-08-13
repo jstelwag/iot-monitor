@@ -49,8 +49,9 @@ public class KNXHandler extends AbstractHandler {
                             break;
                         case "test":
                             knxResponse = readTest(address);
+                            break;
                         default:
-                            knxResponse.put("error", "Unknown type " + matcher.group(4) + " @" + s);
+                            knxResponse.put("error", "Unknown type " + matcher.group(5) + " @" + s);
                             break;
                     }
                     break;
