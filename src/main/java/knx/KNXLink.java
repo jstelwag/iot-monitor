@@ -42,7 +42,7 @@ public class KNXLink {
         LogstashLogger.INSTANCE.message("INFO: KNXLink initialized");
     }
 
-    public static KNXLink getInstance() {
+    public synchronized static KNXLink getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new KNXLink();
         }
