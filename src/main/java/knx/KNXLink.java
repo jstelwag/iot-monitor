@@ -26,6 +26,8 @@ public class KNXLink {
     private KNXNetworkLinkIP knxLink = null;
     private ProcessCommunicator pc = null;
 
+    private long lastCheck;
+
     private final KNXEventListener listener = new KNXEventListener();
 
     private KNXLink() {
@@ -42,8 +44,13 @@ public class KNXLink {
     public ProcessCommunicator pc() throws KNXException, InterruptedException {
         if (knxLink == null || !knxLink.isOpen()) {
             connect();
+        } else if (lastCheck + 300000 < System.currentTimeMillis()) {
+            //Check the connection every five minutes
+            if(!testConnection()) {
+                close();
+                connect();
+            }
         }
-
 
         return pc;
     }
@@ -64,6 +71,7 @@ public class KNXLink {
             LogstashLogger.INSTANCE.message("INFO: connected to knx " + knxIP + " @" + knxLink.getKNXMedium().getDeviceAddress());
         } else {
             close();
+            throw new KNXException("Failed to connect to KNX bus");
         }
     }
 
@@ -79,7 +87,8 @@ public class KNXLink {
             try {
                 pc.readBool(address);
             } catch (KNXException | InterruptedException e1) {
-                LogstashLogger.INSTANCE.message("WARNING: KNXLink not connected, thw requests failed");
+                LogstashLogger.INSTANCE.message("WARNING: KNXLink not connected, thw requests failed, "
+                        + e.getMessage() + " and " + e1.getMessage());
                 return false;
             }
         }
@@ -90,10 +99,12 @@ public class KNXLink {
         LogstashLogger.INSTANCE.message("INFO: Closing knx connection");
         if (pc != null) {
             pc.detach();
+            pc = null;
         }
         if (knxLink != null) {
             knxLink.removeLinkListener(listener);
             knxLink.close();
+            knxLink = null;
         }
     }
 }
