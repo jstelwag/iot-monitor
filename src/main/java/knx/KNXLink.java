@@ -3,6 +3,7 @@ package knx;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
+import tuwien.auto.calimero.datapoint.StateDP;
 import tuwien.auto.calimero.link.KNXNetworkLinkIP;
 import tuwien.auto.calimero.link.medium.KNXMediumSettings;
 import tuwien.auto.calimero.process.ProcessCommunicator;
@@ -18,27 +19,34 @@ import java.net.UnknownHostException;
  */
 public class KNXLink {
 
-    public final static KNXLink INSTANCE = new KNXLink();
+    private static KNXLink INSTANCE = null;
 
     private InetSocketAddress knxIP;
     private InetSocketAddress localIp;
 
+    private long lastCheck;
+
     private KNXNetworkLinkIP knxLink = null;
     private ProcessCommunicator pc = null;
 
-    private long lastCheck;
-
     private final KNXEventListener listener = new KNXEventListener();
 
-    private KNXLink() {
+    protected KNXLink() {
         HeatingProperties prop = new HeatingProperties();
         try {
-            this.knxIP = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
-            this.localIp = new InetSocketAddress(InetAddress.getByName(prop.localIp), prop.localPort);
+            knxIP = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
+            localIp = new InetSocketAddress(InetAddress.getByName(prop.localIp), prop.localPort);
         } catch (UnknownHostException e) {
             LogstashLogger.INSTANCE.message("ERROR: could not initialize KNX link settings " + e.getMessage());
         }
         LogstashLogger.INSTANCE.message("INFO: KNXLink initialized");
+    }
+
+    public static KNXLink getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new KNXLink();
+        }
+        return INSTANCE;
     }
 
     public ProcessCommunicator pc() throws KNXException, InterruptedException {
@@ -56,6 +64,7 @@ public class KNXLink {
     }
 
     private void connect() throws KNXException, InterruptedException {
+        lastCheck = System.currentTimeMillis();
         knxLink = KNXNetworkLinkIP.newTunnelingLink(localIp
                 , knxIP, false
                 , KNXMediumSettings.create(KNXMediumSettings.MEDIUM_KNXIP, null));
@@ -76,7 +85,7 @@ public class KNXLink {
     }
 
     /** Check the status of a device on the KNX bus, if it responds, it it OK */
-    public boolean testConnection() {
+    private boolean testConnection() {
         //Bathroom room 1, ventilation
         GroupAddress address = new GroupAddress(4, 1, 103);
         try {
@@ -105,6 +114,70 @@ public class KNXLink {
             knxLink.removeLinkListener(listener);
             knxLink.close();
             knxLink = null;
+        }
+    }
+
+    public double readFloat(GroupAddress address) throws KNXException, InterruptedException {
+        try {
+            return pc().readFloat(address, false);
+        } catch (KNXException | InterruptedException e) {
+            close();
+            throw e;
+        }
+    }
+
+    public boolean readBoolean(GroupAddress address) throws KNXException, InterruptedException {
+        try {
+            return pc().readBool(address);
+        } catch (KNXException | InterruptedException e) {
+            close();
+            throw e;
+        }
+    }
+
+    public int readInt(GroupAddress address) throws KNXException, InterruptedException {
+        try {
+            return pc().readUnsigned(address, ProcessCommunicator.UNSCALED);
+        } catch (KNXException | InterruptedException e) {
+            close();
+            throw e;
+        }
+    }
+
+    public String readString(GroupAddress address) throws KNXException, InterruptedException {
+        try {
+            StateDP dp = new StateDP(address, "string");
+            return pc().read(dp);
+        } catch (KNXException | InterruptedException e) {
+            close();
+            throw e;
+        }
+    }
+
+    public void writeFloat(GroupAddress address, float soll) throws KNXException, InterruptedException {
+        try {
+            pc().write(address, soll, true);
+        } catch (KNXException | InterruptedException e) {
+            close();
+            throw e;
+        }
+    }
+
+    public void writeBoolean(GroupAddress address, boolean soll) throws KNXException, InterruptedException {
+        try {
+            pc().write(address, soll);
+        } catch (KNXException | InterruptedException e) {
+            close();
+            throw e;
+        }
+    }
+
+    public void writeInt(GroupAddress address, int soll) throws KNXException, InterruptedException {
+        try {
+            pc().write(address, soll, ProcessCommunicator.UNSCALED);
+        } catch (KNXException | InterruptedException e) {
+            close();
+            throw e;
         }
     }
 }

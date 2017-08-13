@@ -7,10 +7,9 @@ import knx.KNXLink;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
+import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
-import tuwien.auto.calimero.KNXFormatException;
-import tuwien.auto.calimero.process.ProcessCommunicator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -42,10 +41,10 @@ public class KNXRoomHandler extends AbstractHandler {
                     int switchCount = 0;
                     for (KNXAddress address : knxList.addressesByRoom(room, KNXAddress.Type.button)) {
                         try {
-                            writeBoolean(new GroupAddress(address.address), false);
+                            KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);
                             switchCount++;
-                        } catch (KNXFormatException e) {
-                            e.printStackTrace();
+                        } catch (KNXException | InterruptedException e) {
+                            LogstashLogger.INSTANCE.message("ERROR: failed to switch room " + address + ", " + e.getMessage());
                         }
                     }
                     knxResponse.put("status", "OK");
@@ -62,18 +61,5 @@ public class KNXRoomHandler extends AbstractHandler {
         response.getWriter().println(knxResponse.toString(4));
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
-    }
-
-    private boolean writeBoolean(GroupAddress address, boolean soll) {
-        boolean retVal = false;
-        try {
-            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
-            pc.write(address, soll);
-            retVal = true;
-        } catch (KNXException | InterruptedException e) {
-            KNXLink.INSTANCE.close();
-        }
-
-        return retVal;
     }
 }

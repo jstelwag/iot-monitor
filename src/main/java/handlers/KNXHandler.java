@@ -7,8 +7,6 @@ import org.json.JSONObject;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
-import tuwien.auto.calimero.datapoint.StateDP;
-import tuwien.auto.calimero.process.ProcessCommunicator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -47,8 +45,8 @@ public class KNXHandler extends AbstractHandler {
                         case "boolean":
                             knxResponse = readBoolean(address);
                             break;
-                        case "test":
-                            knxResponse = readTest(address);
+                        case "string":
+                            knxResponse = readString(address);
                             break;
                         default:
                             knxResponse.put("error", "Unknown type " + matcher.group(5) + " @" + s);
@@ -102,12 +100,9 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/float");
         retVal.put("group", address.toString());
         try {
-            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
-            double value = pc.readFloat(address, false);
-            retVal.put("knx return value", value);
+            retVal.put("knx return value", KNXLink.getInstance().readFloat(address));
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
-            KNXLink.INSTANCE.close();
         }
 
         return retVal;
@@ -119,12 +114,9 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/boolean");
         retVal.put("group", address.toString());
         try {
-            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
-            boolean value = pc.readBool(address);
-            retVal.put("knx return value", value);
+            retVal.put("knx return value", KNXLink.getInstance().readBoolean(address));
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
-            KNXLink.INSTANCE.close();
          }
 
         return retVal;
@@ -136,34 +128,28 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/int");
         retVal.put("group", address.toString());
         try {
-            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
-            int value = pc.readUnsigned(address, ProcessCommunicator.UNSCALED);
-            retVal.put("knx return value", value);
+            retVal.put("knx return value", KNXLink.getInstance().readInt(address));
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
-            KNXLink.INSTANCE.close();
         }
 
         return retVal;
     }
 
-    private JSONObject readTest(GroupAddress address) {
+    private JSONObject readString(GroupAddress address) {
         JSONObject retVal = new JSONObject();
 
-        retVal.put("command", "read/test");
+        retVal.put("command", "read/string");
         retVal.put("group", address.toString());
         try {
-            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
-            StateDP dp = new StateDP(address, "test");
-            String value = pc.read(dp);
-            retVal.put("knx return value", value);
+            retVal.put("knx return value", KNXLink.getInstance().readString(address));
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
-            KNXLink.INSTANCE.close();
         }
 
         return retVal;
     }
+
     private JSONObject writeFloat(GroupAddress address, float soll) {
         JSONObject retVal = new JSONObject();
 
@@ -171,12 +157,10 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
-            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
-            pc.write(address, soll, true);
+            KNXLink.getInstance().writeFloat(address, soll);
             retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
-            KNXLink.INSTANCE.close();
         }
 
         return retVal;
@@ -189,12 +173,10 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
-            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
-            pc.write(address, soll);
+            KNXLink.getInstance().writeBoolean(address, soll);
             retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
-            KNXLink.INSTANCE.close();
         }
 
         return retVal;
@@ -207,12 +189,10 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
-            ProcessCommunicator pc = KNXLink.INSTANCE.pc();
-            pc.write(address, soll, ProcessCommunicator.UNSCALED);
+            KNXLink.getInstance().writeInt(address, soll);
             retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
-            KNXLink.INSTANCE.close();
         }
 
         return retVal;
