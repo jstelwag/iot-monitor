@@ -107,6 +107,7 @@ public class KNXHandler extends AbstractHandler {
             retVal.put("knx return value", value);
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
+            KNXLink.INSTANCE.close();
         }
 
         return retVal;
@@ -123,7 +124,8 @@ public class KNXHandler extends AbstractHandler {
             retVal.put("knx return value", value);
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
-        }
+            KNXLink.INSTANCE.close();
+         }
 
         return retVal;
     }
@@ -139,6 +141,7 @@ public class KNXHandler extends AbstractHandler {
             retVal.put("knx return value", value);
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
+            KNXLink.INSTANCE.close();
         }
 
         return retVal;
@@ -156,6 +159,7 @@ public class KNXHandler extends AbstractHandler {
             retVal.put("knx return value", value);
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
+            KNXLink.INSTANCE.close();
         }
 
         return retVal;
@@ -172,6 +176,7 @@ public class KNXHandler extends AbstractHandler {
             retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
+            KNXLink.INSTANCE.close();
         }
 
         return retVal;
@@ -189,6 +194,7 @@ public class KNXHandler extends AbstractHandler {
             retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
+            KNXLink.INSTANCE.close();
         }
 
         return retVal;
@@ -206,6 +212,7 @@ public class KNXHandler extends AbstractHandler {
             retVal.put("status", "OK");
         } catch (KNXException | InterruptedException e) {
             retVal.put("error", e.getMessage());
+            KNXLink.INSTANCE.close();
         }
 
         return retVal;

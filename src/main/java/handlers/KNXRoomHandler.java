@@ -71,6 +71,7 @@ public class KNXRoomHandler extends AbstractHandler {
             pc.write(address, soll);
             retVal = true;
         } catch (KNXException | InterruptedException e) {
+            KNXLink.INSTANCE.close();
         }
 
         return retVal;

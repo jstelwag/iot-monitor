@@ -44,7 +44,7 @@ public class RoomTemperatureHandler extends AbstractHandler {
                     }
                 }
             }
-        } catch (IOException | KNXException | InterruptedException e) {
+        } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.message("ERROR: closing KNX link, it is giving exceptions " + e.getMessage());
             KNXLink.INSTANCE.close();
             result = false;
