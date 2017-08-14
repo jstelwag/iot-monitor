@@ -218,9 +218,7 @@ public class KNXLink {
         int openPort = startPort;
         while (openPort < 65000) {
             try {
-                Socket socket = new Socket();
-                socket.connect(new InetSocketAddress(localIp, startPort));
-                socket.close();
+                new Socket(localIp, startPort).close();
                 return openPort;
             } catch(IOException e) {
                 openPort++;
