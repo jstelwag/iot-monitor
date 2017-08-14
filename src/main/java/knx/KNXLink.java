@@ -75,7 +75,7 @@ public class KNXLink {
         return pc;
     }
 
-    private void open() throws KNXException, InterruptedException {
+    private void open() throws KNXException, InterruptedException, ConnectException {
         int port = findOpenPort(localIp, localPortStart);
         LogstashLogger.INSTANCE.message("INFO: opening knx from port " + port);
         InetSocketAddress localAddress = new InetSocketAddress(localIp, port);
@@ -86,18 +86,18 @@ public class KNXLink {
         pc = new ProcessCommunicatorImpl(knxLink);
     }
 
-    private void connect() throws KNXException, InterruptedException {
+    private void connect() throws KNXException {
         boolean open = false;
         try {
             open();
             open = true;
-        } catch (KNXException | InterruptedException e) {
-            LogstashLogger.INSTANCE.message("WARNING: connection to knx failed, i will retry " + e.getMessage());
+        } catch (KNXException | InterruptedException | ConnectException e) {
+            LogstashLogger.INSTANCE.message("WARNING: connection to knx failed, but i will retry " + e.getMessage());
             close(CLOSE_TIMEOUT_MS);
             try {
                 open();
                 open = true;
-            } catch (KNXException | InterruptedException e1) {
+            } catch (KNXException | InterruptedException | ConnectException e1) {
                 LogstashLogger.INSTANCE.message("WARNING: second connection attempt to knx failed, i give up " + e1.getMessage());
             }
         }
@@ -124,7 +124,7 @@ public class KNXLink {
             try {
                 pc.readBool(address);
             } catch (KNXException | InterruptedException e1) {
-                LogstashLogger.INSTANCE.message("WARNING: KNXLink not connected, thw requests failed, "
+                LogstashLogger.INSTANCE.message("WARNING: KNXLink not connected, knx test requests failed, "
                         + e.getMessage() + " and " + e1.getMessage());
                 return false;
             }
@@ -214,9 +214,9 @@ public class KNXLink {
         }
     }
 
-    public int findOpenPort(InetAddress localIp, int startPort) {
+    private int findOpenPort(InetAddress localIp, int startPort) throws ConnectException {
         int openPort = startPort;
-        while (true) {
+        while (openPort < 65000) {
             try {
                 Socket socket = new Socket();
                 socket.connect(new InetSocketAddress(localIp, startPort));
@@ -224,7 +224,9 @@ public class KNXLink {
                 return openPort;
             } catch(IOException e) {
                 openPort++;
+                LogstashLogger.INSTANCE.message("INFO: trying next port: " + openPort + ", " + e.getMessage());
             }
         }
+        throw new ConnectException("No open port available.");
     }
 }
