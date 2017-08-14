@@ -24,6 +24,8 @@ public class KNXLink {
     private InetSocketAddress knxIP;
     private InetSocketAddress localIp;
 
+    public static final long CLOSE_TIMEOUT_MS = 60000;
+
     private long lastCheck = System.currentTimeMillis();
 
     private KNXNetworkLinkIP knxLink = null;
@@ -36,7 +38,7 @@ public class KNXLink {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                close();
+                close(0);
             }
         });
         try {
@@ -57,13 +59,14 @@ public class KNXLink {
 
     public ProcessCommunicator pc() throws KNXException, InterruptedException {
         if (knxLink == null || !knxLink.isOpen()) {
+            LogstashLogger.INSTANCE.message("INFO: there is no KNX link, creating the connection");
             connect();
         } else if (lastCheck + 300000 < System.currentTimeMillis()) {
             lastCheck = System.currentTimeMillis();
             //Check the connection every five minutes
             if(!testConnection()) {
-                close();
-                LogstashLogger.INSTANCE.message("WARN: closed knx connection due to connection test failure");
+                LogstashLogger.INSTANCE.message("WARN: connection test failure, restarting connection");
+                close(60000);
                 connect();
             }
         }
@@ -80,7 +83,7 @@ public class KNXLink {
             knxLink.addLinkListener(listener);
             LogstashLogger.INSTANCE.message("INFO: connected to knx " + knxIP + " @" + knxLink.getKNXMedium().getDeviceAddress());
         } else {
-            close();
+            close(CLOSE_TIMEOUT_MS);
             throw new KNXException("Failed to connect to KNX bus");
         }
     }
@@ -105,7 +108,7 @@ public class KNXLink {
         return true;
     }
 
-    public void close() {
+    public void close(long sleep) {
         LogstashLogger.INSTANCE.message("INFO: Closing knx connection");
         if (pc != null) {
             pc.detach();
@@ -116,13 +119,18 @@ public class KNXLink {
             knxLink.close();
             knxLink = null;
         }
+        try {
+            Thread.sleep(sleep);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public double readFloat(GroupAddress address) throws KNXException, InterruptedException {
         try {
             return pc().readFloat(address, false);
         } catch (KNXException | InterruptedException e) {
-            close();
+            close(CLOSE_TIMEOUT_MS);
             throw e;
         }
     }
@@ -131,7 +139,7 @@ public class KNXLink {
         try {
             return pc().readBool(address);
         } catch (KNXException | InterruptedException e) {
-            close();
+            close(CLOSE_TIMEOUT_MS);
             throw e;
         }
     }
@@ -140,7 +148,7 @@ public class KNXLink {
         try {
             return pc().readUnsigned(address, ProcessCommunicator.UNSCALED);
         } catch (KNXException | InterruptedException e) {
-            close();
+            close(CLOSE_TIMEOUT_MS);
             throw e;
         }
     }
@@ -150,7 +158,7 @@ public class KNXLink {
             StateDP dp = new StateDP(address, "string");
             return pc().read(dp);
         } catch (KNXException | InterruptedException e) {
-            close();
+            close(CLOSE_TIMEOUT_MS);
             throw e;
         }
     }
@@ -159,7 +167,7 @@ public class KNXLink {
         try {
             pc().write(address, soll, true);
         } catch (KNXException | InterruptedException e) {
-            close();
+            close(CLOSE_TIMEOUT_MS);
             throw e;
         }
     }
@@ -168,7 +176,7 @@ public class KNXLink {
         try {
             pc().write(address, soll);
         } catch (KNXException | InterruptedException e) {
-            close();
+            close(CLOSE_TIMEOUT_MS);
             throw e;
         }
     }
@@ -177,7 +185,7 @@ public class KNXLink {
         try {
             pc().write(address, soll, ProcessCommunicator.UNSCALED);
         } catch (KNXException | InterruptedException e) {
-            close();
+            close(CLOSE_TIMEOUT_MS);
             throw e;
         }
     }
