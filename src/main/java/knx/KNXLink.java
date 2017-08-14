@@ -24,7 +24,7 @@ public class KNXLink {
     private InetSocketAddress knxIP;
     private InetSocketAddress localIp;
 
-    private long lastCheck;
+    private long lastCheck = System.currentTimeMillis();
 
     private KNXNetworkLinkIP knxLink = null;
     private ProcessCommunicator pc = null;
@@ -33,6 +33,12 @@ public class KNXLink {
 
     protected KNXLink() {
         HeatingProperties prop = new HeatingProperties();
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                close();
+            }
+        });
         try {
             knxIP = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
             localIp = new InetSocketAddress(InetAddress.getByName(prop.localIp), prop.localPort);
@@ -53,9 +59,11 @@ public class KNXLink {
         if (knxLink == null || !knxLink.isOpen()) {
             connect();
         } else if (lastCheck + 300000 < System.currentTimeMillis()) {
+            lastCheck = System.currentTimeMillis();
             //Check the connection every five minutes
             if(!testConnection()) {
                 close();
+                LogstashLogger.INSTANCE.message("WARN: closed knx connection due to connection test failure");
                 connect();
             }
         }
@@ -64,19 +72,12 @@ public class KNXLink {
     }
 
     private void connect() throws KNXException, InterruptedException {
-        lastCheck = System.currentTimeMillis();
         knxLink = KNXNetworkLinkIP.newTunnelingLink(localIp
                 , knxIP, false
                 , KNXMediumSettings.create(KNXMediumSettings.MEDIUM_KNXIP, null));
         pc = new ProcessCommunicatorImpl(knxLink);
         if (testConnection()) {
             knxLink.addLinkListener(listener);
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public void run() {
-                    close();
-                }
-            });
             LogstashLogger.INSTANCE.message("INFO: connected to knx " + knxIP + " @" + knxLink.getKNXMedium().getDeviceAddress());
         } else {
             close();
