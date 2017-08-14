@@ -33,7 +33,7 @@ public class KNXEventListener implements NetworkLinkListener {
 
     @Override
     public void linkClosed(CloseEvent closeEvent) {
-        LogstashLogger.INSTANCE.message("INFO: KNXLink closing");
+        LogstashLogger.INSTANCE.message("INFO: Eventlistener closing");
     }
 
 }

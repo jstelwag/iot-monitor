@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.net.*;
 
 /**
- * Created by Jaap on 8-2-2016.
+ * Link to the KNX bus. Retrieve and write data through this class
  */
 public class KNXLink {
 
@@ -58,7 +58,7 @@ public class KNXLink {
         return INSTANCE;
     }
 
-    public ProcessCommunicator pc() throws KNXException, InterruptedException {
+    private ProcessCommunicator pc() throws KNXException, InterruptedException {
         if (knxLink == null || !knxLink.isOpen()) {
             LogstashLogger.INSTANCE.message("INFO: there is no KNX link, creating the connection");
             connect();
@@ -75,17 +75,38 @@ public class KNXLink {
         return pc;
     }
 
-    private void connect() throws KNXException, InterruptedException {
-        InetSocketAddress localAddress = new InetSocketAddress(localIp, findOpenPort(localIp, localPortStart));
+    private void open() throws KNXException, InterruptedException {
+        int port = findOpenPort(localIp, localPortStart);
+        LogstashLogger.INSTANCE.message("INFO: opening knx from port " + port);
+        InetSocketAddress localAddress = new InetSocketAddress(localIp, port);
         LogstashLogger.INSTANCE.message("INFO: connecting KNX link @" + localAddress.toString());
         knxLink = KNXNetworkLinkIP.newTunnelingLink(localAddress
                 , knxIP, false
                 , KNXMediumSettings.create(KNXMediumSettings.MEDIUM_KNXIP, null));
         pc = new ProcessCommunicatorImpl(knxLink);
-        if (testConnection()) {
+    }
+
+    private void connect() throws KNXException, InterruptedException {
+        boolean open = false;
+        try {
+            open();
+            open = true;
+        } catch (KNXException | InterruptedException e) {
+            LogstashLogger.INSTANCE.message("WARNING: connection to knx failed, i will retry " + e.getMessage());
+            close(CLOSE_TIMEOUT_MS);
+            try {
+                open();
+                open = true;
+            } catch (KNXException | InterruptedException e1) {
+                LogstashLogger.INSTANCE.message("WARNING: second connection attempt to knx failed, i give up " + e1.getMessage());
+            }
+        }
+
+        if (open && testConnection()) {
             knxLink.addLinkListener(listener);
             LogstashLogger.INSTANCE.message("INFO: connected to knx " + knxIP + " @" + knxLink.getKNXMedium().getDeviceAddress());
         } else {
+            LogstashLogger.INSTANCE.message("ERROR: knx link connection failed, closing without retrying");
             close(CLOSE_TIMEOUT_MS);
             throw new KNXException("Failed to connect to KNX bus");
         }
