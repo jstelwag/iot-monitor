@@ -10,9 +10,8 @@ import tuwien.auto.calimero.process.ProcessCommunicator;
 import tuwien.auto.calimero.process.ProcessCommunicatorImpl;
 import util.HeatingProperties;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
+import java.io.IOException;
+import java.net.*;
 
 /**
  * Created by Jaap on 8-2-2016.
@@ -22,7 +21,8 @@ public class KNXLink {
     private static KNXLink INSTANCE = null;
 
     private InetSocketAddress knxIP;
-    private InetSocketAddress localIp;
+    private InetAddress localIp;
+    private int localPortStart;
 
     public static final long CLOSE_TIMEOUT_MS = 60000;
 
@@ -43,7 +43,8 @@ public class KNXLink {
         });
         try {
             knxIP = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
-            localIp = new InetSocketAddress(InetAddress.getByName(prop.localIp), prop.localPort);
+            localIp = InetAddress.getByName(prop.localIp);
+            localPortStart = prop.localPort;
         } catch (UnknownHostException e) {
             LogstashLogger.INSTANCE.message("ERROR: could not initialize KNX link settings " + e.getMessage());
         }
@@ -66,7 +67,7 @@ public class KNXLink {
             //Check the connection every five minutes
             if(!testConnection()) {
                 LogstashLogger.INSTANCE.message("WARN: connection test failure, restarting connection");
-                close(60000);
+                close(CLOSE_TIMEOUT_MS);
                 connect();
             }
         }
@@ -75,7 +76,9 @@ public class KNXLink {
     }
 
     private void connect() throws KNXException, InterruptedException {
-        knxLink = KNXNetworkLinkIP.newTunnelingLink(localIp
+        InetSocketAddress localAddress = new InetSocketAddress(localIp, findOpenPort(localIp, localPortStart));
+        LogstashLogger.INSTANCE.message("INFO: connecting KNX link @" + localAddress.toString());
+        knxLink = KNXNetworkLinkIP.newTunnelingLink(localAddress
                 , knxIP, false
                 , KNXMediumSettings.create(KNXMediumSettings.MEDIUM_KNXIP, null));
         pc = new ProcessCommunicatorImpl(knxLink);
@@ -187,6 +190,20 @@ public class KNXLink {
         } catch (KNXException | InterruptedException e) {
             close(CLOSE_TIMEOUT_MS);
             throw e;
+        }
+    }
+
+    public int findOpenPort(InetAddress localIp, int startPort) {
+        int openPort = startPort;
+        while (true) {
+            try {
+                Socket socket = new Socket();
+                socket.connect(new InetSocketAddress(localIp, startPort));
+                socket.close();
+                return openPort;
+            } catch(IOException e) {
+                openPort++;
+            }
         }
     }
 }
