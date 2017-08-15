@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class KNXAddressList {
 
     final Map<String, KNXAddress> addresses = new HashMap<>();
-    final Pattern pattern = Pattern.compile("\\d{1,3}" + Pattern.quote("/") + "\\d{1,3}" + Pattern.quote("/") + "\\d{1,3}");
+    public static final Pattern knxAddressPattern = Pattern.compile("\\d{1,3}" + Pattern.quote("/") + "\\d{1,3}" + Pattern.quote("/") + "\\d{1,3}");
 
     public KNXAddressList() {
         ClassLoader classLoader = getClass().getClassLoader();
@@ -46,13 +46,12 @@ public class KNXAddressList {
     }
 
     public KNXAddress findInString(String in) {
-        Matcher matcher = pattern.matcher(in);
+        Matcher matcher = knxAddressPattern.matcher(in);
         if (matcher.find()) {
-            KNXAddressList address = new KNXAddressList();
-            if (address.addresses.get(matcher.group(0)) != null) {
-                return address.addresses.get(matcher.group(0));
+            if (addresses.get(matcher.group()) != null) {
+                return addresses.get(matcher.group());
             } else {
-                LogstashLogger.INSTANCE.message("WARNING: Address " + matcher.group(0) + " not found in knx devices list.");
+                LogstashLogger.INSTANCE.message("WARNING: Address " + matcher.group() + " not found in knx devices list.");
             }
         }
         return null;

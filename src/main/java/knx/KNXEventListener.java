@@ -16,18 +16,22 @@ public class KNXEventListener implements NetworkLinkListener {
 
     @Override
     public void indication(FrameEvent frameEvent) {
-        String event = frameEvent.getFrame().toString();
-        KNXAddress knx = addressList.findInString(event);
-        if (knx != null) {
-            switch (knx.type) {
-                case P1: //ignore
-                    break;
-                case climate: //ignore
-                    break;
-                default:
-                    LogstashLogger.INSTANCE.message("knx-event", addressList.replaceReceiverAddress(frameEvent.getFrame().toString()));
-                    break;
+        try {
+            String event = frameEvent.getFrame().toString();
+            KNXAddress knx = addressList.findInString(event);
+            if (knx != null) {
+                switch (knx.type) {
+                    case P1: //ignore
+                        break;
+                    case climate: //ignore
+                        break;
+                    default:
+                        LogstashLogger.INSTANCE.message("knx-event", addressList.replaceReceiverAddress(frameEvent.getFrame().toString()));
+                        break;
+                }
             }
+        } catch (Exception e) {
+            LogstashLogger.INSTANCE.message("ERROR: caught unexpected exception, " + e.getMessage());
         }
     }
 

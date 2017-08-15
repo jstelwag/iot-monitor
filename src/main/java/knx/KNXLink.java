@@ -12,6 +12,7 @@ import util.HeatingProperties;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.Random;
 
 /**
  * Link to the KNX bus. Retrieve and write data through this class
@@ -76,7 +77,7 @@ public class KNXLink {
     }
 
     private void open() throws KNXException, InterruptedException, ConnectException {
-        int port = findOpenPort(localIp, localPortStart);
+        int port = new Random().nextInt(10000) + localPortStart;
         LogstashLogger.INSTANCE.message("INFO: opening knx from port " + port);
         InetSocketAddress localAddress = new InetSocketAddress(localIp, port);
         LogstashLogger.INSTANCE.message("INFO: connecting KNX link @" + localAddress.toString());
@@ -154,7 +155,8 @@ public class KNXLink {
         try {
             return pc().readFloat(address, false);
         } catch (KNXException | InterruptedException e) {
-            close(CLOSE_TIMEOUT_MS);
+            LogstashLogger.INSTANCE.message("WARN: readFloat reported an exception, " + e.getMessage());
+            lastCheck = 0;
             throw e;
         }
     }
@@ -163,7 +165,8 @@ public class KNXLink {
         try {
             return pc().readBool(address);
         } catch (KNXException | InterruptedException e) {
-            close(CLOSE_TIMEOUT_MS);
+            LogstashLogger.INSTANCE.message("WARN: readBoolean reported an exception, " + e.getMessage());
+            lastCheck = 0;
             throw e;
         }
     }
@@ -172,7 +175,8 @@ public class KNXLink {
         try {
             return pc().readUnsigned(address, ProcessCommunicator.UNSCALED);
         } catch (KNXException | InterruptedException e) {
-            close(CLOSE_TIMEOUT_MS);
+            LogstashLogger.INSTANCE.message("WARN: readInt reported an exception, " + e.getMessage());
+            lastCheck = 0;
             throw e;
         }
     }
@@ -182,7 +186,8 @@ public class KNXLink {
             StateDP dp = new StateDP(address, "string");
             return pc().read(dp);
         } catch (KNXException | InterruptedException e) {
-            close(CLOSE_TIMEOUT_MS);
+            LogstashLogger.INSTANCE.message("WARN: readString reported an exception, " + e.getMessage());
+            lastCheck = 0;
             throw e;
         }
     }
@@ -191,7 +196,8 @@ public class KNXLink {
         try {
             pc().write(address, soll, true);
         } catch (KNXException | InterruptedException e) {
-            close(CLOSE_TIMEOUT_MS);
+            LogstashLogger.INSTANCE.message("WARN: writeInt reported an exception, " + e.getMessage());
+            lastCheck = 0;
             throw e;
         }
     }
@@ -200,7 +206,8 @@ public class KNXLink {
         try {
             pc().write(address, soll);
         } catch (KNXException | InterruptedException e) {
-            close(CLOSE_TIMEOUT_MS);
+            LogstashLogger.INSTANCE.message("WARN: writeBoolean reported an exception, " + e.getMessage());
+            lastCheck = 0;
             throw e;
         }
     }
@@ -209,22 +216,9 @@ public class KNXLink {
         try {
             pc().write(address, soll, ProcessCommunicator.UNSCALED);
         } catch (KNXException | InterruptedException e) {
-            close(CLOSE_TIMEOUT_MS);
+            LogstashLogger.INSTANCE.message("WARN: writeInt reported an exception, " + e.getMessage());
+            lastCheck = 0;
             throw e;
         }
-    }
-
-    private int findOpenPort(InetAddress localIp, int startPort) throws ConnectException {
-        int openPort = startPort;
-        while (openPort < 65000) {
-            try {
-                new Socket(localIp, startPort).close();
-                return openPort;
-            } catch(IOException e) {
-                openPort++;
-                LogstashLogger.INSTANCE.message("INFO: trying next port: " + openPort + ", " + e.getMessage());
-            }
-        }
-        throw new ConnectException("No open port available.");
     }
 }
