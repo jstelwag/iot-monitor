@@ -95,7 +95,7 @@ public class Main {
         knxContext.setHandler(new KNXHandler());
         ContextHandler roomContext = new ContextHandler("/room");
         roomContext.setHandler(new KNXRoomHandler());
-        ContextHandler p1Context = new ContextHandler("/P1");
+        ContextHandler p1Context = new ContextHandler("/p1");
         p1Context.setHandler(new P1Handler());
 
         ContextHandler echoContext = new ContextHandler("/echo");

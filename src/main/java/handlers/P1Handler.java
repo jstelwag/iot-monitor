@@ -35,7 +35,7 @@ public class P1Handler extends AbstractHandler {
                 String value = KNXLink.getInstance().readString(p1List.get(key));
                 BigInteger decimal = new BigInteger(value.replace(" ", ""), 16);
                 knxResponse.put(key, decimal);
-                flux.message("P1," + key + "=" + decimal);
+                flux.message("P1,metric=" + key + " value=" + decimal + "i");
             }
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.message("ERROR: failed to request p1 values, " + e.getMessage());
