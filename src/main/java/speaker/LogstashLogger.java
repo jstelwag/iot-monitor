@@ -32,6 +32,7 @@ public class LogstashLogger {
     public void message(String who, String line) {
         send(who + ": " + line);
     }
+
     private void send(String message) {
         try (DatagramSocket socket = new DatagramSocket()){
             byte[] data = message.getBytes();
