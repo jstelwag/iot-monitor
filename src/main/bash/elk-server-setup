@@ -42,35 +42,32 @@ sudo apt-get -y install logstash
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable logstash.service
 
-cat <<EOF > udp-9001-knx.conf
-input {
-  udp { port => 9001 }
-}
-filter {
-  grok {
-    match => { "message" => "%{WORD:one}: %{WORD:two}: %{DATA:receiver}, %{DATA:three} (?<knx_from>\d{1,3}\.\d{1,3}\.\d{1,3}) to (?<knx_to>\d{1,3}\/\d{1,3}\/\d{1,3}), (?<knx_priority>\b.*\b) priority hop count (?<knx_hopcount>\d) tpdu (?<knx_tpdu>[0-9a-f]{2} [0-9a-f][0-9a-f] [0-9a-f][0-9a-f] [0-9a-f][0-9a-f])" }
-  }
-}
-output {
-  elasticsearch {
-    hosts => "localhost:9200"
-  }
-}
-EOF
-sudo mv udp-9001-knx.conf /etc/logstash/conf.d/
-
 cat <<EOF > udp-9000.conf
 input {
   udp { port => 9000 }
 }
 filter {
   grok {
-    match => { "message" => "(?<application>.*?): (?<message>.*)"}
+    match => { "message" => "(?<application>.*?):( (?<log-level>(DEBUG|INFO|WARN|ERROR)):)? (?<message>.*)"}
+    overwrite => ["message"]
+  }
+
+  if [application] =~ "knx-event" {
+    grok {
+      match => { "message" => "receiver: (?<location>.*?) \((?<device-type>.*?)\) (?<device>.*?), (?<from-address>.*?)->(?<to-address>.*?) L_Data.ind, (?<l-data>.*?), tpdu (?<tpdu>.*?)" }
+    }
   }
 }
 output {
-  elasticsearch {
-    hosts => "localhost:9200"
+  if [application] =~ "knx-event" {
+    elasticsearch {
+      hosts => "localhost:9200"
+      index => "knx-%{+YYYY.MM.dd}"
+    }
+  } else {
+    elasticsearch {
+      hosts => "localhost:9200"
+    }
   }
 }
 EOF
