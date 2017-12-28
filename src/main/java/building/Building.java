@@ -116,7 +116,7 @@ public class Building {
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 2, true, ControllableArea.apartment_II_bedroom, HeatZone.Position.floor, "bed- and bathroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 3, true, ControllableArea.apartment_II, HeatZone.Position.floor, "living room"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 4, true, ControllableArea.apartment_III_bathroom, HeatZone.Position.floor, "bed- and bathroom"));
-        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 5, false, null, null));
+        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 5, false, ControllableArea.apartment_III, HeatZone.Position.floor, "unknown")); //todo unknown, try to find location
 
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 0, true, ControllableArea.room_2_bathroom, HeatZone.Position.floor));
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 1, true, ControllableArea.room_2_bathroom, HeatZone.Position.floor));
