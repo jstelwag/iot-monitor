@@ -28,10 +28,13 @@ public class ControlCalculator implements Runnable {
                     // todo add here an optimization algorithm
                     if (setpoint < roomTemperature) {
                         zoneStates.set(zone, false);
-                    } else if (setpoint - roomTemperature < 1.0) {
-                        zoneStates.set(zone, zone.isPreferred);
                     } else {
-                        zoneStates.set(zone, true);
+                        // heating is needed
+                        if (setpoint - roomTemperature < 0.2) {
+                            zoneStates.set(zone, zone.isPreferred);
+                        } else {
+                            zoneStates.set(zone, true);
+                        }
                     }
                 }
             }

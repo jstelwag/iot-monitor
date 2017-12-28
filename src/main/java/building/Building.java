@@ -88,9 +88,9 @@ public class Building {
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 0, true, ControllableArea.room_a, HeatZone.Position.floor, "bed- and bathroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 1, false, ControllableArea.apartment_I, HeatZone.Position.floor, "kitchen"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 2, false, ControllableArea.room_a, HeatZone.Position.wall, "west wall")); //todo: wrong?
-        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 3, false, null, null));
+        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 3, false, ControllableArea.apartment_I, HeatZone.Position.floor, "unknown")); //todo don't know which room, just selected app 1
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 4, true, ControllableArea.apartment_I, HeatZone.Position.floor, "living room"));
-        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 5, false, null, null));
+        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 5, false, ControllableArea.apartment_I, HeatZone.Position.floor, "unknown")); //todo don't know which room, just selected app 1
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 6, false, ControllableArea.room_a, HeatZone.Position.wall, "west wall")); //todo: wrong?
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 7, true, ControllableArea.apartment_I, HeatZone.Position.floor, "bedroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_kelder, 8, false, ControllableArea.room_a, HeatZone.Position.wall, "east wall"));
@@ -126,5 +126,22 @@ public class Building {
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 5, false, ControllableArea.room_2_bathroom, HeatZone.Position.wall, "left at entrance"));
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 6, true, ControllableArea.room_3_bathroom, HeatZone.Position.wall, "wall separating the hall"));
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 7, true, ControllableArea.room_3_bathroom, HeatZone.Position.radiator, "bedroom"));
+
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_torenkelder, 0, true, ControllableArea.room_1, HeatZone.Position.floor));
+
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 0, true, ControllableArea.office, HeatZone.Position.wall, "wall east"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 1, true, ControllableArea.office, HeatZone.Position.wall, "wall east"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 2, true, ControllableArea.office, HeatZone.Position.wall, "wall east"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 3, false, ControllableArea.office, HeatZone.Position.floor, "extra"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 4, false, ControllableArea.office, HeatZone.Position.floor, "convector"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 5, true, ControllableArea.tower_kitchen, HeatZone.Position.floor, "convector 1"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 6, true, ControllableArea.tower_kitchen, HeatZone.Position.floor, "convector 2"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 7, true, ControllableArea.hall, HeatZone.Position.wall));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 8, true, ControllableArea.hall_storage, HeatZone.Position.wall));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 9, true, ControllableArea.hall_toilet, HeatZone.Position.wall));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 10, true, ControllableArea.room_2_bathroom, HeatZone.Position.floor, "convector south 1"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 11, false, ControllableArea.room_2_bathroom, HeatZone.Position.floor, "convector south 2"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 12, true, ControllableArea.room_2_bathroom, HeatZone.Position.floor, "convector west 1"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 13, false, ControllableArea.room_2_bathroom, HeatZone.Position.floor, "convector west 2"));
     }
 }

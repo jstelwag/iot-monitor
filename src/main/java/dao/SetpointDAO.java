@@ -42,7 +42,7 @@ public class SetpointDAO implements Closeable {
 
     public double getDefault(ControllableArea room) {
         if (!jedis.exists(room + ".setpoint-default")) {
-            return 20.0;
+            return 20.5;
         }
         return Double.parseDouble(jedis.get(room + ".setpoint-default"));
     }
@@ -81,9 +81,9 @@ public class SetpointDAO implements Closeable {
     }
 
     public SetpointDAO populateDefault() {
-        setDefault(ControllableArea.apartment_II_bedroom, 19.0);
-        setDefault(ControllableArea.apartment_III_bathroom, 19.0);
-        setDefault(ControllableArea.room_1, 19.0);
+        setDefault(ControllableArea.apartment_II_bedroom, 19.5);
+        setDefault(ControllableArea.apartment_III_bathroom, 19.5);
+        setDefault(ControllableArea.room_1, 19.5);
         return this;
     }
 

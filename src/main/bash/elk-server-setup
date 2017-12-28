@@ -54,8 +54,9 @@ filter {
 
   if [application] =~ "knx-event" {
     grok {
-      match => { "message" => "receiver: (?<location>.*?) \((?<device-type>.*?)\) (?<device>.*?), (?<from-address>.*?)->(?<to-address>.*?) L_Data.ind, (?<l-data>.*?), tpdu (?<tpdu>.*?)" }
+      match => { "message" => "receiver: (?<location>.*?) \((?<device-type>.*?)\) (?<device>.*?), (?<from-address>.*?)->(?<to-address>.*?) L_Data.ind, (?<l-data>.*?), tpd$
     }
+    mutate { remove_field => [ "message" ] }
   }
 }
 output {
