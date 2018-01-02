@@ -19,7 +19,9 @@ public class CustomerNameSpeaker implements Runnable {
         System.out.println("Posting bookings to influx");
         try (FluxLogger flux = new FluxLogger(); BookingDAO bookings = new BookingDAO()) {
             for (Room room : Building.INSTANCE.allControllableRooms()) {
-                flux.message(LineProtocolUtil.protocolLine(room, bookings.getNow(room)));
+                if (bookings.getNow(room) != null) {
+                    flux.message(LineProtocolUtil.protocolLine(room, bookings.getNow(room)));
+                }
             }
         } catch (IOException e) {
             LogstashLogger.INSTANCE.message("ERROR: fail to post bookings to Influx " + e.getMessage());

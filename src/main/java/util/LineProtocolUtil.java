@@ -15,7 +15,7 @@ public class LineProtocolUtil {
             if (first) {
                 first = false;
             } else {
-                states.add(Boolean.parseBoolean(piece));
+                states.add("1".equals(piece));
             }
         }
         // Last item is the checksum
