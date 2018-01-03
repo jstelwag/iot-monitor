@@ -45,6 +45,14 @@ public class LineProtocolUtil {
         return retVal.toString();
     }
 
+    public static String protocolLine(HeatZone.ValveGroup group, int sequence, String type, String value) {
+        StringBuilder retVal = new StringBuilder();
+        retVal.append(group).append(",sequence=").append(sequence).append('i');
+        retVal.append(' ').append(type).append('=').append(value);
+
+        return retVal.toString();
+    }
+
     public static String protocolLine(ControllableArea controllableArea, String type, String value) {
         StringBuilder retVal = new StringBuilder();
         retVal.append(controllableArea).append(",position=room");
