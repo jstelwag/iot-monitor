@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/pi/iot-monitor
+cd /home/jaap/iot-monitor
 
 /usr/bin/mvn clean install
 /usr/bin/crontab src/main/bash/crontab

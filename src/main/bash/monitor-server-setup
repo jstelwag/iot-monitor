@@ -1,0 +1,72 @@
+#!/bin/bash
+# server for the iot-monitor server
+
+# sudo apt install git
+# and run git clone https://github.com/jstelwag/iot-monitor
+
+sudo apt-get update
+sudo apt-get -y upgrade
+
+sudo apt-get -y install cron-apt
+sudo apt-get -y install openjdk-8-jdk maven
+sudo apt-get -y install redis-server
+#sudo apt-get -y install collectd
+sudo apt -y install python-pip
+
+pip install supervisor
+
+curl https://gist.githubusercontent.com/howthebodyworks/176149/raw/d60b505a585dda836fadecca8f6b03884153196b/supervisord.sh > supervisord
+chmod +x supervisord
+sudo mv supervisord /etc/init.d
+sudo update-rc.d supervisord defaults
+echo_supervisord_conf > supervisord.conf
+sed -i 's/tmp\/supervisord.log/var\/log\/supervisord.log/' supervisord.conf
+echo "[program:http_monitor]" >> supervisord.conf
+echo "command=/usr/local/bin/iot-runtime http" >> supervisord.conf
+echo "redirect_stderr=true" >> supervisord.conf
+echo "stdout_logfile=/var/log/iot-monitor.log" >> supervisord.conf
+echo "process_name=http-monitor" >> supervisord.conf
+echo "[program:iot_monitor]" >> supervisord.conf
+echo "command=/usr/local/bin/iot-runtime iot" >> supervisord.conf
+echo "redirect_stderr=true" >> supervisord.conf
+echo "stdout_logfile=/var/log/iot-monitor.log" >> supervisord.conf
+echo "process_name=iot-monitor" >> supervisord.conf
+
+sudo mv supervisord.conf /etc
+
+cat <<EOF >monitor.conf
+iot.port=8888
+master.port=8000
+influx.ip=192.168.
+influx.port=8087
+knx.ip=192.168.
+logstash.ip=192.168.
+logstash.port=9000
+local.ip=192.168.
+beds24.apiKey=
+beds24.propKey=
+EOF
+sudo mv monitor.conf /etc
+
+cat <<EOF >iot-upgrade
+#!/bin/bash
+cd /home/jaap/iot-monitor
+git pull
+sh src/main/bash/iot-upgrade
+EOF
+sudo mv iot-upgrade /usr/local/bin
+sudo chmod +x /usr/local/bin/iot-upgrade
+
+cat <<EOF >iot-runtime
+#!/bin/bash
+sh /home/jaap/iot-monitor/src/main/bash/iot-runtime $1
+exit 0
+EOF
+sudo mv iot-runtime /usr/local/bin
+sudo chmod +x /usr/local/bin/iot-runtime
+
+iot-upgrade
+
+sudo nano /etc/monitor.conf
+
+exit 0
