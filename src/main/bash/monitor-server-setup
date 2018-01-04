@@ -7,7 +7,7 @@
 sudo apt-get update
 sudo apt-get -y upgrade
 
-sudo apt-get -y install cron-apt
+sudo apt-get -y install cron-apt curl
 sudo apt-get -y install openjdk-8-jdk maven
 sudo apt-get -y install redis-server
 #sudo apt-get -y install collectd
@@ -30,7 +30,7 @@ iface enp0s3 inet static
 EOF
 sudo mv interfaces /etc/network
 
-curl https://gist.githubusercontent.com/howthebodyworks/176149/raw/d60b505a585dda836fadecca8f6b03884153196b/supervisord.sh > supervisord
+curl https://raw.githubusercontent.com/Supervisor/initscripts/master/debian-norrgard > supervisord
 chmod +x supervisord
 sudo mv supervisord /etc/init.d
 sudo update-rc.d supervisord defaults

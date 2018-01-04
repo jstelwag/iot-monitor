@@ -1,7 +1,7 @@
 
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-HOME=/home/pi
+HOME=/home/jaap
 
 0 3 * * * (iot-upgrade && sudo reboot) > $HOME/upgrade.log 2>&1
 */10 * * * * iot-runtime beds24 >> $HOME/runtime.log 2>&1
