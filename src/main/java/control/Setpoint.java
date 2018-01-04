@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * If a room is unused, turn off the heating
- * When the room is occupied tonight or it is still 2 hours before checkout, the heating should be switched on
+ * When the room is occupied to(morrow)night or it is still 2 hours before checkout, the heating should be switched on
  */
 public class Setpoint implements Runnable {
 
@@ -27,7 +27,7 @@ public class Setpoint implements Runnable {
         BookingDAO bookings = new BookingDAO();
         for (Room room : Building.INSTANCE.allControllableRooms()) {
             boolean active = bookings.isOccupiedTonight(room)
-                    || bookings.isOccupiedTonight(room) //todo only use tomorrow when things are cold
+                    || bookings.isOccupiedTomorrow(room) //todo only use tomorrow when things are cold
                     || (bookings.isOccupiedNow(room) && now.before(heatingOffTime));
             List<ControllableArea> rooms = Building.INSTANCE.findRooms(room);
             for (ControllableArea controlRoom : rooms) {

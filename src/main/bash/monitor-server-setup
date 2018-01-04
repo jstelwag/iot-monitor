@@ -11,9 +11,6 @@ sudo apt-get -y install cron-apt curl
 sudo apt-get -y install openjdk-8-jdk maven
 sudo apt-get -y install redis-server
 #sudo apt-get -y install collectd
-sudo apt -y install python-pip
-
-pip install supervisor
 
 cat <<EOF >interfaces
 # The loopback network interface
@@ -30,29 +27,62 @@ iface enp0s3 inet static
 EOF
 sudo mv interfaces /etc/network
 
-curl https://raw.githubusercontent.com/Supervisor/initscripts/master/debian-norrgard > supervisord
-chmod +x supervisord
-sudo mv supervisord /etc/init.d
-sudo update-rc.d supervisord defaults
-echo_supervisord_conf > supervisord.conf
-sed -i 's/tmp\/supervisord.log/var\/log\/supervisord.log/' supervisord.conf
-echo "[program:http_monitor]" >> supervisord.conf
-echo "command=/usr/local/bin/iot-runtime http" >> supervisord.conf
-echo "redirect_stderr=true" >> supervisord.conf
-echo "stdout_logfile=/var/log/iot-monitor.log" >> supervisord.conf
-echo "process_name=http-monitor" >> supervisord.conf
-echo "[program:iot_monitor]" >> supervisord.conf
-echo "command=/usr/local/bin/iot-runtime iot" >> supervisord.conf
-echo "redirect_stderr=true" >> supervisord.conf
-echo "stdout_logfile=/var/log/iot-monitor.log" >> supervisord.conf
-echo "process_name=iot-monitor" >> supervisord.conf
+cat <<EOF >udp-listener.service
+[Unit]
+Description=Java UDP listener Service
+[Service]
+User=jaap
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/home/jaap
+#path to executable. 
+#executable is a bash script which calls jar file
+ExecStart=/usr/local/bin/iot-runtime iot
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=multi-user.target
+EOF
 
-sudo mv supervisord.conf /etc
+sudo mv udp-listener.service /etc/systemd/system/
+
+sudo systemctl daemon-reload
+sudo systemctl enable udp-listener.service
+sudo systemctl start udp-listener
+sudo systemctl status udp-listener
+
+cat <<EOF >http-listener.service
+[Unit]
+Description=Java HTTP listener Service
+[Service]
+User=jaap
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/home/jaap
+#path to executable. 
+#executable is a bash script which calls jar file
+ExecStart=/usr/local/bin/iot-runtime http
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo mv http-listener.service /etc/systemd/system/
+
+sudo systemctl daemon-reload
+sudo systemctl enable http-listener.service
+sudo systemctl start http-listener
+sudo systemctl status http-listener
 
 cat <<EOF >monitor.conf
 iot.port=8888
 master.port=8000
-influx.ip=192.168.
+influx.ip=192.168.178.18
 influx.port=8087
 knx.ip=192.168.
 logstash.ip=192.168.

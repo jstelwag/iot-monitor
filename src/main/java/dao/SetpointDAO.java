@@ -92,21 +92,21 @@ public class SetpointDAO implements Closeable {
             case 22:
                 return in - 0.5;
             case 23:
-                return in - 1.0;
+                return in - 0.8;
             case 0:
-                return in - 3.0;
+                return in - 2.5;
             case 1:
-                return in - 3.0;
+                return in - 2.5;
             case 2:
-                return in - 3.0;
+                return in - 2.5;
             case 3:
                 return in - 2.0;
             case 4:
                 return in - 2.0;
             case 5:
-                return in - 1.5;
-            case 6:
                 return in - 1.0;
+            case 6:
+                return in - 0.8;
             case 7:
                 return in - 0.5;
             default:
