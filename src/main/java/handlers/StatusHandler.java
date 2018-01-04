@@ -33,6 +33,7 @@ public class StatusHandler extends AbstractHandler {
         statusResponse.put("rooms", new JSONArray());
         statusResponse.put("occupiedNow", new JSONArray());
         statusResponse.put("occupiedTonight", new JSONArray());
+        statusResponse.put("occupiedTomorrow", new JSONArray());
 
         SetpointDAO setpoints = new SetpointDAO();
         TemperatureDAO temperatures = new TemperatureDAO();
@@ -53,6 +54,7 @@ public class StatusHandler extends AbstractHandler {
             roomResponse.put("active", setpoints.isActive(controllableArea));
             roomResponse.put("booking-now", bookings.getNow(controllableArea.room));
             roomResponse.put("booking-tonight", bookings.getTonight(controllableArea.room));
+            roomResponse.put("booking-tomorrow", bookings.getTomorrow(controllableArea.room));
 
             if (temperatures.getActual(controllableArea) != null) {
                 roomResponse.put("temperature", temperatures.getActual(controllableArea));
@@ -92,6 +94,12 @@ public class StatusHandler extends AbstractHandler {
                 statusResponse.getJSONArray("occupiedTonight").put(bookingTonight);
                 bookingTonight.put("name", bookings.getTonight(room));
                 bookingTonight.put("room", room);
+            }
+            if (bookings.isOccupiedTomorrow(room)) {
+                JSONObject bookingTomorrow = new JSONObject();
+                statusResponse.getJSONArray("occupiedTomorrow").put(bookingTomorrow);
+                bookingTomorrow.put("name", bookings.getTomorrow(room));
+                bookingTomorrow.put("room", room);
             }
         }
         IOUtils.closeQuietly(bookings);

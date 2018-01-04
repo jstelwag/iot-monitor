@@ -46,6 +46,10 @@ public class BookingDAO implements Closeable {
         return jedis.get(room + ".booking-tonight");
     }
 
+    public String getTomorrow(Room room) {
+        return jedis.get(room + ".booking-tomorrow");
+    }
+
     public BookingDAO setTomorrow(Room room, String name) {
         if (name == null) {
             jedis.setex(room + ".booking-tomorrow", TTL_BOOKINGS, "empty");
@@ -69,6 +73,14 @@ public class BookingDAO implements Closeable {
             return true;
         }
         return !"empty".equals(getTonight(room));
+    }
+
+    public boolean isOccupiedTomorrow(Room room) {
+        if (!jedis.exists(room + ".booking-tomorrow")) {
+            LogstashLogger.INSTANCE.message("WARNING: " + room + ".booking-tomorrow is not available in Redis");
+            return true;
+        }
+        return !"empty".equals(getTomorrow(room));
     }
 
     @Override

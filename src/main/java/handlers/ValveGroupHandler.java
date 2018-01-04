@@ -21,7 +21,7 @@ public class ValveGroupHandler extends AbstractHandler {
             throws IOException, ServletException {
         response.setContentType("text/plain");
         IoTRequestDispatcher dispatcher = new IoTRequestDispatcher(IOUtils.toString(request.getReader()));
-        if(dispatcher.isGroup()) {
+        if (dispatcher.isGroup()) {
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().println(dispatcher.actuatorsOut());
         } else {

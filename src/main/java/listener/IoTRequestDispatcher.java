@@ -47,8 +47,9 @@ public class IoTRequestDispatcher {
                 || (group == HeatZone.ValveGroup.koetshuis_trap_15 && zones.size() + 1 == clientStates.size())) {
             try (FluxLogger flux = new FluxLogger()) {
                 for (int i = 0; i < zones.size(); i++) {
-                    flux.message(LineProtocolUtil.protocolLine(zones.get(i), "clientState",
-                            clientStates.get(i) ? "1i" : "0i"));
+                    String state = clientStates.get(i) ? "1i" : "0i";
+                    flux.message(LineProtocolUtil.protocolLine(zones.get(i), "clientState", state));
+                    flux.message(LineProtocolUtil.protocolLine(zones.get(i).group, zones.get(i).groupSequence, "clientState", state));
                 }
 
                 //TODO add logging of pump state

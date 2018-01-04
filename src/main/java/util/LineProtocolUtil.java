@@ -15,7 +15,7 @@ public class LineProtocolUtil {
             if (first) {
                 first = false;
             } else {
-                states.add(Boolean.parseBoolean(piece));
+                states.add("1".equals(piece));
             }
         }
         // Last item is the checksum
@@ -40,6 +40,14 @@ public class LineProtocolUtil {
         } else {
             retVal.append(zone.group).append(",sequence=").append(zone.groupSequence).append('i');
         }
+        retVal.append(' ').append(type).append('=').append(value);
+
+        return retVal.toString();
+    }
+
+    public static String protocolLine(HeatZone.ValveGroup group, int sequence, String type, String value) {
+        StringBuilder retVal = new StringBuilder();
+        retVal.append(group).append(",sequence=").append(sequence).append('i');
         retVal.append(' ').append(type).append('=').append(value);
 
         return retVal.toString();
