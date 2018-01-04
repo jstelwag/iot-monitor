@@ -64,7 +64,7 @@
             <version>2.3</version>
         </dependency>
 
-        <!-- mvn install -DskipTests from https://github.com/jstelwag/calimero-core first --
+        <!-- mvn install -DskipTests from https://github.com/jstelwag/calimero-core first 
         <dependency>
             <groupId>com.github.calimero</groupId>
             <artifactId>calimero-core</artifactId>
