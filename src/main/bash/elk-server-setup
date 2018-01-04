@@ -3,6 +3,7 @@
 # first run git clone https://github.com/jstelwag/iot-monitor
 # then sh iot-monitor/src/main/bash/elk-server-setup
 
+sudo apt-get -y install software-properties-common
 sudo add-apt-repository ppa:webupd8team/java
 sudo apt-get update
 sudo apt-get -y upgrade
@@ -35,7 +36,6 @@ sudo /bin/systemctl enable elasticsearch.service
 
 echo "cluster.name: kasteel-nijswiller" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
 echo "node.name: nijswiller-1" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
-echo "node.rack: kasteel-brix" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
 
 # Logstash
 sudo apt-get -y install logstash
