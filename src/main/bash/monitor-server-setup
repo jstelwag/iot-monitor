@@ -15,6 +15,21 @@ sudo apt -y install python-pip
 
 pip install supervisor
 
+cat <<EOF >interfaces
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto enp0s3
+iface enp0s3 inet static
+ address 192.168.178.18
+ netmask 255.255.255.0
+ gateway 192.168.178.1
+ dns-nameservers 8.8.8.8
+EOF
+sudo mv interfaces /etc/network
+
 curl https://gist.githubusercontent.com/howthebodyworks/176149/raw/d60b505a585dda836fadecca8f6b03884153196b/supervisord.sh > supervisord
 chmod +x supervisord
 sudo mv supervisord /etc/init.d

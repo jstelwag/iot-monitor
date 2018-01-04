@@ -58,19 +58,19 @@
     </properties>
 
     <dependencies>
-        <!--
         <dependency>
             <groupId>com.github.calimero</groupId>
             <artifactId>calimero-core</artifactId>
-            <version>2.3-beta</version>
+            <version>2.3</version>
         </dependency>
-        -->
-        <!-- mvn install -DskipTests from https://github.com/jstelwag/calimero-core first -->
+
+        <!-- mvn install -DskipTests from https://github.com/jstelwag/calimero-core first --
         <dependency>
             <groupId>com.github.calimero</groupId>
             <artifactId>calimero-core</artifactId>
             <version>2.4-SNAPSHOT</version>
         </dependency>
+        -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
