@@ -19,7 +19,8 @@ public class LineProtocolUtil {
             }
         }
         // Last item is the checksum
-        if (!states.isEmpty()) {
+        //todo remove
+        if (!states.isEmpty() && !line.startsWith("kasteel_zolder")) {
             states.remove(states.size() - 1);
         }
         return states;
