@@ -123,6 +123,35 @@ public class HeatZoneStateDAO implements Closeable {
         zone = building.zoneById(HeatZone.ValveGroup.kasteel_zolder, 7);
         setDefault(zone, true);
 
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 0);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 1);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 2);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 3);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 4);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 5);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 6);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 7);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 8);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 9);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 10);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 11);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 12);
+        setDefault(zone, true);
+        zone = building.zoneById(HeatZone.ValveGroup.kasteel_hal, 13);
+        setDefault(zone, true);
+
         return this;
     }
 

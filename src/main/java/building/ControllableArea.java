@@ -14,13 +14,15 @@ public enum ControllableArea {
     room_d(Room.room_d, new GroupAddress(1, 5, 41), null, null, new GroupAddress(1, 7, 6), null, 1),
     //Room 1 needs to bo colder so set the default mode to Away (2)
     room_1(Room.room_1, new GroupAddress(4, 5, 1), new GroupAddress(4, 5, 6), "4/5/6", new GroupAddress(4, 7, 0), "4/5/3", 2),
-    //room_2(Room.room_2, )
+    room_2(Room.room_2, new GroupAddress(6, 5, 1), null, null, null, null, 0),
     room_2_bathroom(Room.room_2, new GroupAddress(6, 5, 1), new GroupAddress(6, 5, 6), "6/5/8", new GroupAddress(6, 7, 0), "6/5/3", 1),
     room_3_bathroom(Room.room_3, new GroupAddress(6, 5, 11), new GroupAddress(6, 5, 16), "6/5/18", null, "6/5/13", 1),
     hall(Room.hall, new GroupAddress(0,0,0), null, null, null, null, 0),
     hall_toilet(Room.hall, new GroupAddress(0,0,0), null, null, null, null, 0),
     hall_storage(Room.hall, new GroupAddress(0,0,0), null, null, null, null, 0),
     office(Room.office, new GroupAddress(0,0,0), null, null, null, null, 0),
+    ballroom_south(Room.ballroom_south, new GroupAddress(0,0,0), null, null, null, null, 0),
+    ballroom_north(Room.ballroom_north, new GroupAddress(0,0,0), null, null, null, null, 0),
     tower_kitchen(Room.kitchen, new GroupAddress(0,0,0), null, null, null, null, 0);
 
     ControllableArea(Room room, GroupAddress temperatureSensor, GroupAddress setpoint, String offset, GroupAddress allOffButton, String modusAddress, int defaultModus) {

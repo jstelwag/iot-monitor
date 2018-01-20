@@ -30,7 +30,7 @@ public class ValveGroupHandler extends AbstractHandler {
         }
 
         baseRequest.setHandled(true);
-        if (dispatcher.isGroup()) {
+        if (dispatcher.isLoggable()) {
             dispatcher.logState();
         }
     }

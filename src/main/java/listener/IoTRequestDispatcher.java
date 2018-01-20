@@ -39,6 +39,10 @@ public class IoTRequestDispatcher {
         return group != null;
     }
 
+    public boolean isLoggable() {
+        return isGroup() && StringUtils.countMatches(lineIn, ":") > 2;
+    }
+
     public void logState() {
         List<HeatZone> zones = Building.INSTANCE.zonesByGroup(group);
         List<Boolean> clientStates = LineProtocolUtil.states(lineIn);
