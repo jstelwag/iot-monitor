@@ -22,7 +22,8 @@ public enum Room {
     , office(Building.Construction.kasteel, 0)
     , ballroom_south(Building.Construction.kasteel, 0)
     , ballroom_north(Building.Construction.kasteel, 0)
-    , kitchen(Building.Construction.kasteel, 0);
+    , kitchen(Building.Construction.kasteel, 0)
+    , yet_unknown(Building.Construction.kasteel, 0); //Needed sofar for P1 meter
 
     Room(Building.Construction construction, long beds24Id) {
         this.construction = construction;
