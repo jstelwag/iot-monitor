@@ -52,11 +52,14 @@ public class FurnaceHandler extends AbstractHandler {
             } else {
                 response.getWriter().print("{\"furnace\"=\"OFF\"");
             }
-            if (pumpDesire >= 2) {
+            if (furnaceState && pumpDesire >= 2) {
                 response.getWriter().println(",\"pump\"=\"ON\"}");
             } else {
                 response.getWriter().println(",\"pump\"=\"OFF\"}");
             }
+
+            //TODO, log only when there is a response
+
             try (FluxLogger flux = new FluxLogger()) {
                 flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceDesire", Integer.toString(furnaceDesire)));
                 flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceState", furnaceState ? "1i" : "0i"));
