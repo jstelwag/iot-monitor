@@ -104,7 +104,7 @@ sudo chmod +x /usr/local/bin/iot-upgrade
 
 cat <<EOF >iot-runtime
 #!/bin/bash
-sh /home/jaap/iot-monitor/src/main/bash/iot-runtime $1
+sh /home/jaap/iot-monitor/src/main/bash/iot-runtime \$@
 exit 0
 EOF
 sudo mv iot-runtime /usr/local/bin

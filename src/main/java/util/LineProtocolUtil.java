@@ -18,11 +18,7 @@ public class LineProtocolUtil {
                 states.add("1".equals(piece));
             }
         }
-        // Last item is the checksum
-        //todo remove
-        if (!states.isEmpty() && !line.startsWith("kasteel_zolder") && !line.startsWith("koetshuis_trap")) {
-            states.remove(states.size() - 1);
-        }
+
         return states;
     }
 
