@@ -16,6 +16,9 @@ public class SetpointDAO implements Closeable {
 
     private final int TTL_KNX = 120;
     private final int TTL_BOOKINGS = 1800;
+    private final double DEFAULT_SETPOINT = 20.5;
+    private final double DEFAULT_SETPOINT_BEDROOM = 19.5;
+    private final double DEFAULT_SETPOINT_OFF = 12.0;
 
     public SetpointDAO() {
         jedis = new Jedis("localhost");
@@ -42,7 +45,7 @@ public class SetpointDAO implements Closeable {
 
     public double getDefault(ControllableArea room) {
         if (!jedis.exists(room + ".setpoint-default")) {
-            return 20.5;
+            return DEFAULT_SETPOINT;
         }
         return Double.parseDouble(jedis.get(room + ".setpoint-default"));
     }
@@ -59,7 +62,7 @@ public class SetpointDAO implements Closeable {
             return timeCorrected(setpoint);
         }
 
-        return 14.0;
+        return DEFAULT_SETPOINT_OFF;
     }
 
     public SetpointDAO setDefault(ControllableArea room, double value) {
@@ -81,9 +84,9 @@ public class SetpointDAO implements Closeable {
     }
 
     public SetpointDAO populateDefault() {
-        setDefault(ControllableArea.apartment_II_bedroom, 19.5);
-        setDefault(ControllableArea.apartment_III_bathroom, 19.5);
-        setDefault(ControllableArea.room_1, 19.5);
+        setDefault(ControllableArea.apartment_II_bedroom, DEFAULT_SETPOINT_BEDROOM);
+        setDefault(ControllableArea.apartment_III_bathroom, DEFAULT_SETPOINT_BEDROOM);
+        setDefault(ControllableArea.room_1, DEFAULT_SETPOINT_BEDROOM);
         return this;
     }
 
