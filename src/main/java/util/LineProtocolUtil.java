@@ -10,12 +10,14 @@ public class LineProtocolUtil {
     public static List<Boolean> states(String line) {
         List<Boolean> states = new LinkedList<>();
 
-        boolean first = true;
-        for (String piece : line.split(":")) {
-            if (first) {
-                first = false;
+        boolean start = false;
+        for (int i = 0; i < line.length(); i++) {
+            if (!start && line.charAt(i) == '[') {
+                start = true;
+            } else if (line.charAt(i) == ']') {
+                break;
             } else {
-                states.add("1".equals(piece));
+                states.add(line.charAt(i) == '1');
             }
         }
 
