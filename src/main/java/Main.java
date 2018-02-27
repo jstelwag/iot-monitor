@@ -88,7 +88,7 @@ public class Main {
         ContextHandler valveGroupContext = new ContextHandler("/valvegroup");
         valveGroupContext.setHandler(new ValveGroupHandler());
         ContextHandler knxtemperatures = new ContextHandler("/knxtemperatures");
-        knxtemperatures.setHandler(new RoomTemperatureHandler());
+        knxtemperatures.setHandler(new KNXTemperaturesHandler());
         ContextHandler redisContext = new ContextHandler("/redis");
         redisContext.setHandler(new RedisHandler());
         ContextHandler knxContext = new ContextHandler("/knx");

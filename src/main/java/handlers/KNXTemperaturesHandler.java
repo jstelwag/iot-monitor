@@ -18,18 +18,20 @@ import java.io.IOException;
 /**
  * Created by Jaap on 27-5-2016.
  */
-public class RoomTemperatureHandler extends AbstractHandler {
+public class KNXTemperaturesHandler extends AbstractHandler {
 
     @Override
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         boolean result = true;
+        String message = "";
         try (SetpointDAO setpoints = new SetpointDAO(); TemperatureDAO temperatures = new TemperatureDAO()) {
             for (ControllableArea controllableArea : ControllableArea.values()) {
                 try {
                     double value = KNXLink.getInstance().readFloat(controllableArea.temperatureSensor);
                     temperatures.set(controllableArea, value);
                 } catch (KNXTimeoutException e) {
+                    message += "Timeout retrieving " + controllableArea + " temperature. ";
                     LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " temperature");
                     result = false;
                 }
@@ -37,12 +39,14 @@ public class RoomTemperatureHandler extends AbstractHandler {
                     try {
                         setpoints.setKnx(controllableArea, KNXLink.getInstance().readFloat(controllableArea.setpoint));
                     } catch (KNXTimeoutException e) {
+                        message += "Timeout retrieving " + controllableArea + " setpoint. ";
                         LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " setpoint");
                         result = false;
                     }
                 }
             }
         } catch (KNXException | InterruptedException e) {
+            message += "ERROR: closing KNX link, it is giving exceptions " + e.getMessage();
             LogstashLogger.INSTANCE.message("ERROR: closing KNX link, it is giving exceptions " + e.getMessage());
             result = false;
         }
@@ -51,7 +55,7 @@ public class RoomTemperatureHandler extends AbstractHandler {
         if (result) {
             response.getWriter().println("{\"status\"=\"OK\"}");
         } else {
-            response.getWriter().println("{\"status\"=\"ERROR\"}");
+            response.getWriter().println("{\"status\"=\"ERROR\", \"message\"=\"" + message + "\"}");
         }
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
