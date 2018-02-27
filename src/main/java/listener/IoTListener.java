@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.*;
 
+@Deprecated
 public class IoTListener implements Runnable, Closeable {
     private final int WORKERS = 4;
 

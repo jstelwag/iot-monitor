@@ -40,7 +40,7 @@ public class IoTRequestDispatcher {
     }
 
     public boolean isLoggable() {
-        return isGroup() && StringUtils.countMatches(lineIn, ":") > 2;
+        return isGroup() && lineIn.contains("[") && lineIn.contains("]");
     }
 
     public void logState() {
