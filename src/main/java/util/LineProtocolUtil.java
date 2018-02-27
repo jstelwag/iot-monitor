@@ -12,12 +12,16 @@ public class LineProtocolUtil {
 
         boolean start = false;
         for (int i = 0; i < line.length(); i++) {
-            if (!start && line.charAt(i) == '[') {
-                start = true;
-            } else if (line.charAt(i) == ']') {
-                break;
+            if (!start) {
+                if (line.charAt(i) == '[') {
+                    start = true;
+                }
             } else {
-                states.add(line.charAt(i) == '1');
+                if (line.charAt(i) == ']') {
+                    break;
+                } else {
+                    states.add(line.charAt(i) == '1');
+                }
             }
         }
 
