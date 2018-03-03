@@ -361,7 +361,7 @@
 2/7/2	homeserver	koetshuis	room_a	verdieping
 2/7/102	homeserver	koetshuis	room_a	scenes
 2/5/1	climate	koetshuis	apartment_I	actueel
-2/5/11	climate koetshuis	room_a	actueel
+2/5/11	climate	koetshuis	room_a	actueel
 2/5/12	climate	koetshuis	room_a	soll-basis
 2/5/13	climate	koetshuis	room_a	modus
 2/5/14	climate	koetshuis	room_a	status
