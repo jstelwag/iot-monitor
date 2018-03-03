@@ -419,6 +419,8 @@
 4/5/6	climate	kasteel	room_1	soll temperatuur
 4/5/7	climate	kasteel	room_1	verschuiving actueel
 4/5/8	climate	kasteel	room_1	verschuiving gewenst
+5/5/1	climate	kasteel	office	actueel
+5/5/2	climate	kasteel	hall	actueel
 6/0/101	button	kasteel	room_2	Badkamer lampen
 6/0/102	button	kasteel	room_2	Badkamer afzuiging
 6/0/103	button	kasteel	room_2	Badkamer spiegel
