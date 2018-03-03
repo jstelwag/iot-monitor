@@ -186,9 +186,9 @@
 1/1/103	button_status	koetshuis	room_c	Afzuiging
 1/1/1	button_status	koetshuis	room_c	Spots plafond
 1/1/2	button_status	koetshuis	room_c	Plafondstraler
-1/1/134	button_status	koetshuis	apartment_III	Wandlamp zuidmuur
+1/1/134	button_status	koetshuis	room_f	Wandlamp zuidmuur
 1/1/135	button_status	koetshuis	plein	Gevel bij voordeur
-1/1/136	button_status	koetshuis	apartment_III	Woonkamer staande lamp bij keuken/serre
+1/1/136	button_status	koetshuis	room_e	Woonkamer staande lamp bij keuken/serre
 1/1/137	button_status	koetshuis	room_e	Eetkamer tafellamp
 1/1/138	button_status	koetshuis	room_f	Badkamer?
 1/1/139	button_status	koetshuis	room_e	Hal spots plafond
