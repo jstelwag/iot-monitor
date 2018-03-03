@@ -104,12 +104,12 @@
 1/0/1	button	koetshuis	room_c	Spots plafond
 1/0/2	button	koetshuis	room_c	Plafondstraler
 1/0/7	button	koetshuis	room_e	Keuken & woonkamer spots plafond
-1/0/8	button	koetshuis	apartment_III	Woonkamer spots plafond bij TV
+1/0/8	button	koetshuis	room_f	Woonkamer spots plafond bij TV
 1/0/9	button	koetshuis	room_f	Slaapkamer spots plafond
 1/0/10	button	koetshuis	room_f	Badkamer spots plafond
 1/0/134	button	koetshuis	room_f	Kleine slaapkamer wandlamp zuidmuur
 1/0/135	button	koetshuis	plein	Buitenlamp bij voordeur
-1/0/136	button	koetshuis	apartment_III	Woonkamer staande lamp bij keuken/serre
+1/0/136	button	koetshuis	room_e	Woonkamer staande lamp bij keuken/serre
 1/0/137	button	koetshuis	room_e	Eetkamer tafellamp
 1/0/138	button	koetshuis	room_e	Toilet
 1/0/139	button	koetshuis	room_e	Hal spots plafond
@@ -120,7 +120,7 @@
 1/0/144	button	koetshuis	room_e	Hal spots
 1/0/145	button	koetshuis	room_b	Westmuur links
 1/0/11	button	koetshuis	room_b	Spots
-1/0/12	button	koetshuis	apartment_III	Serre spots
+1/0/12	button	koetshuis	room_e	Serre spots
 1/0/13	button	koetshuis	apartment_II	Serre spots
 1/0/146	button	koetshuis	room_d	WCD a
 1/0/147	button	koetshuis	room_d	WCD b
@@ -197,7 +197,7 @@
 1/1/142	button_status	koetshuis	room_e	Toilet spot plafond
 1/1/143	button_status	koetshuis	room_e	Keuken plafond boven aanrecht
 1/1/7	button_status	koetshuis	room_e	Keuken & woonkamer spots plafond
-1/1/8	button_status	koetshuis	apartment_III	Woonkamer spots plafond bij TV
+1/1/8	button_status	koetshuis	room_f	Woonkamer spots plafond bij TV
 1/1/9	button_status	koetshuis	room_f	Slaapkamer spots plafond
 1/1/144	button_status	koetshuis	room_e	Hal spots
 1/1/145	button_status	koetshuis	room_b	Westmuur links
@@ -217,7 +217,7 @@
 1/2/1	dimmer_relative	koetshuis	room_c	Spots uitbouw
 1/2/2	dimmer_relative	koetshuis	room_c	Plafondstraler
 1/2/7	dimmer_relative	koetshuis	room_e	Keuken & woonkamer spots plafond
-1/2/8	dimmer_relative	koetshuis	apartment_III	Woonkamer spots plafond bij TV
+1/2/8	dimmer_relative	koetshuis	room_f	Woonkamer spots plafond bij TV
 1/2/9	dimmer_relative	koetshuis	room_f	Slaapkamer spots plafond
 1/2/11	dimmer_relative	koetshuis	room_b	Spots
 1/2/12	dimmer_relative	koetshuis	room_e	Serre spots
@@ -230,7 +230,7 @@
 1/3/1	dimmer_absolute	koetshuis	room_c	Spots uitbouw
 1/3/2	dimmer_absolute	koetshuis	room_c	Plafondstraler
 1/3/7	dimmer_absolute	koetshuis	room_e	Keuken & woonkamer spots plafond
-1/3/8	dimmer_absolute	koetshuis	apartment_III	Woonkamer spots plafond bij TV
+1/3/8	dimmer_absolute	koetshuis	room_f	Woonkamer spots plafond bij TV
 1/3/11	dimmer_absolute	koetshuis	room_b	Spots uitbouw
 1/3/12	dimmer_absolute	koetshuis	room_e	Serre spots
 1/3/9	dimmer_absolute	koetshuis	room_f	Slaapkamer spots plafond
@@ -242,8 +242,8 @@
 1/4/6	dimmer_status	koetshuis	room_d	Spots uitbouw west
 1/4/1	dimmer_status	koetshuis	room_c	Spots uitbouw
 1/4/2	dimmer_status	koetshuis	room_c	Plafondstraler
-1/4/7	dimmer_status	koetshuis	apartment_III	Keuken & woonkamer spots plafond
-1/4/8	dimmer_status	koetshuis	apartment_III	Woonkamer spots plafond bij TV
+1/4/7	dimmer_status	koetshuis	room_e	Keuken & woonkamer spots plafond
+1/4/8	dimmer_status	koetshuis	room_f	Woonkamer spots plafond bij TV
 1/4/11	dimmer_status	koetshuis	room_b	Spots uitbouw
 1/4/4	dimmer_status	koetshuis	yet_unknown	22-b, bg, kamer 2, woonk. & hal, spots
 1/4/12	dimmer_status	koetshuis	room_e	Serre spots
