@@ -54,7 +54,7 @@ filter {
     grok {
       match => { "message" => "receiver: (?<location>.*?) \((?<device-type>.*?)\) (?<device>.*?), (?<from-address>.*?)->(?<to-address>.*?) L_Data.ind, (?<l-data>.*?), tpd$
     }
-    mutate { remove_field => [ "message" ] }
+    mutate => { remove_field => [ "message" ] }
   }
 }
 output {

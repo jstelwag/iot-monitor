@@ -6,7 +6,6 @@ package building;
 public enum Room {
     apartment_I(Building.Construction.koetshuis, 13237)
     , apartment_II(Building.Construction.koetshuis, 13238)
-    , apartment_III(Building.Construction.koetshuis, 26355)
     , room_a(Building.Construction.koetshuis, 12205)
     , room_b(Building.Construction.koetshuis, 13235)
     , room_c(Building.Construction.koetshuis, 13236)
