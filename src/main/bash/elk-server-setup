@@ -3,11 +3,9 @@
 # first run git clone https://github.com/jstelwag/iot-monitor
 # then sh iot-monitor/src/main/bash/elk-server-setup
 
-sudo apt-get -y install software-properties-common
-sudo add-apt-repository ppa:webupd8team/java
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get -y install oracle-java8-installer
+sudo apt-get -y install default-jdk curl
 #sudo apt-get -y install collectd
 
 cat <<EOF >interfaces
@@ -28,7 +26,7 @@ sudo mv interfaces /etc/network
 # Elastic
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 sudo apt-get -y install apt-transport-https
-echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-5.x.list
+echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
 sudo apt-get update
 sudo apt-get -y install elasticsearch
 sudo /bin/systemctl daemon-reload
@@ -60,16 +58,7 @@ filter {
   }
 }
 output {
-  if [application] =~ "knx-event" {
-    elasticsearch {
-      hosts => "localhost:9200"
-      index => "knx-%{+YYYY.MM.dd}"
-    }
-  } else {
-    elasticsearch {
-      hosts => "localhost:9200"
-    }
-  }
+  elasticsearch {}
 }
 EOF
 sudo mv udp-9000.conf /etc/logstash/conf.d/

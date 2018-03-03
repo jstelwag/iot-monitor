@@ -85,7 +85,7 @@ public class SetpointDAO implements Closeable {
 
     public SetpointDAO populateDefault() {
         setDefault(ControllableArea.apartment_II_bedroom, DEFAULT_SETPOINT_BEDROOM);
-        setDefault(ControllableArea.apartment_III_bathroom, DEFAULT_SETPOINT_BEDROOM);
+        setDefault(ControllableArea.room_f_bathroom, DEFAULT_SETPOINT_BEDROOM);
         setDefault(ControllableArea.room_1, DEFAULT_SETPOINT_BEDROOM);
         return this;
     }

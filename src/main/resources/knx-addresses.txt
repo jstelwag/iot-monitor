@@ -1,3 +1,68 @@
+0/0/2	homeserver	koetshuis	yet_unknown	tijd
+0/2/1	P1	misc	yet_unknown	DSMR version nr
+0/2/2	P1	misc	yet_unknown	P1G2 version nr
+0/2/3	P1	misc	yet_unknown	P1 error counter
+0/2/4	P1	misc	yet_unknown	last P1 message timestamp
+0/2/11	P1	misc	yet_unknown	aantal aangesloten M-bus devic
+0/2/12	P1	misc	yet_unknown	G-meter type
+0/2/13	P1	misc	yet_unknown	stand gasklep
+0/2/14	P1	misc	yet_unknown	datum laatste gasstand
+0/2/15	P1	misc	yet_unknown	tijd laatste gasstand
+0/2/16	P1	misc	yet_unknown	gas verbruikt (m3)
+0/2/21	P1	misc	yet_unknown	E-meter type
+0/2/31	P1	misc	yet_unknown	laaste lange uitval duur(s)
+0/2/29	P1	misc	yet_unknown	laaste lange uitval datum
+0/2/30	P1	misc	yet_unknown	laaste lange uitval tijd
+0/2/26	P1	misc	yet_unknown	actueel tarief (1=laag,2=hoog)
+0/2/25	P1	misc	yet_unknown	laag tarief actief
+0/2/24	P1	misc	yet_unknown	stand switchaar
+0/2/41	P1	misc	yet_unknown	actuele stroom L1 (A)
+0/2/42	P1	misc	yet_unknown	actuele stroom L2 (A)
+0/2/43	P1	misc	yet_unknown	actuele stroom L3 (A)
+0/2/51	P1	misc	yet_unknown	actueel verbruik (kW)
+0/2/52	P1	misc	yet_unknown	actueel verbruik L1 (kW)
+0/2/53	P1	misc	yet_unknown	actueel verbruik L2 (kW)
+0/2/54	P1	misc	yet_unknown	actueel verbruik L3 (kW)
+0/2/61	P1	misc	yet_unknown	actueel geleverd (kW)
+0/2/62	P1	misc	yet_unknown	actueel geleverd L1 (kW)
+0/2/63	P1	misc	yet_unknown	actueel geleverd L2 (kW)
+0/2/64	P1	misc	yet_unknown	actueel geleverd L3 (kW)
+0/2/71	P1	misc	yet_unknown	verbruik laag (kWh)
+0/2/72	P1	misc	yet_unknown	verbruik hoog (kWh)
+0/2/73	P1	misc	yet_unknown	verbruik totaal (kWh)
+0/2/81	P1	misc	yet_unknown	geleverd laag (kWh)
+0/2/82	P1	misc	yet_unknown	geleverd hoog (kWh)
+0/2/83	P1	misc	yet_unknown	geleverd totaal (kWh)
+0/2/91	P1	misc	yet_unknown	verschil laag (kWh)
+0/2/92	P1	misc	yet_unknown	verschil hoog (kWh)
+0/2/93	P1	misc	yet_unknown	verschil totaal (kWh)
+0/2/151	P1	misc	yet_unknown	actueel verbruik (W)
+0/2/152	P1	misc	yet_unknown	actueel verbruik L1 (W)
+0/2/153	P1	misc	yet_unknown	actueel verbruik L2 (W)
+0/2/154	P1	misc	yet_unknown	actueel verbruik L3 (W)
+0/2/161	P1	misc	yet_unknown	actueel geleverd (W)
+0/2/162	P1	misc	yet_unknown	actueel geleverd L1 (W)
+0/2/163	P1	misc	yet_unknown	actueel geleverd L2 (W)
+0/2/164	P1	misc	yet_unknown	actueel geleverd L3 (W)
+0/2/171	P1	misc	yet_unknown	verbruik laag (Wh)
+0/2/172	P1	misc	yet_unknown	verbruik hoog (Wh)
+0/2/173	P1	misc	yet_unknown	verbruik totaal (Wh)
+0/2/181	P1	misc	yet_unknown	geleverd laag (Wh)
+0/2/182	P1	misc	yet_unknown	geleverd hoog (Wh)
+0/2/183	P1	misc	yet_unknown	geleverd totaal (Wh)
+0/2/191	P1	misc	yet_unknown	verschil laag (Wh)
+0/2/192	P1	misc	yet_unknown	verschil hoog (Wh)
+0/2/193	P1	misc	yet_unknown	verschil totaal (Wh)
+0/2/36	P1	misc	yet_unknown	spanningsdips L2
+0/2/37	P1	misc	yet_unknown	spanningsdips L3
+0/2/35	P1	misc	yet_unknown	spanningsdips L1
+0/2/32	P1	misc	yet_unknown	spanningspieken L1
+0/2/33	P1	misc	yet_unknown	spanningspieken L2
+0/2/34	P1	misc	yet_unknown	spanningspieken L3
+0/2/22	P1	misc	yet_unknown	max power (kW)
+0/2/23	P1	misc	yet_unknown	max current (A)
+0/2/27	P1	misc	yet_unknown	aantal uitvallen
+0/2/28	P1	misc	yet_unknown	aantal lange uitvallen
 1/0/0	button	koetshuis	room_b	Plafondstraler
 1/0/4	button	koetshuis	apartment_II	Woonkamer spots
 1/0/5	button	koetshuis	room_d	Plafondstraler
@@ -38,21 +103,21 @@
 1/0/103	button	koetshuis	room_c	Toilet afzuiging
 1/0/1	button	koetshuis	room_c	Spots plafond
 1/0/2	button	koetshuis	room_c	Plafondstraler
-1/0/7	button	koetshuis	apartment_III	Keuken & woonkamer spots plafond
+1/0/7	button	koetshuis	room_e	Keuken & woonkamer spots plafond
 1/0/8	button	koetshuis	apartment_III	Woonkamer spots plafond bij TV
-1/0/9	button	koetshuis	apartment_III	Slaapkamer spots plafond
-1/0/10	button	koetshuis	apartment_III	Badkamer spots plafond
-1/0/134	button	koetshuis	apartment_III	Kleine slaapkamer wandlamp zuidmuur
+1/0/9	button	koetshuis	room_f	Slaapkamer spots plafond
+1/0/10	button	koetshuis	room_f	Badkamer spots plafond
+1/0/134	button	koetshuis	room_f	Kleine slaapkamer wandlamp zuidmuur
 1/0/135	button	koetshuis	plein	Buitenlamp bij voordeur
 1/0/136	button	koetshuis	apartment_III	Woonkamer staande lamp bij keuken/serre
-1/0/137	button	koetshuis	apartment_III	Eetkamer tafellamp
-1/0/138	button	koetshuis	apartment_III	Toilet
-1/0/139	button	koetshuis	apartment_III	Hal spots plafond
-1/0/140	button	koetshuis	apartment_III	Eetkamer boven tafel
-1/0/141	button	koetshuis	apartment_III	Badkamer bij wastafel
-1/0/142	button	koetshuis	apartment_III	Toilet spot
-1/0/143	button	koetshuis	apartment_III	Keuken plafond boven aanrecht
-1/0/144	button	koetshuis	apartment_III	Hal spots
+1/0/137	button	koetshuis	room_e	Eetkamer tafellamp
+1/0/138	button	koetshuis	room_e	Toilet
+1/0/139	button	koetshuis	room_e	Hal spots plafond
+1/0/140	button	koetshuis	room_e	Eetkamer boven tafel
+1/0/141	button	koetshuis	room_f	Badkamer bij wastafel
+1/0/142	button	koetshuis	room_e	Toilet spot
+1/0/143	button	koetshuis	room_e	Keuken plafond boven aanrecht
+1/0/144	button	koetshuis	room_e	Hal spots
 1/0/145	button	koetshuis	room_b	Westmuur links
 1/0/11	button	koetshuis	room_b	Spots
 1/0/12	button	koetshuis	apartment_III	Serre spots
@@ -61,16 +126,16 @@
 1/0/147	button	koetshuis	room_d	WCD b
 1/0/148	button	koetshuis	hall_center	Verdieping spot trap
 1/0/149	button	koetshuis	room_d	Badkamer spots & wastafel
-1/6/0	window	koetshuis	apartment_III	raam 1 move
-1/6/1	window	koetshuis	apartment_III	raam 1 stop
-1/6/2	window	koetshuis	apartment_III	raam 2 move
-1/6/4	window	koetshuis	apartment_III	raam 3 move
-1/6/6	window	koetshuis	apartment_III	raam 4 move
-1/6/3	window	koetshuis	apartment_III	raam 2 stop
-1/6/5	window	koetshuis	apartment_III	raam 3 stop
-1/6/7	window	koetshuis	apartment_III	raam 4 stop
-1/6/8	window	koetshuis	apartment_III	ramen move
-1/6/9	window	koetshuis	apartment_III	ramen stop
+1/6/0	window	koetshuis	room_e	raam 1 move
+1/6/1	window	koetshuis	room_e	raam 1 stop
+1/6/2	window	koetshuis	room_e	raam 2 move
+1/6/4	window	koetshuis	room_e	raam 3 move
+1/6/6	window	koetshuis	room_e	raam 4 move
+1/6/3	window	koetshuis	room_e	raam 2 stop
+1/6/5	window	koetshuis	room_e	raam 3 stop
+1/6/7	window	koetshuis	room_e	raam 4 stop
+1/6/8	window	koetshuis	room_e	ramen move
+1/6/9	window	koetshuis	room_e	ramen stop
 1/6/21	window	koetshuis	apartment_II	raam 1 move
 1/6/23	window	koetshuis	apartment_II	raam 2 move
 1/6/25	window	koetshuis	apartment_II	raam 3 move
@@ -124,21 +189,21 @@
 1/1/134	button_status	koetshuis	apartment_III	Wandlamp zuidmuur
 1/1/135	button_status	koetshuis	plein	Gevel bij voordeur
 1/1/136	button_status	koetshuis	apartment_III	Woonkamer staande lamp bij keuken/serre
-1/1/137	button_status	koetshuis	apartment_III	Eetkamer tafellamp
-1/1/138	button_status	koetshuis	apartment_III	Badkamer?
-1/1/139	button_status	koetshuis	apartment_III	Hal spots plafond
-1/1/140	button_status	koetshuis	apartment_III	Eetkamer boven tafel
-1/1/141	button_status	koetshuis	apartment_III	Badkamer bij wastafel
-1/1/142	button_status	koetshuis	apartment_III	Toilet spot plafond
-1/1/143	button_status	koetshuis	apartment_III	Keuken plafond boven aanrecht
-1/1/7	button_status	koetshuis	apartment_III	Keuken & woonkamer spots plafond
+1/1/137	button_status	koetshuis	room_e	Eetkamer tafellamp
+1/1/138	button_status	koetshuis	room_f	Badkamer?
+1/1/139	button_status	koetshuis	room_e	Hal spots plafond
+1/1/140	button_status	koetshuis	room_e	Eetkamer boven tafel
+1/1/141	button_status	koetshuis	room_f	Badkamer bij wastafel
+1/1/142	button_status	koetshuis	room_e	Toilet spot plafond
+1/1/143	button_status	koetshuis	room_e	Keuken plafond boven aanrecht
+1/1/7	button_status	koetshuis	room_e	Keuken & woonkamer spots plafond
 1/1/8	button_status	koetshuis	apartment_III	Woonkamer spots plafond bij TV
-1/1/9	button_status	koetshuis	apartment_III	Slaapkamer spots plafond
-1/1/144	button_status	koetshuis	apartment_III	Hal spots
+1/1/9	button_status	koetshuis	room_f	Slaapkamer spots plafond
+1/1/144	button_status	koetshuis	room_e	Hal spots
 1/1/145	button_status	koetshuis	room_b	Westmuur links
 1/1/11	button_status	koetshuis	room_b	Spots
-1/1/12	button_status	koetshuis	apartment_III	Serre spots
-1/1/10	button_status	koetshuis	apartment_III	Badkamer spots plafond
+1/1/12	button_status	koetshuis	room_e	Serre spots
+1/1/10	button_status	koetshuis	room_f	Badkamer spots plafond
 1/1/13	button_status	koetshuis	apartment_II	Serre spots
 1/1/147	button_status	koetshuis	room_d	WCD b
 1/1/146	button_status	koetshuis	room_d	WCD a
@@ -151,12 +216,12 @@
 1/2/6	dimmer_relative	koetshuis	room_d	Uitbouw west pots
 1/2/1	dimmer_relative	koetshuis	room_c	Spots uitbouw
 1/2/2	dimmer_relative	koetshuis	room_c	Plafondstraler
-1/2/7	dimmer_relative	koetshuis	apartment_III	Keuken & woonkamer spots plafond
+1/2/7	dimmer_relative	koetshuis	room_e	Keuken & woonkamer spots plafond
 1/2/8	dimmer_relative	koetshuis	apartment_III	Woonkamer spots plafond bij TV
-1/2/9	dimmer_relative	koetshuis	apartment_III	Slaapkamer spots plafond
+1/2/9	dimmer_relative	koetshuis	room_f	Slaapkamer spots plafond
 1/2/11	dimmer_relative	koetshuis	room_b	Spots
-1/2/12	dimmer_relative	koetshuis	apartment_III	Serre spots
-1/2/10	dimmer_relative	koetshuis	apartment_III	Badkamer spots plafond
+1/2/12	dimmer_relative	koetshuis	room_e	Serre spots
+1/2/10	dimmer_relative	koetshuis	room_f	Badkamer spots plafond
 1/2/13	dimmer_relative	koetshuis	apartment_II	Serre spots
 1/3/0	dimmer_absolute	koetshuis	room_b	Plafonstraler
 1/3/3	dimmer_absolute	koetshuis	yet_unknown	22-b, bg, kamer 2, slaapkamer & badkamer, spots
@@ -164,12 +229,12 @@
 1/3/6	dimmer_absolute	koetshuis	room_d	Spots uitbouw
 1/3/1	dimmer_absolute	koetshuis	room_c	Spots uitbouw
 1/3/2	dimmer_absolute	koetshuis	room_c	Plafondstraler
-1/3/7	dimmer_absolute	koetshuis	apartment_III	Keuken & woonkamer spots plafond
+1/3/7	dimmer_absolute	koetshuis	room_e	Keuken & woonkamer spots plafond
 1/3/8	dimmer_absolute	koetshuis	apartment_III	Woonkamer spots plafond bij TV
 1/3/11	dimmer_absolute	koetshuis	room_b	Spots uitbouw
-1/3/12	dimmer_absolute	koetshuis	apartment_III	Serre spots
-1/3/9	dimmer_absolute	koetshuis	apartment_III	Slaapkamer spots plafond
-1/3/10	dimmer_absolute	koetshuis	apartment_III	Badkamer, spots plafond
+1/3/12	dimmer_absolute	koetshuis	room_e	Serre spots
+1/3/9	dimmer_absolute	koetshuis	room_f	Slaapkamer spots plafond
+1/3/10	dimmer_absolute	koetshuis	room_f	Badkamer, spots plafond
 1/3/13	dimmer_absolute	koetshuis	apartment_II	Serre spots
 1/4/0	dimmer_status	koetshuis	room_b	Plafonstraler
 1/4/3	dimmer_status	koetshuis	yet_unknown	22-b, bg, kamer 2, slaapkamer & badkamer, spots
@@ -181,40 +246,42 @@
 1/4/8	dimmer_status	koetshuis	apartment_III	Woonkamer spots plafond bij TV
 1/4/11	dimmer_status	koetshuis	room_b	Spots uitbouw
 1/4/4	dimmer_status	koetshuis	yet_unknown	22-b, bg, kamer 2, woonk. & hal, spots
-1/4/12	dimmer_status	koetshuis	apartment_III	Serre spots
-1/4/9	dimmer_status	koetshuis	apartment_III	Slaapkamer spots plafond
-1/4/10	dimmer_status	koetshuis	apartment_III	Badkamer spots plafond
+1/4/12	dimmer_status	koetshuis	room_e	Serre spots
+1/4/9	dimmer_status	koetshuis	room_f	Slaapkamer spots plafond
+1/4/10	dimmer_status	koetshuis	room_f	Badkamer spots plafond
 1/4/13	dimmer_status	koetshuis	apartment_II	Serre spots
-1/7/1	homeserver	koetshuis	room_b	kamer B (west)
-1/7/3	homeserver	koetshuis	room_d	kamer 3
-1/7/2	homeserver	koetshuis	room_c	kamer C (oost)
-1/7/102	homeserver	koetshuis	room_b	scenes kamer B
-1/7/101	homeserver	koetshuis	apartment_II	scenes apartement 2
-1/7/103	homeserver	koetshuis	room_c	scenes kamer C
-1/7/4	homeserver	koetshuis	apartment_III	appartement 3
-1/7/5	homeserver	koetshuis	apartment_III	appartement 3 badkamer
-1/7/104	homeserver	koetshuis	apartment_III	appartement 3 scenes
-1/7/0	homeserver	koetshuis	apartment_II	appartement 2
-1/7/6	homeserver	koetshuis	room_d	kamer D
-1/7/105	homeserver	koetshuis	room_d	scenes kamer D
 1/5/0	climate	koetshuis	apartment_II	Toilet
 1/5/1	climate	koetshuis	apartment_II	Actueel
-1/5/11	climate	koetshuis	apartment_III	Actueel
+1/5/11	climate	koetshuis	room_e	Actueel
 1/5/21	climate	koetshuis	room_b	Actueel
 1/5/31	climate	koetshuis	room_c	Actueel
 1/5/41	climate	koetshuis	room_d	Actueel
-1/5/51	climate	koetshuis	apartment_III	Badkamer actueel
-1/5/12	climate	koetshuis	apartment_III	soll-basis
-1/5/13	climate	koetshuis	apartment_III	modus
-1/5/14	climate	koetshuis	apartment_III	status
-1/5/15	climate	koetshuis	apartment_III	stelgrootte
-1/5/16	climate	koetshuis	apartment_III	soll temperatuur
+1/5/51	climate	koetshuis	room_e	Badkamer actueel
+1/5/12	climate	koetshuis	room_e	soll-basis
+1/5/13	climate	koetshuis	room_e	modus
+1/5/14	climate	koetshuis	room_e	status
+1/5/15	climate	koetshuis	room_e	stelgrootte
+1/5/16	climate	koetshuis	room_e	soll temperatuur
 1/5/2	climate	koetshuis	apartment_II	soll-basis
 1/5/3	climate	koetshuis	apartment_II	modus
 1/5/4	climate	koetshuis	apartment_II	status
 1/5/5	climate	koetshuis	apartment_II	stelgrootte
 1/5/6	climate	koetshuis	apartment_II	soll temperatuur
 1/5/61	climate	koetshuis	apartment_II	badkamer actueel
+1/5/70  climate koetshuis   room_f  Actueel
+1/7/1	homeserver	koetshuis	room_b	kamer B (west)
+1/7/3	homeserver	koetshuis	room_d	kamer 3
+1/7/2	homeserver	koetshuis	room_c	kamer C (oost)
+1/7/102	homeserver	koetshuis	room_b	scenes kamer B
+1/7/101	homeserver	koetshuis	apartment_II	scenes apartement 2
+1/7/103	homeserver	koetshuis	room_c	scenes kamer C
+1/7/4	homeserver	koetshuis	room_e	appartement 3
+1/7/5	homeserver	koetshuis	room_e	appartement 3 badkamer
+1/7/104	homeserver	koetshuis	room_e	appartement 3 scenes
+1/7/0	homeserver	koetshuis	apartment_II	appartement 2
+1/7/6	homeserver	koetshuis	room_d	kamer D
+1/7/7   homeserver  koetshuis   room_f  kamer F
+1/7/105	homeserver	koetshuis	room_d	scenes kamer D
 2/0/0	button	koetshuis	room_a	Zithoek spots plafond uitbouw
 2/0/1	button	koetshuis	room_a	Badkamer spots plafond
 2/0/2	button	koetshuis	apartment_I	Eetkamer spots plafond
@@ -302,71 +369,6 @@
 2/5/16	climate	koetshuis	room_a	soll temperatuur
 2/5/17	climate	koetshuis	room_a	verschuiving actueel
 2/5/18	climate	koetshuis	room_a	verschuiving gewenst
-0/0/2	homeserver	koetshuis	yet_unknown	tijd
-0/2/1	P1	misc	yet_unknown	DSMR version nr
-0/2/2	P1	misc	yet_unknown	P1G2 version nr
-0/2/3	P1	misc	yet_unknown	P1 error counter
-0/2/4	P1	misc	yet_unknown	last P1 message timestamp
-0/2/11	P1	misc	yet_unknown	aantal aangesloten M-bus devic
-0/2/12	P1	misc	yet_unknown	G-meter type
-0/2/13	P1	misc	yet_unknown	stand gasklep
-0/2/14	P1	misc	yet_unknown	datum laatste gasstand
-0/2/15	P1	misc	yet_unknown	tijd laatste gasstand
-0/2/16	P1	misc	yet_unknown	gas verbruikt (m3)
-0/2/21	P1	misc	yet_unknown	E-meter type
-0/2/31	P1	misc	yet_unknown	laaste lange uitval duur(s)
-0/2/29	P1	misc	yet_unknown	laaste lange uitval datum
-0/2/30	P1	misc	yet_unknown	laaste lange uitval tijd
-0/2/26	P1	misc	yet_unknown	actueel tarief (1=laag,2=hoog)
-0/2/25	P1	misc	yet_unknown	laag tarief actief
-0/2/24	P1	misc	yet_unknown	stand switchaar
-0/2/41	P1	misc	yet_unknown	actuele stroom L1 (A)
-0/2/42	P1	misc	yet_unknown	actuele stroom L2 (A)
-0/2/43	P1	misc	yet_unknown	actuele stroom L3 (A)
-0/2/51	P1	misc	yet_unknown	actueel verbruik (kW)
-0/2/52	P1	misc	yet_unknown	actueel verbruik L1 (kW)
-0/2/53	P1	misc	yet_unknown	actueel verbruik L2 (kW)
-0/2/54	P1	misc	yet_unknown	actueel verbruik L3 (kW)
-0/2/61	P1	misc	yet_unknown	actueel geleverd (kW)
-0/2/62	P1	misc	yet_unknown	actueel geleverd L1 (kW)
-0/2/63	P1	misc	yet_unknown	actueel geleverd L2 (kW)
-0/2/64	P1	misc	yet_unknown	actueel geleverd L3 (kW)
-0/2/71	P1	misc	yet_unknown	verbruik laag (kWh)
-0/2/72	P1	misc	yet_unknown	verbruik hoog (kWh)
-0/2/73	P1	misc	yet_unknown	verbruik totaal (kWh)
-0/2/81	P1	misc	yet_unknown	geleverd laag (kWh)
-0/2/82	P1	misc	yet_unknown	geleverd hoog (kWh)
-0/2/83	P1	misc	yet_unknown	geleverd totaal (kWh)
-0/2/91	P1	misc	yet_unknown	verschil laag (kWh)
-0/2/92	P1	misc	yet_unknown	verschil hoog (kWh)
-0/2/93	P1	misc	yet_unknown	verschil totaal (kWh)
-0/2/151	P1	misc	yet_unknown	actueel verbruik (W)
-0/2/152	P1	misc	yet_unknown	actueel verbruik L1 (W)
-0/2/153	P1	misc	yet_unknown	actueel verbruik L2 (W)
-0/2/154	P1	misc	yet_unknown	actueel verbruik L3 (W)
-0/2/161	P1	misc	yet_unknown	actueel geleverd (W)
-0/2/162	P1	misc	yet_unknown	actueel geleverd L1 (W)
-0/2/163	P1	misc	yet_unknown	actueel geleverd L2 (W)
-0/2/164	P1	misc	yet_unknown	actueel geleverd L3 (W)
-0/2/171	P1	misc	yet_unknown	verbruik laag (Wh)
-0/2/172	P1	misc	yet_unknown	verbruik hoog (Wh)
-0/2/173	P1	misc	yet_unknown	verbruik totaal (Wh)
-0/2/181	P1	misc	yet_unknown	geleverd laag (Wh)
-0/2/182	P1	misc	yet_unknown	geleverd hoog (Wh)
-0/2/183	P1	misc	yet_unknown	geleverd totaal (Wh)
-0/2/191	P1	misc	yet_unknown	verschil laag (Wh)
-0/2/192	P1	misc	yet_unknown	verschil hoog (Wh)
-0/2/193	P1	misc	yet_unknown	verschil totaal (Wh)
-0/2/36	P1	misc	yet_unknown	spanningsdips L2
-0/2/37	P1	misc	yet_unknown	spanningsdips L3
-0/2/35	P1	misc	yet_unknown	spanningsdips L1
-0/2/32	P1	misc	yet_unknown	spanningspieken L1
-0/2/33	P1	misc	yet_unknown	spanningspieken L2
-0/2/34	P1	misc	yet_unknown	spanningspieken L3
-0/2/22	P1	misc	yet_unknown	max power (kW)
-0/2/23	P1	misc	yet_unknown	max current (A)
-0/2/27	P1	misc	yet_unknown	aantal uitvallen
-0/2/28	P1	misc	yet_unknown	aantal lange uitvallen
 3/1/105	button_status	koetshuis	plein	Buitenlamp wasruimte rechts
 3/1/104	button_status	koetshuis	plein	Buitenlamp plataan entree
 3/1/102	button_status	koetshuis	plein	Buitenlamp wasruimte links

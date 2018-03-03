@@ -1,10 +1,12 @@
 #!/bin/bash
-#usage: guest-install name memsize poolname volume
+#usage: guest-install name memsize disksize
 
+IMAGES_HOME=/home/qemu/images
+
+sudo fallocate -l $3M $IMAGES_HOME/$1.img
 sudo virt-install \
 --name=$1 --ram=$2 --vcpus=3 \
---disk vol=$3/$4 \
---network bridge:br0 \
+--file=$IMAGES_HOME/$1.img  --network bridge:br0 \
 --nographics --os-type=linux --os-variant=ubuntu16.04 --virt-type=kvm \
 --noapic --noacpi \
 --location http://nl.archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64/ \
