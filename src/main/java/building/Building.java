@@ -103,15 +103,15 @@ public class Building {
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 5, true, ControllableArea.room_d, HeatZone.Position.floor, "bathroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 6, false, ControllableArea.room_c, HeatZone.Position.wall)); //todo not determined, must be wrong
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 7, false, ControllableArea.room_d, HeatZone.Position.floor, "bedroom"));
-        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 8, false, ControllableArea.room_f_bathroom, HeatZone.Position.wall, "small bedroom"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 8, false, ControllableArea.room_f, HeatZone.Position.wall, "small bedroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 9, false, ControllableArea.room_c, HeatZone.Position.wall)); //todo seems OK
-        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 10, true, ControllableArea.room_f_bathroom, HeatZone.Position.wall, "master bedroom"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 10, true, ControllableArea.room_f, HeatZone.Position.wall, "master bedroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 11, true, ControllableArea.room_e, HeatZone.Position.floor, "sunroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 12, false, ControllableArea.room_d, HeatZone.Position.wall, "south"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 13, false, ControllableArea.room_d, HeatZone.Position.wall, "bedroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_15, 14, false, ControllableArea.room_d, HeatZone.Position.wall, "east"));
 
-        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 0, true, ControllableArea.room_e, HeatZone.Position.floor, "small bedroom"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 0, true, ControllableArea.room_f, HeatZone.Position.floor, "small bedroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 1, true, ControllableArea.room_e, HeatZone.Position.floor, "hall, living room"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 2, true, ControllableArea.apartment_II_bedroom, HeatZone.Position.floor, "bed- and bathroom"));
         zones.add(new HeatZone(HeatZone.ValveGroup.koetshuis_trap_6, 3, true, ControllableArea.apartment_II, HeatZone.Position.floor, "living room"));
