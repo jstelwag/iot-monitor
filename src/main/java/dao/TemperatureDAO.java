@@ -25,6 +25,10 @@ public class TemperatureDAO implements Closeable {
         return Double.valueOf(jedis.get(room + ".temperature"));
     }
 
+    public boolean has(ControllableArea room) {
+        return jedis.exists(room + ".temperature");
+    }
+
     public Double getActual(ControllableArea room) {
         if (!jedis.exists(room + ".temperature")) {
             return null;
