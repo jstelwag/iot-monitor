@@ -27,13 +27,15 @@ public class KNXTemperaturesHandler extends AbstractHandler {
         String message = "";
         try (SetpointDAO setpoints = new SetpointDAO(); TemperatureDAO temperatures = new TemperatureDAO()) {
             for (ControllableArea controllableArea : ControllableArea.values()) {
-                try {
-                    double value = KNXLink.getInstance().readFloat(controllableArea.temperatureSensor);
-                    temperatures.set(controllableArea, value);
-                } catch (KNXTimeoutException e) {
-                    message += "Timeout retrieving " + controllableArea + " temperature. ";
-                    LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " temperature");
-                    result = false;
+                if (controllableArea.temperatureSensor != null) {
+                    try {
+                        double value = KNXLink.getInstance().readFloat(controllableArea.temperatureSensor);
+                        temperatures.set(controllableArea, value);
+                    } catch (KNXTimeoutException e) {
+                        message += "Timeout retrieving " + controllableArea + " temperature. ";
+                        LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " temperature");
+                        result = false;
+                    }
                 }
                 if (controllableArea.setpoint != null) {
                     try {
