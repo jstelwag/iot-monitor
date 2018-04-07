@@ -57,8 +57,10 @@ public class ControlCalculator implements Runnable {
         Calendar now = Calendar.getInstance();
         return (now.get(Calendar.MONTH) == Calendar.NOVEMBER
                 || now.get(Calendar.MONTH) == Calendar.DECEMBER
-                || now.get(Calendar.MONTH) == Calendar.JANUARY)
-                && now.get(Calendar.HOUR_OF_DAY) < 7
-                && now.get(Calendar.HOUR_OF_DAY) > 21;
+                || now.get(Calendar.MONTH) == Calendar.JANUARY
+                || now.get(Calendar.MONTH) == Calendar.FEBRUARY
+                || now.get(Calendar.MONTH) == Calendar.MARCH)
+                && now.get(Calendar.HOUR_OF_DAY) > 7
+                && now.get(Calendar.HOUR_OF_DAY) < 21;
     }
 }
