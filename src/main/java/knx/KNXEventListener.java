@@ -26,7 +26,10 @@ public class KNXEventListener implements NetworkLinkListener {
                     case climate: //ignore
                         break;
                     default:
-                        LogstashLogger.INSTANCE.message("knx-event", addressList.replaceReceiverAddress(frameEvent.getFrame().toString()));
+                        //ignore the watchdog ping messages
+                        if (knx.type != KNXAddress.Type.button_status || !knx.address.equals("4/1/103")) {
+                            LogstashLogger.INSTANCE.message("knx-event", addressList.replaceReceiverAddress(frameEvent.getFrame().toString()));
+                        }
                         break;
                 }
             }
