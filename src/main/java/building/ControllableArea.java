@@ -17,13 +17,14 @@ public enum ControllableArea {
     //Room 1 needs to bo colder so set the default mode to Away (2)
     room_1(Room.room_1, new GroupAddress(4, 5, 1), new GroupAddress(4, 5, 6), "4/5/6", new GroupAddress(4, 7, 0), "4/5/3", 2),
     room_2(Room.room_2, new GroupAddress(6, 5, 1), null, null, null, null, 0),
-    room_2_bathroom(Room.room_2, new GroupAddress(6, 5, 1), new GroupAddress(6, 5, 6), "6/5/8", new GroupAddress(6, 7, 0), "6/5/3", 1),
-    room_3_bathroom(Room.room_3, new GroupAddress(6, 5, 11), new GroupAddress(6, 5, 16), "6/5/18", null, "6/5/13", 1),
+    room_2_bathroom(Room.room_2, new GroupAddress(6, 5, 1), null, null, null, null, 0),
+    room_3_bathroom(Room.room_3, new GroupAddress(6, 5, 11), null, null, null, null, 0),
     hall(Room.hall, new GroupAddress(5,5,2), null, null, null, null, 0),
-    hall_toilet(Room.hall, null, null, null, null, null, 0),
+    hall_toilet(Room.hall, new GroupAddress(5,5,3), null, null, null, null, 0),
     hall_storage(Room.hall, null, null, null, null, null, 0),
     office(Room.office, new GroupAddress(5,5,1), null, null, null, null, 0),
-    ballroom_south(Room.ballroom_south, null, null, null, null, null, 0),
+    ballroom_south(Room.ballroom_south, new GroupAddress(5,5,4), null, null, null, null, 0),
+    ballroom_center(Room.ballroom_south, new GroupAddress(5,5,5), null, null, null, null, 0),
     ballroom_north(Room.ballroom_north, null, null, null, null, null, 0),
     tower_kitchen(Room.kitchen, null, null, null, null, null, 0);
 
