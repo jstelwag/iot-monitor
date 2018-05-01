@@ -24,7 +24,7 @@ public enum ControllableArea {
     hall_storage(Room.hall, null, null, null, null, null, 0),
     office(Room.office, new GroupAddress(5,5,1), null, null, null, null, 0),
     ballroom_south(Room.ballroom_south, new GroupAddress(5,5,4), null, null, null, null, 0),
-    ballroom_center(Room.ballroom_south, new GroupAddress(5,5,5), null, null, null, null, 0),
+    ballroom_center(Room.ballroom_center, new GroupAddress(5,5,5), null, null, null, null, 0),
     ballroom_north(Room.ballroom_north, null, null, null, null, null, 0),
     tower_kitchen(Room.kitchen, null, null, null, null, null, 0);
 
