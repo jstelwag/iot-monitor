@@ -42,6 +42,7 @@ public class KNXAddressList {
         } catch (ArrayIndexOutOfBoundsException ea) {
             System.out.println("Syntax error in knx-addresses.txt at line " + lineNumber);
             LogstashLogger.INSTANCE.message("ERROR: syntax error in knx-addresses.txt at line " + lineNumber);
+            throw ea;
         } catch (IOException e) {
             System.out.println("Did not open knx-addresses.txt " + e.getMessage());
             LogstashLogger.INSTANCE.message("ERROR: did not open knx-addresses.txt " + e.getMessage());

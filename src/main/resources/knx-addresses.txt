@@ -421,9 +421,9 @@
 4/5/8	climate	kasteel	room_1	verschuiving gewenst
 5/5/1	climate	kasteel	office	actueel
 5/5/2	climate	kasteel	hall	actueel
-5/5/3   climate kasteel hall_toilet  actueel
-5/5/4   climate kasteel ballroom_south  actueel
-5/5/5   climate kasteel ballroom_center actueel
+5/5/3	climate	kasteel	hall_toilet	actueel
+5/5/4	climate	kasteel	ballroom_south	actueel
+5/5/5	climate	kasteel	ballroom_center	actueel
 6/0/101	button	kasteel	room_2	Badkamer lampen
 6/0/102	button	kasteel	room_2	Badkamer afzuiging
 6/0/103	button	kasteel	room_2	Badkamer spiegel
