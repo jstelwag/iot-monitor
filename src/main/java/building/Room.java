@@ -20,6 +20,7 @@ public enum Room {
     , hall_center(Building.Construction.koetshuis, 0)
     , plein(Building.Construction.koetshuis, 0)
     , hall(Building.Construction.kasteel, 0)
+    , hall_toilet(Building.Construction.kasteel, 0)
     , office(Building.Construction.kasteel, 0)
     , ballroom_south(Building.Construction.kasteel, 0)
     , ballroom_center(Building.Construction.kasteel, 0)

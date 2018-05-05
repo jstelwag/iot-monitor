@@ -39,9 +39,9 @@ public class KNXAddressList {
                     LogstashLogger.INSTANCE.message("ERROR: duplicate address in knx-addresses.txt " + record.get(0));
                 }
             }
-        } catch (ArrayIndexOutOfBoundsException ea) {
-            System.out.println("Syntax error in knx-addresses.txt at line " + lineNumber);
-            LogstashLogger.INSTANCE.message("ERROR: syntax error in knx-addresses.txt at line " + lineNumber);
+        } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException ea) {
+            System.out.println("Syntax error in knx-addresses.txt at line " + lineNumber + " (" + ea.getMessage() + ")");
+            LogstashLogger.INSTANCE.message("ERROR: syntax error in knx-addresses.txt at line " + lineNumber  + " (" + ea.getMessage() + ")");
             throw ea;
         } catch (IOException e) {
             System.out.println("Did not open knx-addresses.txt " + e.getMessage());
