@@ -26,20 +26,25 @@ public class KNXAddressList {
     public KNXAddressList() {
         ClassLoader classLoader = getClass().getClassLoader();
         Reader in = null;
+        int lineNumber = 0;
         try {
             in = new InputStreamReader(classLoader.getResourceAsStream("knx-addresses.txt"));
             Iterable<CSVRecord> records = CSVFormat.TDF.parse(in);
             for (CSVRecord record : records) {
+                lineNumber++;
                 if (addresses.put(record.get(0)
                         , new KNXAddress(record.get(0), KNXAddress.Type.valueOf(record.get(1))
-                        , Building.Construction.valueOf(record.get(2))
-                        , Room.valueOf(record.get(3)), record.get(4))) != null) {
+                                , Building.Construction.valueOf(record.get(2))
+                                , Room.valueOf(record.get(3)), record.get(4))) != null) {
                     LogstashLogger.INSTANCE.message("ERROR: duplicate address in knx-addresses.txt " + record.get(0));
                 }
             }
+        } catch (ArrayIndexOutOfBoundsException ea) {
+            System.out.println("Syntax error in knx-addresses.txt at line " + lineNumber);
+            LogstashLogger.INSTANCE.message("ERROR: syntax error in knx-addresses.txt at line " + lineNumber);
         } catch (IOException e) {
             System.out.println("Did not open knx-addresses.txt " + e.getMessage());
-            LogstashLogger.INSTANCE.message("ERROR: did not open knx-addresses.txt " + e.getMessage() );
+            LogstashLogger.INSTANCE.message("ERROR: did not open knx-addresses.txt " + e.getMessage());
         } finally {
             IOUtils.closeQuietly(in);
         }

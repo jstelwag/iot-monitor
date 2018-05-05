@@ -10,7 +10,6 @@ import tuwien.auto.calimero.process.ProcessCommunicator;
 import tuwien.auto.calimero.process.ProcessCommunicatorImpl;
 import util.HeatingProperties;
 
-import java.io.IOException;
 import java.net.*;
 import java.util.Random;
 
