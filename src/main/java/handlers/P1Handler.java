@@ -41,7 +41,6 @@ public class P1Handler extends AbstractHandler {
             LogstashLogger.INSTANCE.message("ERROR: failed to request p1 values, " + e.getMessage());
         }
 
-        LogstashLogger.INSTANCE.message("INFO: KNX request P1 => " + knxResponse.toString(4));
         response.getWriter().println(knxResponse.toString(4));
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
