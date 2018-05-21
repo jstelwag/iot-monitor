@@ -26,7 +26,7 @@ public class Setpoint implements Runnable {
         SetpointDAO setpoints = new SetpointDAO();
         BookingDAO bookings = new BookingDAO();
         for (Room room : Building.INSTANCE.allControllableRooms()) {
-            boolean active = bookings.isOccupiedTonight(room)
+            boolean active = room.beds24Id == 0 || bookings.isOccupiedTonight(room)
                     || bookings.isOccupiedTomorrow(room) //todo only use tomorrow when things are cold
                     || (bookings.isOccupiedNow(room) && now.before(heatingOffTime));
             List<ControllableArea> rooms = Building.INSTANCE.findRooms(room);
