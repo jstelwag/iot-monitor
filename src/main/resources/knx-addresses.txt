@@ -419,6 +419,11 @@
 4/5/6	climate	kasteel	room_1	soll temperatuur
 4/5/7	climate	kasteel	room_1	verschuiving actueel
 4/5/8	climate	kasteel	room_1	verschuiving gewenst
+5/0/1	button	kasteel	office	Staande lamp
+5/0/103	button	kasteel	hall_toilet	Lamp WC
+5/1/1	button_status	kasteel	office	Staande lamp
+5/1/103	button_status	kasteel	hall_toilet	Lamp WC
+5/4/1	dimmer_relative	kasteel	office	Dimmer wandlampen
 5/5/1	climate	kasteel	office	actueel
 5/5/2	climate	kasteel	hall	actueel
 5/5/3	climate	kasteel	hall_toilet	actueel
