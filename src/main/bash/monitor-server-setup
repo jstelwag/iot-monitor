@@ -6,10 +6,7 @@
 
 sudo apt-get update
 sudo apt-get -y upgrade
-
-sudo apt-get -y install cron-apt curl
-sudo apt-get -y install openjdk-8-jdk maven
-sudo apt-get -y install redis-server
+sudo apt-get -y install cron-apt curl openjdk-8-jdk maven redis-server git
 #sudo apt-get -y install collectd
 
 cat <<EOF >interfaces
@@ -110,6 +107,16 @@ EOF
 sudo mv iot-runtime /usr/local/bin
 sudo chmod +x /usr/local/bin/iot-runtime
 
+git clone https://github.com/jstelwag/calimero.parent
+cd calimero.parent
+mvn install
+cd ..
+
+git clone https://github.com/jstelwag/calimero-core
+cd calimero-core
+mvn clean install -Dmaven.test.skip=true
+
+git clone https://github.com/jstelwag/iot-monitor/
 iot-upgrade
 
 sudo nano /etc/monitor.conf

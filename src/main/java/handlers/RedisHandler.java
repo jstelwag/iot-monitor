@@ -29,10 +29,9 @@ public class RedisHandler extends AbstractHandler {
 
         JSONArray redisResponse = new JSONArray();
         for (String key : all) {
-            redisResponse.put(new JSONObject()
-                    .put("key", key)
+            redisResponse.put(new JSONObject().put(key, new JSONObject()
                     .put("value", jedis.get(key))
-                    .put("ttl", jedis.ttl(key)));
+                    .put("ttl", jedis.ttl(key))));
         }
 
         IOUtils.closeQuietly(jedis);
