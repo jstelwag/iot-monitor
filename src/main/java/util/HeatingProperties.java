@@ -40,22 +40,22 @@ public class HeatingProperties {
             IOUtils.closeQuietly(inputStream);
         }
 
-        iotPort = Integer.parseInt(prop.getProperty("iot.port"));
-        masterPort = Integer.parseInt(prop.getProperty("master.port"));
+        iotPort = Integer.parseInt(prop.getProperty("iot.port").trim());
+        masterPort = Integer.parseInt(prop.getProperty("master.port").trim());
         influxIp = prop.getProperty("influx.ip").trim();
-        influxPort = Integer.parseInt(prop.getProperty("influx.port"));
+        influxPort = Integer.parseInt(prop.getProperty("influx.port").trim());
         knxIp = prop.getProperty("knx.ip").trim();
         logstashIp = prop.getProperty("logstash.ip").trim();
-        logstashPort = Integer.parseInt(prop.getProperty("logstash.port"));
+        logstashPort = Integer.parseInt(prop.getProperty("logstash.port").trim());
 
         if (prop.getProperty("knx.port") != null) {
-            knxPort = Integer.parseInt(prop.getProperty("knx.port"));
+            knxPort = Integer.parseInt(prop.getProperty("knx.port").trim());
         } else {
             knxPort = KNXnetIPConnection.DEFAULT_PORT;
         }
         localIp = prop.getProperty("local.ip").trim();
         if (prop.getProperty("local.port") != null) {
-            localPort = Integer.parseInt(prop.getProperty("local.port"));
+            localPort = Integer.parseInt(prop.getProperty("local.port").trim());
         } else {
             localPort = 11111;
         }
