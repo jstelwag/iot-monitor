@@ -44,12 +44,6 @@ public class StatusHandler extends AbstractHandler {
             statusResponse.getJSONArray("rooms").put(roomResponse);
             roomResponse.put("controllableArea", controllableArea);
             roomResponse.put("setpoint", setpoints.get(controllableArea));
-            if (setpoints.getUser(controllableArea) != null) {
-                roomResponse.put("setpoint-user", setpoints.getUser(controllableArea));
-            }
-            if (setpoints.getKnx(controllableArea) != null) {
-                roomResponse.put("setpoint-knx", setpoints.getKnx(controllableArea));
-            }
             roomResponse.put("setpoint-default", setpoints.getDefault(controllableArea));
             roomResponse.put("active", setpoints.isActive(controllableArea));
             roomResponse.put("booking-now", bookings.getNow(controllableArea.room));
