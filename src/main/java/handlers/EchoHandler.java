@@ -20,7 +20,7 @@ public class EchoHandler extends AbstractHandler {
             throws IOException, ServletException {
         System.out.println("Echo request");
         response.getWriter().println("{" + s + ":" + IOUtils.toString(request.getReader()).trim() + "}");
-        LogstashLogger.INSTANCE.message("echo: " + s);
+        LogstashLogger.INSTANCE.info("echo: " + s);
         baseRequest.setHandled(true);
     }
 }

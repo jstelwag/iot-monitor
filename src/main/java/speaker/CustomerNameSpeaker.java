@@ -24,7 +24,7 @@ public class CustomerNameSpeaker implements Runnable {
                 }
             }
         } catch (IOException e) {
-            LogstashLogger.INSTANCE.message("ERROR: fail to post bookings to Influx " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Failed to post bookings to Influx " + e.getMessage());
         }
     }
 }

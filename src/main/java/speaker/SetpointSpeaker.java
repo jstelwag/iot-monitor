@@ -19,14 +19,15 @@ public class SetpointSpeaker implements Runnable {
 
         try (FluxLogger flux = new FluxLogger(); SetpointDAO dao = new SetpointDAO()) {
             for (ControllableArea controllableArea : ControllableArea.values()) {
-                flux.message(LineProtocolUtil.protocolLine(controllableArea, "setpoint", Double.toString(dao.get(controllableArea))));
+                flux.message(LineProtocolUtil.protocolLine(controllableArea, "setpoint"
+                        , Double.toString(dao.get(controllableArea))));
                 count++;
             }
         } catch (UnknownHostException | SocketException e) {
-            LogstashLogger.INSTANCE.message("ERROR: can't find InfluxDB for SetpointSpeaker " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Can't find InfluxDB for SetpointSpeaker " + e.getMessage());
         } catch (IOException e) {
-            LogstashLogger.INSTANCE.message("ERROR: can't connect to Redis " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Can't connect to Redis " + e.getMessage());
         }
-        System.out.println("Posted " + count + " setpoints to InfluxDB");
+        LogstashLogger.INSTANCE.info("Posted " + count + " setpoints to InfluxDB");
     }
 }

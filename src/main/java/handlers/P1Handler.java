@@ -38,7 +38,7 @@ public class P1Handler extends AbstractHandler {
                 flux.message("P1,metric=" + key + " value=" + decimal + "i");
             }
         } catch (KNXException | InterruptedException e) {
-            LogstashLogger.INSTANCE.message("ERROR: failed to request p1 values, " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Failed to receive p1 values, " + e.getMessage());
         }
 
         response.getWriter().println(knxResponse.toString(4));

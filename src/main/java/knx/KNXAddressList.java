@@ -36,16 +36,16 @@ public class KNXAddressList {
                         , new KNXAddress(record.get(0), KNXAddress.Type.valueOf(record.get(1))
                                 , Building.Construction.valueOf(record.get(2))
                                 , Room.valueOf(record.get(3)), record.get(4))) != null) {
-                    LogstashLogger.INSTANCE.message("ERROR: duplicate address in knx-addresses.txt " + record.get(0));
+                    LogstashLogger.INSTANCE.error("Duplicate address in knx-addresses.txt " + record.get(0));
                 }
             }
         } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException ea) {
             System.out.println("Syntax error in knx-addresses.txt at line " + lineNumber + " (" + ea.getMessage() + ")");
-            LogstashLogger.INSTANCE.message("ERROR: syntax error in knx-addresses.txt at line " + lineNumber  + " (" + ea.getMessage() + ")");
+            LogstashLogger.INSTANCE.error("Syntax error in knx-addresses.txt at line " + lineNumber  + " (" + ea.getMessage() + ")");
             throw ea;
         } catch (IOException e) {
             System.out.println("Did not open knx-addresses.txt " + e.getMessage());
-            LogstashLogger.INSTANCE.message("ERROR: did not open knx-addresses.txt " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Did not open knx-addresses.txt " + e.getMessage());
         } finally {
             IOUtils.closeQuietly(in);
         }
@@ -57,7 +57,7 @@ public class KNXAddressList {
             if (addresses.get(matcher.group()) != null) {
                 return addresses.get(matcher.group());
             } else {
-                LogstashLogger.INSTANCE.message("WARNING: Address " + matcher.group() + " not found in knx devices list.");
+                LogstashLogger.INSTANCE.warn("Address " + matcher.group() + " not found in knx devices list.");
             }
         }
         return null;
@@ -69,7 +69,7 @@ public class KNXAddressList {
             return "receiver: " + knx.toString() + ", " + in;
         }
 
-        LogstashLogger.INSTANCE.message("WARNING: matcher miss, no address (d/d/d) found in knx event " + in);
+        LogstashLogger.INSTANCE.warn("Matcher miss, no address (d/d/d) found in knx event " + in);
         return in;
     }
 

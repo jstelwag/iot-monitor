@@ -34,17 +34,15 @@ public class Main {
         } else if ("beds24".equals(args[0])) {
             new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
         } else if ("iot".equals(args[0])) {
-            LogstashLogger.INSTANCE.message("starting iot listener");
+            LogstashLogger.INSTANCE.info("Starting iot listener");
             new IoTListener(prop.iotPort).run();
-        } else if ("thermostatreset".equals(args[0])) {
-            new KNXThermostatReset().run();
         } else if ("roomreset".equals(args[0])) {
             new KNXRoomReset().run();
         }
     }
 
     private static void startHttp(int port) {
-        LogstashLogger.INSTANCE.message("start http");
+        LogstashLogger.INSTANCE.info("Starting http");
 
         Server httpServer = new Server(port);
         httpServer.setHandler(contexts());
@@ -57,8 +55,7 @@ public class Main {
             httpServer.start();
             httpServer.join();
         } catch (Exception e) {
-            LogstashLogger.INSTANCE.message("FATAL: failed to start http listener " + e.toString());
-            System.out.println(e.toString());
+            LogstashLogger.INSTANCE.fatal("Failed to start http listener " + e.toString());
             System.exit(0);
         }
 
@@ -70,8 +67,7 @@ public class Main {
             try {
                 //hello
             } catch (RuntimeException e) {
-                LogstashLogger.INSTANCE.message("ERROR: exception occurred at the regular speaker scheduling " + e.toString());
-                e.printStackTrace();
+                LogstashLogger.INSTANCE.error("Exception occurred at the regular speaker scheduling " + e.toString());
             }
         }
     }

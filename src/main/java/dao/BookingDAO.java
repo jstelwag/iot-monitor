@@ -5,7 +5,6 @@ import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
 
 import java.io.Closeable;
-import java.io.IOException;
 
 /**
  * Created by Jaap on 11-12-2016.
@@ -61,7 +60,7 @@ public class BookingDAO implements Closeable {
 
     public boolean isOccupiedNow(Room room) {
         if (!jedis.exists(room + ".booking-now")) {
-            LogstashLogger.INSTANCE.message("WARNING: " + room + ".booking-now is not available in Redis");
+            LogstashLogger.INSTANCE.warn(room + ".booking-now is not available in Redis");
             return true;
         }
         return !"empty".equals(getNow(room));
@@ -69,7 +68,7 @@ public class BookingDAO implements Closeable {
 
     public boolean isOccupiedTonight(Room room) {
         if (!jedis.exists(room + ".booking-tonight")) {
-            LogstashLogger.INSTANCE.message("WARNING: " + room + ".booking-tonight is not available in Redis");
+            LogstashLogger.INSTANCE.warn(room + ".booking-tonight is not available in Redis");
             return true;
         }
         return !"empty".equals(getTonight(room));
@@ -77,14 +76,14 @@ public class BookingDAO implements Closeable {
 
     public boolean isOccupiedTomorrow(Room room) {
         if (!jedis.exists(room + ".booking-tomorrow")) {
-            LogstashLogger.INSTANCE.message("WARNING: " + room + ".booking-tomorrow is not available in Redis");
+            LogstashLogger.INSTANCE.warn(room + ".booking-tomorrow is not available in Redis");
             return true;
         }
         return !"empty".equals(getTomorrow(room));
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         jedis.close();
     }
 }

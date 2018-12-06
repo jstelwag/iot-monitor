@@ -20,7 +20,7 @@ public class FluxLogger implements Closeable {
         try {
             host = InetAddress.getByName(properties.influxIp);
         } catch (UnknownHostException e) {
-            LogstashLogger.INSTANCE.message("ERROR: trying to set up InluxDB client for unknown host " + e.toString());
+            LogstashLogger.INSTANCE.error("Tried to set up InluxDB client for unknown host " + e.toString());
             throw e;
         }
         port = properties.influxPort;
@@ -28,14 +28,14 @@ public class FluxLogger implements Closeable {
             socket = new DatagramSocket();
         } catch (SocketException e) {
             System.out.println("Socket error " + e.toString());
-            LogstashLogger.INSTANCE.message("ERROR: unable to open socket to connect to InfluxDB @" + host + ":" + port
+            LogstashLogger.INSTANCE.error("Unable to open socket to connect to InfluxDB @" + host + ":" + port
                     + " " + e.getMessage());
             throw e;
         }
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         if (socket != null)
             socket.close();
     }
@@ -46,7 +46,7 @@ public class FluxLogger implements Closeable {
             DatagramPacket packet = new DatagramPacket(data, data.length, host, port);
             socket.send(packet);
         } catch (IOException e) {
-            System.out.println("ERROR for UDP connection, @" + host.getHostAddress() + ":" + port);
+            LogstashLogger.INSTANCE.error("Faulty UDP connection, @" + host.getHostAddress() + ":" + port);
         }
     }
 }

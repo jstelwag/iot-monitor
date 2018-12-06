@@ -26,8 +26,7 @@ public class ValveGroupHandler extends AbstractHandler {
             response.getWriter().println(dispatcher.actuatorsOut());
         } else {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            System.out.println("ERROR: bad request received in /valvegroup " + s);
-            LogstashLogger.INSTANCE.message("ERROR: bad request received in /valvegroup in /valvegroup " + s);
+            LogstashLogger.INSTANCE.error("Bad request received in /valvegroup in /valvegroup " + s);
         }
 
         baseRequest.setHandled(true);

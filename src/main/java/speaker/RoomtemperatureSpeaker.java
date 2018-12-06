@@ -25,8 +25,8 @@ public class RoomtemperatureSpeaker implements Runnable {
                 }
             }
         } catch (IOException e) {
-            LogstashLogger.INSTANCE.message("ERROR: failed logging temperatures " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Failed logging temperatures " + e.getMessage());
         }
-        System.out.println("Posted " + count + " room temperatures to InfluxDB");
+        LogstashLogger.INSTANCE.info("Posted " + count + " room temperatures to InfluxDB");
     }
 }

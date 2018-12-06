@@ -63,8 +63,7 @@ public class Beds24BookingRetriever implements Runnable {
                             roomsTomorrow.add(room);
                         }
                     } else {
-                        LogstashLogger.INSTANCE.message("ERROR, unknown room id " + bedsBooking.toString(1));
-                        System.out.println("ERROR, unknown room id " + bedsBooking.toString(1));
+                        LogstashLogger.INSTANCE.error("Unknown room id " + bedsBooking.toString(1));
                     }
                 }
             }
@@ -83,11 +82,9 @@ public class Beds24BookingRetriever implements Runnable {
             //todo remove this
             bookings.setNow(Room.room_3, "Lynn, Anna en Jaap");
             bookings.setTonight(Room.room_3, "Lynn, Anna en Jaap");
-
-            System.out.println("Retrieved " + response.length() + " bookings");
+            LogstashLogger.INSTANCE.info("Retrieved " + response.length() + " bookings");
         } catch (IOException | ParseException e) {
-            System.out.println("Unexpected response from beds24: " + responseBody);
-            LogstashLogger.INSTANCE.message("ERROR: Unexpected response from beds24: " + responseBody);
+            LogstashLogger.INSTANCE.error("Unexpected response from beds24: " + responseBody);
         }
     }
 }

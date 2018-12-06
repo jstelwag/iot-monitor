@@ -88,7 +88,7 @@ public class KNXHandler extends AbstractHandler {
             knxResponse.put("error", "Syntax not recognized for " + s);
         }
 
-        LogstashLogger.INSTANCE.message("KNX request " + s + " => " + knxResponse.toString(4));
+        LogstashLogger.INSTANCE.info("KNX request " + s + " => " + knxResponse.toString(4));
         response.getWriter().println(knxResponse.toString(4));
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);

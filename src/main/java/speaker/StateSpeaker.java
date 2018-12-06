@@ -25,8 +25,8 @@ public class StateSpeaker implements Runnable {
                 count++;
             }
         } catch (IOException e) {
-            LogstashLogger.INSTANCE.message("ERROR: sending state data to influx " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Sending state data to influx " + e.getMessage());
         }
-        System.out.println("Posted " + count + " states (x2) to InfluxDB");
+        LogstashLogger.INSTANCE.info("Posted " + count + " states (x2) to InfluxDB");
     }
 }

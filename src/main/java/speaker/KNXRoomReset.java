@@ -14,8 +14,6 @@ import java.io.IOException;
  */
 public class KNXRoomReset implements Runnable {
 
-    private final HeatingProperties prop = new HeatingProperties();
-
     public KNXRoomReset() {}
 
     @Override
@@ -28,17 +26,17 @@ public class KNXRoomReset implements Runnable {
                     String response = Request.Get("http://" + prop.localIp + ":" + prop.masterPort + "/room/"
                                 + room + "/all-off/").execute().returnContent().asString();
                     if (!response.contains("\"status\": \"OK\"")) {
-                        LogstashLogger.INSTANCE.message("ERROR: unexpected response while resetting room "
+                        LogstashLogger.INSTANCE.error("Unexpected response while resetting room "
                                 + room + ": " + response);
                     } else {
                         resetCount++;
-                        LogstashLogger.INSTANCE.message("Reset room " + room);
+                        LogstashLogger.INSTANCE.info("Reset room " + room);
                     }
                 }
             }
-            System.out.println("I have reset " + resetCount + " rooms");
+            LogstashLogger.INSTANCE.info("Room reset complete for " + resetCount + " rooms");
         } catch (IOException e) {
-            LogstashLogger.INSTANCE.message("ERROR: while resetting thermostats " + e.getMessage());
+            LogstashLogger.INSTANCE.error("While resetting rooms " + e.getMessage());
         }
     }
 }

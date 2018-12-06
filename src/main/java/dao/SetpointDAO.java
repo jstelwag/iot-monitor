@@ -45,7 +45,7 @@ public class SetpointDAO implements Closeable {
 
     public boolean isActive(ControllableArea room) {
         if (!jedis.exists(room + ".heating-active")) {
-            LogstashLogger.INSTANCE.message("WARNING " + room + ".heating-active not available in Redis");
+            LogstashLogger.INSTANCE.warn(room + ".heating-active not available in Redis");
             return true;
         }
         return "T".equals(jedis.get(room + ".heating-active"));
@@ -93,7 +93,7 @@ public class SetpointDAO implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         jedis.close();
     }
 }

@@ -32,14 +32,14 @@ public class KNXTemperaturesHandler extends AbstractHandler {
                         temperatures.set(controllableArea, value);
                     } catch (KNXTimeoutException e) {
                         message += "Timeout retrieving " + controllableArea + " temperature. ";
-                        LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " temperature");
+                        LogstashLogger.INSTANCE.error("Timeout retrieving " + controllableArea + " temperature");
                         result = false;
                     }
                 }
             }
         } catch (KNXException | InterruptedException e) {
             message += "ERROR: closing KNX link, it is giving exceptions " + e.getMessage();
-            LogstashLogger.INSTANCE.message("ERROR: closing KNX link, it is giving exceptions " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Closing KNX link, it is giving exceptions " + e.getMessage());
             result = false;
         }
 

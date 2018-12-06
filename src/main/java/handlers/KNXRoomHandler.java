@@ -44,7 +44,7 @@ public class KNXRoomHandler extends AbstractHandler {
                             KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);
                             switchCount++;
                         } catch (KNXException | InterruptedException e) {
-                            LogstashLogger.INSTANCE.message("ERROR: failed to switch room " + address + ", " + e.getMessage());
+                            LogstashLogger.INSTANCE.error("Failed to switch room " + address + ", " + e.getMessage());
                         }
                     }
                     knxResponse.put("status", "OK");

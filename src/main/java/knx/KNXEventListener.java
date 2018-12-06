@@ -34,13 +34,13 @@ public class KNXEventListener implements NetworkLinkListener {
                 }
             }
         } catch (Exception e) {
-            LogstashLogger.INSTANCE.message("ERROR: caught unexpected exception, " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Caught unexpected exception, " + e.getMessage());
         }
     }
 
     @Override
     public void linkClosed(CloseEvent closeEvent) {
-        LogstashLogger.INSTANCE.message("INFO: Eventlistener closing");
+        LogstashLogger.INSTANCE.info("Eventlistener closing");
     }
 
 }
