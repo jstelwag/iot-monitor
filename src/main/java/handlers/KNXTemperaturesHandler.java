@@ -1,7 +1,6 @@
 package handlers;
 
 import building.ControllableArea;
-import dao.SetpointDAO;
 import dao.TemperatureDAO;
 import knx.KNXLink;
 import org.eclipse.jetty.server.Request;
@@ -25,7 +24,7 @@ public class KNXTemperaturesHandler extends AbstractHandler {
             throws IOException, ServletException {
         boolean result = true;
         String message = "";
-        try (SetpointDAO setpoints = new SetpointDAO(); TemperatureDAO temperatures = new TemperatureDAO()) {
+        try (TemperatureDAO temperatures = new TemperatureDAO()) {
             for (ControllableArea controllableArea : ControllableArea.values()) {
                 if (controllableArea.temperatureSensor != null) {
                     try {
@@ -34,15 +33,6 @@ public class KNXTemperaturesHandler extends AbstractHandler {
                     } catch (KNXTimeoutException e) {
                         message += "Timeout retrieving " + controllableArea + " temperature. ";
                         LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " temperature");
-                        result = false;
-                    }
-                }
-                if (controllableArea.setpoint != null) {
-                    try {
-                        setpoints.setKnx(controllableArea, KNXLink.getInstance().readFloat(controllableArea.setpoint));
-                    } catch (KNXTimeoutException e) {
-                        message += "Timeout retrieving " + controllableArea + " setpoint. ";
-                        LogstashLogger.INSTANCE.message("Timeout retrieving " + controllableArea + " setpoint");
                         result = false;
                     }
                 }

@@ -14,33 +14,13 @@ import java.util.Calendar;
 public class SetpointDAO implements Closeable {
     private final Jedis jedis;
 
-    private final int TTL_KNX = 120;
     private final int TTL_BOOKINGS = 1800;
-    private final double DEFAULT_SETPOINT = 20.5;
+    private final double DEFAULT_SETPOINT = 21.0;
     private final double DEFAULT_SETPOINT_BEDROOM = 19.5;
     private final double DEFAULT_SETPOINT_OFF = 12.0;
 
     public SetpointDAO() {
         jedis = new Jedis("localhost");
-    }
-
-    public SetpointDAO setKnx(ControllableArea room, double value) {
-        jedis.setex(room.name() + ".setpoint-knx", TTL_KNX, Double.toString(value));
-        return this;
-    }
-
-    public Double getUser(ControllableArea room) {
-        if (!jedis.exists(room + ".setpoint-user")) {
-            return null;
-        }
-        return Double.valueOf(jedis.get(room + ".setpoint-user"));
-    }
-
-    public Double getKnx(ControllableArea room) {
-        if (!jedis.exists(room + ".setpoint-knx")) {
-            return null;
-        }
-        return Double.valueOf(jedis.get(room + ".setpoint-knx"));
     }
 
     public double getDefault(ControllableArea room) {
@@ -52,14 +32,7 @@ public class SetpointDAO implements Closeable {
 
     public double get(ControllableArea room) {
         if (isActive(room)) {
-            Double setpoint = getKnx(room);
-            if (setpoint == null) {
-                setpoint = getUser(room);
-            }
-            if (setpoint == null) {
-                setpoint = getDefault(room);
-            }
-            return timeCorrected(setpoint);
+            return timeCorrected(getDefault(room));
         }
 
         return DEFAULT_SETPOINT_OFF;
