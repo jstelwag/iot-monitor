@@ -92,9 +92,8 @@ sudo mv monitor.conf /etc
 
 cat <<EOF >iot-upgrade
 #!/bin/bash
-cd /home/jaap/iot-monitor
-git pull
-sh src/main/bash/iot-upgrade
+/bin/bash /home/jaap/iot-monitor/src/main/bash/iot-upgrade
+exit 0
 EOF
 sudo mv iot-upgrade /usr/local/bin
 sudo chmod +x /usr/local/bin/iot-upgrade

@@ -1,7 +1,16 @@
 #!/bin/bash
 cd /home/jaap/iot-monitor
 
-/usr/bin/mvn clean install
-/usr/bin/crontab src/main/bash/crontab
+logstaship=$(grep logstash.ip /etc/monitor.conf | cut -d "=" -f2)
+logstashport=$(grep logstash.port /etc/monitor.conf | cut -d "=" -f2)
+
+if [ -z "$(git status --porcelain)" ]; then
+  /bin/echo "iot-monitor:INFO:No changes in repository (iot-upgrade)" > /dev/udp/${logstaship}/${logstashport}
+else
+  /usr/bin/git pull
+  /usr/bin/mvn clean install
+  /usr/bin/crontab /home/pi/iot-monitor/src/main/bash/crontab
+  /bin/echo "iot-monitor:INFO:Update completed (iot-upgrade)" > /dev/udp/${logstaship}/${logstashport}
+fi
 
 exit 0
