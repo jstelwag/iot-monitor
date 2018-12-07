@@ -1,7 +1,6 @@
 import control.ControlCalculator;
 import control.Setpoint;
 import handlers.*;
-import listener.IoTListener;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
@@ -33,9 +32,6 @@ public class Main {
             new CustomerNameSpeaker().run();
         } else if ("beds24".equals(args[0])) {
             new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
-        } else if ("iot".equals(args[0])) {
-            LogstashLogger.INSTANCE.info("Starting iot listener");
-            new IoTListener(prop.iotPort).run();
         } else if ("roomreset".equals(args[0])) {
             new KNXRoomReset().run();
         }

@@ -58,12 +58,11 @@ public class IoTRequestDispatcher {
 
                 //TODO add logging of pump state
             } catch (IOException e) {
-                LogstashLogger.INSTANCE.message("ERROR: failed to log client state " + e.getMessage());
+                LogstashLogger.INSTANCE.error("failed to log client state " + e.getMessage());
             }
-            System.out.println("Ingested " + zones.size() + " states from valve group " + device(lineIn));
+            LogstashLogger.INSTANCE.info("Ingested " + zones.size() + " states from valve group " + device(lineIn));
         } else {
-            LogstashLogger.INSTANCE.message("ERROR: size mismatch group zones and states returned by client " + device(lineIn));
-            System.out.println("Unusable response, mismatch between group " + zones.size() + " and states "
+            LogstashLogger.INSTANCE.error("Unusable response, mismatch between group " + zones.size() + " and states "
                     + clientStates.size() + " from valve group " + device(lineIn));
         }
     }

@@ -41,7 +41,7 @@ public class LogstashLogger {
         message("INFO:" + message);
     }
 
-    public void message(String line) {
+    private void message(String line) {
         message("iot-monitor", line);
     }
 
