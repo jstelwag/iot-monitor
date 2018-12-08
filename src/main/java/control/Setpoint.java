@@ -20,7 +20,6 @@ public class Setpoint implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Updating setpoints to Redis");
         Date now = new Date();
         Date heatingOffTime = DateUtils.addHours(HeatingProperties.checkoutTime(now), -2);
         SetpointDAO setpoints = new SetpointDAO();
