@@ -45,7 +45,7 @@ input {
 }
 filter {
   grok {
-    match => { "message" => "(?<application>.*?):( (?<log-level>(DEBUG|INFO|WARN|ERROR)):)? (?<message>.*)"}
+    match => { "message" => "(?<application>.*?):(%{SPACE}(?<log-level>(DEBUG|INFO|WARN|ERROR|FATAL)):)?%{SPACE}(?<message>.*)" }
     overwrite => ["message"]
   }
 

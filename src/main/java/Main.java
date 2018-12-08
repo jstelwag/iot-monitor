@@ -9,12 +9,11 @@ import retriever.Beds24BookingRetriever;
 import speaker.*;
 import util.HeatingProperties;
 
-import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        System.out.println("Monitor " + args[0]);
+    public static void main(String[] args) {
+        LogstashLogger.INSTANCE.info("Monitor " + args[0]);
         HeatingProperties prop = new HeatingProperties();
         if ("http".equals(args[0])) {
             startHttp(prop.masterPort);
