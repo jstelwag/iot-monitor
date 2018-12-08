@@ -4,7 +4,8 @@ cd /home/jaap/iot-monitor
 logstaship=$(grep logstash.ip /etc/monitor.conf | cut -d "=" -f2)
 logstashport=$(grep logstash.port /etc/monitor.conf | cut -d "=" -f2)
 
-if [ -z "$(git status --porcelain)" ]; then
+gitstatus = $(git pull)
+if [ "${gitstatus}" = "Already up-to-date." ]; then
   /bin/echo "iot-monitor:INFO:No changes in repository (iot-upgrade)" > /dev/udp/${logstaship}/${logstashport}
 else
   /usr/bin/git pull
