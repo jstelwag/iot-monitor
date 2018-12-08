@@ -26,7 +26,8 @@ import java.util.Properties;
 
 public class HeatingProperties {
     public final String influxIp, knxIp, localIp, logstashIp, beds24ApiKey, beds24PropKey;
-    public int iotPort, masterPort, influxPort, localPort, knxPort, logstashPort;
+    public int masterPort, influxPort, localPort, knxPort, logstashPort, elevation;
+    public double latitude, longitude;
 
     public HeatingProperties()  {
         InputStream inputStream = null;
@@ -40,7 +41,6 @@ public class HeatingProperties {
             IOUtils.closeQuietly(inputStream);
         }
 
-        iotPort = Integer.parseInt(prop.getProperty("iot.port").trim());
         masterPort = Integer.parseInt(prop.getProperty("master.port").trim());
         influxIp = prop.getProperty("influx.ip").trim();
         influxPort = Integer.parseInt(prop.getProperty("influx.port").trim());
@@ -61,6 +61,10 @@ public class HeatingProperties {
         }
         beds24ApiKey = prop.getProperty("beds24.apiKey").trim();
         beds24PropKey = prop.getProperty("beds24.propKey").trim();
+
+        latitude = Double.parseDouble(prop.getProperty("location.latitude"));
+        longitude = Double.parseDouble(prop.getProperty("location.longitude"));
+        elevation = Integer.parseInt(prop.getProperty("location.elevation"));
     }
 
     public static Date checkoutTime(Date day) {

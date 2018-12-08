@@ -1,6 +1,7 @@
 import control.ControlCalculator;
 import control.Setpoint;
 import handlers.*;
+import lighting.DuskTimer;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
@@ -9,6 +10,9 @@ import retriever.Beds24BookingRetriever;
 import speaker.*;
 import util.HeatingProperties;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class Main {
 
@@ -16,7 +20,7 @@ public class Main {
         LogstashLogger.INSTANCE.info("Monitor " + args[0]);
         HeatingProperties prop = new HeatingProperties();
         if ("http".equals(args[0])) {
-            startHttp(prop.masterPort);
+            startHttpAndTimers(prop.masterPort);
         } else if ("setpointspeaker".equals(args[0])) {
             new SetpointSpeaker().run();
         } else if ("setpoint".equals(args[0])) {
@@ -36,7 +40,7 @@ public class Main {
         }
     }
 
-    private static void startHttp(int port) {
+    private static void startHttpAndTimers(int port) {
         LogstashLogger.INSTANCE.info("Starting http");
 
         Server httpServer = new Server(port);
@@ -53,6 +57,11 @@ public class Main {
             LogstashLogger.INSTANCE.fatal("Failed to start http listener " + e.toString());
             System.exit(0);
         }
+
+        TimerTask dusk = new DuskTimer();
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(dusk, 1000, 5*60*1000);
+
 
         while (true) {
             try {

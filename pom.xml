@@ -58,23 +58,22 @@
     </properties>
 
     <dependencies>
-        <!--
         <dependency>
             <groupId>com.github.calimero</groupId>
             <artifactId>calimero-core</artifactId>
-            <version>2.3</version>
+            <version>2.4-rc1</version>
         </dependency>
-        -->
+
         <!-- first set up calimero
         git clone https://github.com/calimero-project/calimero.parent.git
         git clone https://github.com/calimero-project/calimero-core.git
-        mvn install-->
+        mvn install
         <dependency>
             <groupId>com.github.calimero</groupId>
             <artifactId>calimero-core</artifactId>
             <version>2.4-SNAPSHOT</version>
         </dependency>
-
+-->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>fluent-hc</artifactId>
