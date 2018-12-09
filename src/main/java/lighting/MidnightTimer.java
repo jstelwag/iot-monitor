@@ -6,9 +6,8 @@ import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
 
 import java.util.Date;
-import java.util.TimerTask;
 
-public class MidnightTimer extends TimerTask {
+public class MidnightTimer extends Runnable {
 
 
     public Date midnight() {

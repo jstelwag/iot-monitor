@@ -22,7 +22,7 @@ public class Main {
         LogstashLogger.INSTANCE.info("Monitor " + args[0]);
         HeatingProperties prop = new HeatingProperties();
         if ("http".equals(args[0])) {
-            startHttpAndTimers(prop.masterPort);
+            startHttp(prop.masterPort);
         } else if ("setpointspeaker".equals(args[0])) {
             new SetpointSpeaker().run();
         } else if ("setpoint".equals(args[0])) {
@@ -42,16 +42,9 @@ public class Main {
         }
     }
 
-    private static void startHttpAndTimers(int port) {
+    private static void startHttp(int port) {
 
         new AlwaysOn();
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new DuskTimer(), 10000, 5*60*1000);
-        timer.scheduleAtFixedRate(new DawnTimer(), 11000, 5*60*1000);
-
-        MidnightTimer midnight = new MidnightTimer();
-        timer.schedule(midnight, midnight.midnight());
 
         LogstashLogger.INSTANCE.info("Starting http");
 
@@ -105,6 +98,8 @@ public class Main {
         roomContext.setHandler(new KNXRoomHandler());
         ContextHandler p1Context = new ContextHandler("/p1");
         p1Context.setHandler(new P1Handler());
+        ContextHandler timerContext = new ContextHandler("/timer");
+        timerContext.setHandler(new TimerHandler());
 
         ContextHandler echoContext = new ContextHandler("/echo");
         echoContext.setHandler(new EchoHandler());

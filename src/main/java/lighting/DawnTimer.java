@@ -6,9 +6,7 @@ import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
 
-import java.util.TimerTask;
-
-public class DawnTimer extends TimerTask {
+public class DawnTimer extends Runnable {
 
     @Override
     public void run() {

@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import speaker.FluxLogger;
+import speaker.LogstashLogger;
 import util.LineProtocolUtil;
 
 import javax.servlet.ServletException;
@@ -33,7 +34,7 @@ public class FurnaceHandler extends AbstractHandler {
         if (matcher.find()) {
             String rawFurnace = matcher.group(1);
             Furnace furnace = Furnace.valueOf(rawFurnace);
-            System.out.println("/furnace request: " + furnace);
+            LogstashLogger.INSTANCE.info("/furnace request: " + furnace);
 
             int pumpDesire = 0; // TODO refactor this for every pump
             HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
@@ -65,7 +66,7 @@ public class FurnaceHandler extends AbstractHandler {
                 flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceState", furnaceState ? "1i" : "0i"));
             }
         } else {
-            System.out.println("/furnace request: no furnace found " + s);
+            LogstashLogger.INSTANCE.error("/furnace request: no furnace found " + s);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.getWriter().println("{\"furnace\"=\"ERROR\"}");
         }

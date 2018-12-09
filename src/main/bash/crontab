@@ -9,6 +9,7 @@ HOME=/home/jaap
 */10 * * * * (sleep 30 && iot-runtime customerspeaker) >> $HOME/runtime.log 2>&1
 * * * * * curl localhost:8000/knxtemperatures/
 * * * * * curl localhost:8000/p1/
+*/5 * * * * curl localhost:8000/timer/
 * * * * * iot-runtime control >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime statespeaker >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime fluxtemperatures >> $HOME/runtime.log 2>&1
