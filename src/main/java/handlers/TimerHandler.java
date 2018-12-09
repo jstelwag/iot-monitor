@@ -33,7 +33,7 @@ public class TimerHandler extends AbstractHandler {
 
         response.setContentType("application/json");
 
-        if (s.contains("midnight")) {
+        if (request.getQueryString().contains("midnight")) {
             try {
                 new MidnightTimer().run();
                 response.getWriter().print("{\"midnighttimer\"=\"OK\"}");
@@ -54,7 +54,7 @@ public class TimerHandler extends AbstractHandler {
 
             try {
                 new DuskTimer().run();
-                response.getWriter().print("{\"dustimer\"=\"OK\"}");
+                response.getWriter().print("{\"dusktimer\"=\"OK\"}");
             } catch (Exception e) {
                 LogstashLogger.INSTANCE.error("Failed with DuskTimer " + e.getMessage());
                 response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
