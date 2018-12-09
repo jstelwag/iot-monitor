@@ -305,7 +305,7 @@
 2/0/115	button	koetshuis	apartment_I	Muur bij trap rechts
 2/0/116	button	koetshuis	apartment_I	Toilet afzuiging
 2/0/117	button	koetshuis	apartment_I	Terras buitenlamp
-2/0/118	button	koetshuis	plein	Buitenlamp oordeur buiten
+2/0/118	button	koetshuis	plein	Buitenlamp voordeur buiten
 2/0/119	button	koetshuis	hall_left	Hal plafond
 2/0/120	button	koetshuis	room_a	Bed midden
 2/0/121	button	koetshuis	room_a	Slaapkamer staande lamp

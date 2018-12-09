@@ -1,6 +1,7 @@
 import control.ControlCalculator;
 import control.Setpoint;
 import handlers.*;
+import lighting.AlwaysOn;
 import lighting.DawnTimer;
 import lighting.DuskTimer;
 import lighting.MidnightTimer;
@@ -13,7 +14,6 @@ import speaker.*;
 import util.HeatingProperties;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class Main {
@@ -43,6 +43,8 @@ public class Main {
     }
 
     private static void startHttpAndTimers(int port) {
+
+        new AlwaysOn();
 
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new DuskTimer(), 10000, 5*60*1000);

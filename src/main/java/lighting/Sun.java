@@ -30,13 +30,15 @@ public class Sun {
         return position;
     }
 
-    public boolean dusk() {
+    public boolean dusk(double bias) {
         AzimuthZenithAngle position = position();
-        return position.getZenithAngle() < DUSK_ZENITH && position.getZenithAngle() > DUSK_ZENITH - ZENTIH_THRESHOLD;
+        return position.getZenithAngle() < (DUSK_ZENITH + bias)
+                && position.getZenithAngle() > (DUSK_ZENITH - ZENTIH_THRESHOLD + bias);
     }
 
-    public boolean dawn() {
+    public boolean dawn(double bias) {
         AzimuthZenithAngle position = position();
-        return position.getZenithAngle() > DAWN_ZENTIH && position.getZenithAngle() < DAWN_ZENTIH + ZENTIH_THRESHOLD;
+        return position.getZenithAngle() > (DAWN_ZENTIH + bias)
+                && position.getZenithAngle() < (DAWN_ZENTIH + ZENTIH_THRESHOLD + bias);
     }
 }
