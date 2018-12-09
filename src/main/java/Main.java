@@ -1,6 +1,7 @@
 import control.ControlCalculator;
 import control.Setpoint;
 import handlers.*;
+import lighting.DawnTimer;
 import lighting.DuskTimer;
 import lighting.MidnightTimer;
 import org.eclipse.jetty.server.*;
@@ -43,9 +44,9 @@ public class Main {
 
     private static void startHttpAndTimers(int port) {
 
-        TimerTask dusk = new DuskTimer();
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(dusk, 1000, 5*60*1000);
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new DuskTimer(), 10000, 5*60*1000);
+        timer.scheduleAtFixedRate(new DawnTimer(), 11000, 5*60*1000);
 
         MidnightTimer midnight = new MidnightTimer();
         timer.schedule(midnight, midnight.midnight());
