@@ -32,6 +32,7 @@ public class KNXLink {
     private ProcessCommunicator pc = null;
 
     private final KNXEventListener listener = new KNXEventListener();
+    private final ToggleAllListener toggleListener = new ToggleAllListener();
 
     protected KNXLink() {
         HeatingProperties prop = new HeatingProperties();
@@ -104,6 +105,7 @@ public class KNXLink {
 
         if (open && testConnection()) {
             knxLink.addLinkListener(listener);
+            knxLink.addLinkListener(toggleListener);
             LogstashLogger.INSTANCE.info("Connected to knx " + knxIP + " @" + knxLink.getKNXMedium().getDeviceAddress());
         } else {
             LogstashLogger.INSTANCE.error("knx link connection failed, closing without retrying");
@@ -140,6 +142,7 @@ public class KNXLink {
         }
         if (knxLink != null) {
             knxLink.removeLinkListener(listener);
+            knxLink.removeLinkListener(toggleListener);
             knxLink.close();
             knxLink = null;
         }

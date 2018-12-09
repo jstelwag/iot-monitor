@@ -27,7 +27,7 @@ public class KNXRoomHandler extends AbstractHandler {
     @Override
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        System.out.println("KNX request " + s);
+        LogstashLogger.INSTANCE.info("KNX via http request " + s);
         response.setContentType("application/json");
         Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
                 + Pattern.quote("/"));
