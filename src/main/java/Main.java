@@ -2,6 +2,7 @@ import control.ControlCalculator;
 import control.Setpoint;
 import handlers.*;
 import lighting.DuskTimer;
+import lighting.MidnightTimer;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
@@ -41,6 +42,14 @@ public class Main {
     }
 
     private static void startHttpAndTimers(int port) {
+
+        TimerTask dusk = new DuskTimer();
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(dusk, 1000, 5*60*1000);
+
+        MidnightTimer midnight = new MidnightTimer();
+        timer.schedule(midnight, midnight.midnight());
+
         LogstashLogger.INSTANCE.info("Starting http");
 
         Server httpServer = new Server(port);
@@ -57,10 +66,6 @@ public class Main {
             LogstashLogger.INSTANCE.fatal("Failed to start http listener " + e.toString());
             System.exit(0);
         }
-
-        TimerTask dusk = new DuskTimer();
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(dusk, 1000, 5*60*1000);
 
 
         while (true) {
