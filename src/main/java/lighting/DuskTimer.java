@@ -6,7 +6,7 @@ import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
 
-public class DuskTimer extends Runnable{
+public class DuskTimer implements Runnable{
 
     @Override
     public void run() {

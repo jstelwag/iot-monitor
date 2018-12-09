@@ -7,7 +7,7 @@ import tuwien.auto.calimero.KNXException;
 
 import java.util.Date;
 
-public class MidnightTimer extends Runnable {
+public class MidnightTimer implements Runnable {
 
 
     public Date midnight() {
