@@ -5,6 +5,8 @@ import speaker.LogstashLogger;
 import tuwien.auto.calimero.CloseEvent;
 import tuwien.auto.calimero.FrameEvent;
 import tuwien.auto.calimero.link.NetworkLinkListener;
+import tuwien.auto.calimero.GroupAddress;
+import tuwien.auto.calimero.KNXException;
 
 public class ToggleAllListener implements NetworkLinkListener {
 
