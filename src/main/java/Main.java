@@ -107,7 +107,7 @@ public class Main {
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
                 , furnaceContext, knxtemperatures, redisContext, knxContext, roomContext, p1Context
-                , echoContext});
+                , timerContext, echoContext});
         return contexts;
     }
 
