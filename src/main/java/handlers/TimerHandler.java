@@ -33,33 +33,34 @@ public class TimerHandler extends AbstractHandler {
 
         response.setContentType("application/json");
 
-        response.getWriter().print("[");
-        try {
-            new DawnTimer().run();
-            response.getWriter().print("{\"dawntimer\"=\"OK\"}");
-        } catch (Exception e) {
-            LogstashLogger.INSTANCE.error("Failed with DawnTimer " + e.getMessage());
-            response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
-        }
-        response.getWriter().print(",");
+        if (s.contains("midnight")) {
+            try {
+                new MidnightTimer().run();
+                response.getWriter().print("{\"midnighttimer\"=\"OK\"}");
+            } catch (Exception e) {
+                LogstashLogger.INSTANCE.error("Failed with MidnightTimer " + e.getMessage());
+                response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
+            }
+        } else {
+            response.getWriter().print("[");
+            try {
+                new DawnTimer().run();
+                response.getWriter().print("{\"dawntimer\"=\"OK\"}");
+            } catch (Exception e) {
+                LogstashLogger.INSTANCE.error("Failed with DawnTimer " + e.getMessage());
+                response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
+            }
+            response.getWriter().print(",");
 
-        try {
-            new DuskTimer().run();
-            response.getWriter().print("{\"dustimer\"=\"OK\"}");
-        } catch (Exception e) {
-            LogstashLogger.INSTANCE.error("Failed with DuskTimer " + e.getMessage());
-            response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
+            try {
+                new DuskTimer().run();
+                response.getWriter().print("{\"dustimer\"=\"OK\"}");
+            } catch (Exception e) {
+                LogstashLogger.INSTANCE.error("Failed with DuskTimer " + e.getMessage());
+                response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
+            }
+            response.getWriter().println("]");
         }
-        response.getWriter().print(",");
-
-        try {
-            new MidnightTimer().run();
-            response.getWriter().print("{\"midnighttimer\"=\"OK\"}");
-        } catch (Exception e) {
-            LogstashLogger.INSTANCE.error("Failed with MidnightTimer " + e.getMessage());
-            response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
-        }
-        response.getWriter().println("]");
 
         baseRequest.setHandled(true);
     }
