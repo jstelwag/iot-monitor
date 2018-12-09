@@ -14,7 +14,7 @@ public class DuskTimer extends TimerTask {
     public void run() {
         Jedis jedis = new Jedis("localhost");
 
-        if (!"ON".equals(jedis.get("indoor.state") new Sun().dusk(-8.0))) {
+        if (!"ON".equals(jedis.get("indoor.state") && new Sun().dusk(-8.0))) {
             LogstashLogger.INSTANCE.info("Switching dusk indoor - lights on");
             jedis.set("indoor.state", "ON");
 
@@ -33,7 +33,7 @@ public class DuskTimer extends TimerTask {
             }
         }
 
-        if (!"ON".equals(jedis.get("outdoor.state") new Sun().dusk(0.0))) {
+        if (!"ON".equals(jedis.get("outdoor.state") && new Sun().dusk(0.0))) {
             LogstashLogger.INSTANCE.info("Switching dusk outdoor - lights on");
             jedis.set("outdoor.state", "ON");
 
