@@ -2,6 +2,8 @@ package lighting;
 
 import knx.KNXLink;
 import speaker.LogstashLogger;
+import tuwien.auto.calimero.GroupAddress;
+import tuwien.auto.calimero.KNXException;
 
 import java.util.Date;
 import java.util.TimerTask;
