@@ -10,7 +10,7 @@ if [ "${gitstatus}" = "Already up-to-date." ]; then
 else
   /usr/bin/git pull
   /usr/bin/mvn clean install
-  /usr/bin/crontab /home/pi/iot-monitor/src/main/bash/crontab
+  /usr/bin/crontab /home/jaap/iot-monitor/src/main/bash/crontab
   /bin/echo "iot-monitor:INFO:Update completed (iot-upgrade)" > /dev/udp/${logstaship}/${logstashport}
 fi
 
