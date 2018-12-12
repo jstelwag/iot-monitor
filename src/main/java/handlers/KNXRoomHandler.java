@@ -1,11 +1,13 @@
 package handlers;
 
+import building.Building;
 import building.Room;
 import knx.KNXAddress;
 import knx.KNXAddressList;
 import knx.KNXLink;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
@@ -57,6 +59,30 @@ public class KNXRoomHandler extends AbstractHandler {
                     knxResponse.put("error", "Unknown command " + matcher.group(2) + " @" + s);
                     break;
             }
+        } else if (s.contains("list")) {
+            JSONArray buildings = new JSONArray();
+            for (Building.Construction building : Building.Construction.values()) {
+                JSONObject buildingResponse = new JSONObject();
+                buildings.put(buildingResponse);
+                buildingResponse.put("name", building);
+                JSONArray rooms = new JSONArray();
+                buildingResponse.put("rooms", rooms);
+                for (Room room : Room.values()) {
+                    if (room.construction == building) {
+                        JSONObject roomResponse = new JSONObject();
+                        rooms.put(roomResponse);
+                        roomResponse.put("name", room);
+                        JSONArray lights = new JSONArray();
+                        roomResponse.put("lights", lights);
+                        for (KNXAddress address :new KNXAddressList().addressesByRoom(room, KNXAddress.Type.button)) {
+                            lights.put(address);
+                        }
+                    }
+                }
+            }
+            knxResponse.put("status", "OK");
+            knxResponse.put("buildings", buildings);
+
         } else {
             knxResponse.put("error", "Syntax not recognized for " + s);
         }
