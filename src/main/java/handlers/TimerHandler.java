@@ -59,7 +59,9 @@ public class TimerHandler extends AbstractHandler {
 
         try (FluxLogger flux = new FluxLogger()) {
             flux.message(Room.room_e.toString() + " state="
-                    + (KNXLink.getInstance().readBoolean(new GroupAddress("1/0/7") ? 1 : 0));
+                    + (KNXLink.getInstance().readBoolean(new GroupAddress("1/0/7") ? 1 : 0)));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         baseRequest.setHandled(true);
