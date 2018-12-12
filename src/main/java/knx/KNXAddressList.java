@@ -32,19 +32,36 @@ public class KNXAddressList {
             Iterable<CSVRecord> records = CSVFormat.TDF.parse(in);
             for (CSVRecord record : records) {
                 lineNumber++;
-                if (addresses.put(record.get(0)
+                String address = record.get(0);
+
+                if (addresses.put(address
                         , new KNXAddress(record.get(0), KNXAddress.Type.valueOf(record.get(1))
                                 , Building.Construction.valueOf(record.get(2))
                                 , Room.valueOf(record.get(3)), record.get(4))) != null) {
                     LogstashLogger.INSTANCE.error("Duplicate address in knx-addresses.txt " + record.get(0));
                 }
+                if ("0".equals(address.split("/")[1])) {
+                    // button style device. expand
+                    addresses.put(address.replace("/0/", "/1/")
+                            , new KNXAddress(record.get(0), KNXAddress.Type.button_status
+                                    , Building.Construction.valueOf(record.get(2))
+                                    , Room.valueOf(record.get(3)), record.get(4)));
+                } else if ("2".equals(address.split("/")[1])) {
+                    // dimmer style device. expand
+                    addresses.put(address.replace("/2/", "/3/")
+                            , new KNXAddress(record.get(0), KNXAddress.Type.dimmer_absolute
+                                    , Building.Construction.valueOf(record.get(2))
+                                    , Room.valueOf(record.get(3)), record.get(4)));
+                    addresses.put(address.replace("/2/", "/4/")
+                            , new KNXAddress(record.get(0), KNXAddress.Type.dimmer_status
+                                    , Building.Construction.valueOf(record.get(2))
+                                    , Room.valueOf(record.get(3)), record.get(4)));
+                }
             }
         } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException ea) {
-            System.out.println("Syntax error in knx-addresses.txt at line " + lineNumber + " (" + ea.getMessage() + ")");
             LogstashLogger.INSTANCE.error("Syntax error in knx-addresses.txt at line " + lineNumber  + " (" + ea.getMessage() + ")");
             throw ea;
         } catch (IOException e) {
-            System.out.println("Did not open knx-addresses.txt " + e.getMessage());
             LogstashLogger.INSTANCE.error("Did not open knx-addresses.txt " + e.getMessage());
         } finally {
             IOUtils.closeQuietly(in);

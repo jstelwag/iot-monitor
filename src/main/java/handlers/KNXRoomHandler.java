@@ -7,6 +7,7 @@ import knx.KNXLink;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
+import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
@@ -39,6 +40,8 @@ public class KNXRoomHandler extends AbstractHandler {
                 case "all-off":
                     KNXAddressList knxList = new KNXAddressList();
                     int switchCount = 0;
+                    Jedis jedis = new Jedis("localhost");
+                    jedis.set(room + ".all.state", "OFF");
                     for (KNXAddress address : knxList.addressesByRoom(room, KNXAddress.Type.button)) {
                         try {
                             KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);

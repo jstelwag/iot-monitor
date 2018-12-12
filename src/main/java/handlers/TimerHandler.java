@@ -27,7 +27,7 @@ public class TimerHandler extends AbstractHandler {
 
         response.setContentType("application/json");
 
-        if (request.getQueryString().contains("midnight")) {
+        if (request.getQueryString() != null && request.getQueryString().contains("midnight")) {
             try {
                 new MidnightTimer().run();
                 response.getWriter().print("{\"midnighttimer\"=\"OK\"}");
@@ -58,9 +58,9 @@ public class TimerHandler extends AbstractHandler {
 
         try (FluxLogger flux = new FluxLogger()) {
             flux.message(Room.room_e.toString() + " spotstate="
-                    + (KNXLink.getInstance().readBoolean(new GroupAddress("1/0/7")) ? 1 : 0));
+                    + (KNXLink.getInstance().readBoolean(new GroupAddress("1/0/7")) ? "1i" : "0i"));
         } catch (Exception e) {
-            e.printStackTrace();
+            response.getWriter().println("ERROR: " + e.getMessage());
         }
 
         baseRequest.setHandled(true);
