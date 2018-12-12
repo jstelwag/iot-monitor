@@ -9,7 +9,6 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import speaker.FluxLogger;
 import speaker.LogstashLogger;
-import util.LineProtocolUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +57,7 @@ public class TimerHandler extends AbstractHandler {
         }
 
         try (FluxLogger flux = new FluxLogger()) {
-            flux.message(Room.room_e.toString() + " state="
+            flux.message(Room.room_e.toString() + " spotstate="
                     + (KNXLink.getInstance().readBoolean(new GroupAddress("1/0/7")) ? 1 : 0));
         } catch (Exception e) {
             e.printStackTrace();
