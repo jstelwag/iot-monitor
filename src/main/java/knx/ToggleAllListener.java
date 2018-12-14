@@ -31,7 +31,7 @@ public class ToggleAllListener implements NetworkLinkListener {
                     //    try {
                     //        KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), desiredState);
                             switchCount++;
-                            Thread.sleep(50); //Wait a little to reduce LED switching peaks
+                            //Thread.sleep(50); //Wait a little to reduce LED switching peaks
                     //    } catch (KNXException | InterruptedException e) {
                     //        LogstashLogger.INSTANCE.error("Failed to toggle room " + address + ", " + e.getMessage());
                     //    }
