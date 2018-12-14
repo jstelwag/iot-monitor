@@ -37,6 +37,7 @@ public class TimerHandler extends AbstractHandler {
                 response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
             }
         } else if (s != null && s.contains("manual")) {
+            LogstashLogger.INSTANCE.info("Manual public light switch request: " + s);
             // /timer/manual/listname/location(indoor|outdoor)/on|off/
             Pattern manualPattern = Pattern.compile(Pattern.quote("/") + "manual" + Pattern.quote("/")
                     + "(.?)" + Pattern.quote("/") + "(.?)" + Pattern.quote("/"));
@@ -65,6 +66,8 @@ public class TimerHandler extends AbstractHandler {
                         response.getWriter().print("\"status\"=\"ERROR\"");
                 }
                 response.getWriter().print("}");
+            } else {
+                LogstashLogger.INSTANCE.warn("Unrecognized manual light request: " + s);
             }
         } else {
             response.getWriter().print("[");
