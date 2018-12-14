@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Schedule {
 
-    enum Location {
+    public enum Location {
         indoor,
         outdoor
     }

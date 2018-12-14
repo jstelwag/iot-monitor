@@ -16,7 +16,6 @@ public class SwitchLights {
         LogstashLogger.INSTANCE.info("Switching " + location + " - lights " + (onOrOff ? "on" : "off"));
         jedis.set(location + ".state", onOrOff ? "ON" : "OFF");
         try {
-
             for (String address : lights) {
                 KNXLink.getInstance().writeBoolean(new GroupAddress(address), onOrOff);
                 Thread.sleep(100);
