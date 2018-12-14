@@ -35,6 +35,8 @@ public class TimerHandler extends AbstractHandler {
                 LogstashLogger.INSTANCE.error("Failed with MidnightTimer " + e.getMessage());
                 response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
             }
+        } else if (s != null && s.contains("manual")) {
+
         } else {
             response.getWriter().print("[");
             try {
@@ -54,13 +56,6 @@ public class TimerHandler extends AbstractHandler {
                 response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
             }
             response.getWriter().println("]");
-        }
-
-        try (FluxLogger flux = new FluxLogger()) {
-            flux.message(Room.room_e.toString() + " spotstate="
-                    + (KNXLink.getInstance().readBoolean(new GroupAddress("1/1/8")) ? "1i" : "0i"));
-        } catch (Exception e) {
-            response.getWriter().println("ERROR: " + e.getMessage());
         }
 
         baseRequest.setHandled(true);

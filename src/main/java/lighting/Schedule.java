@@ -5,6 +5,11 @@ import java.util.List;
 
 public class Schedule {
 
+    enum Location {
+        indoor,
+        outdoor
+    }
+
     public List<String> outdoorToMidnight = new LinkedList<>();
     public List<String> outdoorToDawn = new LinkedList<>();
     public List<String> indoorToMidnight = new LinkedList<>();
