@@ -40,7 +40,7 @@ public class TimerHandler extends AbstractHandler {
             LogstashLogger.INSTANCE.info("Manual public light switch request: " + s);
             // /timer/manual/listname/location(indoor|outdoor)/on|off/
             Pattern manualPattern = Pattern.compile(Pattern.quote("/") + "manual" + Pattern.quote("/")
-                    + "(.?)" + Pattern.quote("/") + "(.?)" + Pattern.quote("/"));
+                    + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
             Matcher matcher = manualPattern.matcher(s);
             if (matcher.find()) {
                 boolean onOrOff = "on".equalsIgnoreCase(matcher.group(3));
