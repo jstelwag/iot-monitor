@@ -1,7 +1,9 @@
 package knx;
 
 import speaker.LogstashLogger;
-
+import tuwien.auto.calimero.link.NetworkLinkListener;
+import tuwien.auto.calimero.CloseEvent;
+import tuwien.auto.calimero.FrameEvent;
 
 /**
  * Simply log all KNX bus messages to Elastic
