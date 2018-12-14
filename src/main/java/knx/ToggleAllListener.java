@@ -39,7 +39,6 @@ public class ToggleAllListener implements NetworkLinkListener {
                     LogstashLogger.INSTANCE.info("Toggled room " + knx.room + ", switched " + switchCount
                             + " lights " + (desiredState ? "on" : "off"));
                 }
-            }
         } catch (Exception e) {
             LogstashLogger.INSTANCE.error("Caught unexpected exception, " + e.getMessage());
         }
