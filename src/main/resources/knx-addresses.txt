@@ -86,7 +86,7 @@
 1/0/117	button	koetshuis	room_c	Wastafel spiegel
 1/0/118	button	koetshuis	apartment_II	Badkamer spiegel
 1/0/119	button	koetshuis	apartment_II	Toilet afzuiging
-1/0/12	button	koetshuis	room_e	Serre spots
+1/0/12	button	koetshuis	room_e	Spots plafond
 1/0/120	button	koetshuis	apartment_II	Slaapkamer leeslamp links
 1/0/121	button	koetshuis	apartment_II	Slaapkamer leeslamp rechts
 1/0/122	button	koetshuis	apartment_II	Toilet spot
@@ -129,7 +129,7 @@
 1/2/1	dimmer_relative	koetshuis	room_c	Spots uitbouw
 1/2/10	dimmer_relative	koetshuis	room_f	Badkamer spots plafond
 1/2/11	dimmer_relative	koetshuis	room_b	Spots
-1/2/12	dimmer_relative	koetshuis	room_e	Serre spots
+1/2/12	dimmer_relative	koetshuis	room_e	Spots plafond
 1/2/13	dimmer_relative	koetshuis	apartment_II	Serre spots
 1/2/2	dimmer_relative	koetshuis	room_c	Plafondstraler
 1/2/3	dimmer_relative	koetshuis	yet_unknown	Slaapkamer & badkamer spots

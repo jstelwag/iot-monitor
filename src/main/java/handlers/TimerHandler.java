@@ -27,7 +27,7 @@ public class TimerHandler extends AbstractHandler {
 
         response.setContentType("application/json");
 
-        if (request.getQueryString() != null && request.getQueryString().contains("midnight")) {
+        if (s != null && s.contains("midnight")) {
             try {
                 new MidnightTimer().run();
                 response.getWriter().print("{\"midnighttimer\"=\"OK\"}");

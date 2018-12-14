@@ -64,9 +64,9 @@ public class KNXRoomHandler extends AbstractHandler {
             for (Building.Construction building : Building.Construction.values()) {
                 JSONObject buildingResponse = new JSONObject();
                 buildings.put(buildingResponse);
-                buildingResponse.put("name", building);
                 JSONArray rooms = new JSONArray();
                 buildingResponse.put("rooms", rooms);
+                buildingResponse.put("name", building);
                 for (Room room : Room.values()) {
                     if (room.construction == building) {
                         JSONObject roomResponse = new JSONObject();
@@ -75,7 +75,11 @@ public class KNXRoomHandler extends AbstractHandler {
                         JSONArray lights = new JSONArray();
                         roomResponse.put("lights", lights);
                         for (KNXAddress address :new KNXAddressList().addressesByRoom(room, KNXAddress.Type.button)) {
-                            lights.put(address);
+                            JSONObject lightResponse = new JSONObject();
+                            lights.put(lightResponse);
+                            lightResponse.put("name", address.description);
+                            lightResponse.put("address", address.address);
+                            lightResponse.put("type", address.type);
                         }
                     }
                 }
