@@ -52,8 +52,8 @@ public class IoTRequestDispatcher {
             try (FluxLogger flux = new FluxLogger()) {
                 for (int i = 0; i < zones.size(); i++) {
                     String state = clientStates.get(i) ? "1i" : "0i";
-                    flux.message(LineProtocolUtil.protocolLine(zones.get(i), "clientState", state));
-                    flux.message(LineProtocolUtil.protocolLine(zones.get(i).group, zones.get(i).groupSequence, "clientState", state));
+                    flux.message(LineProtocolUtil.protocolLine(zones.get(i), "stateConfirmed", state));
+                    flux.message(LineProtocolUtil.protocolLine(zones.get(i).group, zones.get(i).groupSequence, "stateConfirmed", state));
                 }
 
                 //TODO add logging of pump state
