@@ -7,6 +7,7 @@ import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
 import org.apache.commons.io.IOUtils;
+import speaker.LogstashLogger;
 
 import java.util.Calendar;
 
@@ -14,7 +15,7 @@ public class ControlCalculator implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Calculating state");
+        LogstashLogger.INSTANCE.info("Calculating state");
 
         SetpointDAO setpoints = new SetpointDAO();
         TemperatureDAO temperatures = new TemperatureDAO();
@@ -25,24 +26,24 @@ public class ControlCalculator implements Runnable {
 
             for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
                 if (HeatingControl.INSTANCE.overrides.containsKey(zone)) {
-                    zoneStates.set(zone, HeatingControl.INSTANCE.overrides.get(zone));
+                    zoneStates.setDesired(zone, HeatingControl.INSTANCE.overrides.get(zone));
                 } else {
                     // todo add here an optimization algorithm
                     if (!temperatures.has(controllableArea)){
                         // Just guessing heat desire
                         if (isWinter()) {
-                            zoneStates.set(zone, zone.isPreferred);
+                            zoneStates.setDesired(zone, zone.isPreferred);
                         } else {
-                            zoneStates.set(zone, false);
+                            zoneStates.setDesired(zone, false);
                         }
                     } else if (setpoint < roomTemperature) {
-                        zoneStates.set(zone, false);
+                        zoneStates.setDesired(zone, false);
                     } else {
                         // heating is needed
-                        if (setpoint - roomTemperature < 0.2) {
-                            zoneStates.set(zone, zone.isPreferred);
+                        if (setpoint - roomTemperature < 0.1) {
+                            zoneStates.setDesired(zone, zone.isPreferred);
                         } else {
-                            zoneStates.set(zone, true);
+                            zoneStates.setDesired(zone, true);
                         }
                     }
                 }

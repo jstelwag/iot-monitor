@@ -8,6 +8,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import speaker.LogstashLogger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public class StateHandler extends AbstractHandler {
     @Override
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        System.out.println("State request");
+        LogstashLogger.INSTANCE.info("State request");
         JSONArray stateResponse = new JSONArray();
 
         HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
@@ -34,7 +35,8 @@ public class StateHandler extends AbstractHandler {
             for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
                 JSONObject state = new JSONObject();
                 state.put("sequence", zone.groupSequence);
-                state.put("value", zoneStates.get(zone));
+                state.put("valueDesired", zoneStates.getDesired(zone));
+                state.put("valueActual", zoneStates.getActual(zone));
                 groupsResponse.getJSONArray("states").put(state);
             }
         }

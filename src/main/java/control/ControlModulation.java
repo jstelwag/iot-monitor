@@ -3,7 +3,7 @@ package control;
 import java.util.Date;
 
 /**
- * Created by Jaap on 30-9-2016.
+ * Modulates the furnace (on / off sequences) based on the heating demand
  */
 public class ControlModulation {
     public boolean currentState = false;

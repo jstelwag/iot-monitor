@@ -1,5 +1,6 @@
 import control.ControlCalculator;
 import control.Setpoint;
+import control.ZoneModulation;
 import handlers.*;
 import lighting.AlwaysOn;
 import lighting.DawnTimer;
@@ -33,6 +34,8 @@ public class Main {
             new StateSpeaker().run();
         } else if ("control".equals(args[0])) {
             new ControlCalculator().run();
+        } else if ("modulate".equals(args[0])) {
+            new ZoneModulation().run();
         } else if ("customerspeaker".equals(args[0])) {
             new CustomerNameSpeaker().run();
         } else if ("beds24".equals(args[0])) {

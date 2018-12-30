@@ -54,7 +54,7 @@ public class HeatingControl {
         HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
         for (HeatZone.ValveGroup group : HeatingControl.INSTANCE.valveGroupsByFurnace(furnace)) {
             for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
-                if (zoneStates.get(zone)) furnaceDesire++;
+                if (zoneStates.getActual(zone)) furnaceDesire++;
             }
         }
         IOUtils.closeQuietly(zoneStates);

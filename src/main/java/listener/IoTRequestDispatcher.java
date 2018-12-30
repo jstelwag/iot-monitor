@@ -17,7 +17,7 @@ import static util.LineProtocolUtil.device;
 
 public class IoTRequestDispatcher {
 
-    String lineIn;
+    private String lineIn;
     private HeatZone.ValveGroup group = null;
 
     public IoTRequestDispatcher(String lineIn) {
@@ -72,13 +72,13 @@ public class IoTRequestDispatcher {
 
         HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
         for (HeatZone zone : Building.INSTANCE.zonesByGroup(device(lineIn))) {
-            response.append(zoneStates.get(zone) ? "1" : "0");
+            response.append(zoneStates.getActual(zone) ? "1" : "0");
         }
 
         if (device(lineIn) == HeatZone.ValveGroup.koetshuis_trap_15) {
             int pumpDesire = 0;
             for (HeatZone zone : Building.INSTANCE.zonesByGroup(device(lineIn))) {
-                if (zoneStates.get(zone)) pumpDesire++;
+                if (zoneStates.getActual(zone)) pumpDesire++;
             }
             int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(device(lineIn).furnace);
             boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(device(lineIn).furnace).control(furnaceDesire);

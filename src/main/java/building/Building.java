@@ -56,6 +56,16 @@ public class Building {
         return retVal;
     }
 
+    public List<HeatZone> zonesByFurnace(Furnace furnace) {
+        List<HeatZone> retVal = new ArrayList<>();
+        for (HeatZone zone : zones) {
+            if (zone.group.furnace == furnace) {
+                retVal.add(zone);
+            }
+        }
+        return retVal;
+    }
+
     public List<ControllableArea> findRooms(Room room) {
         List<ControllableArea> retVal = new ArrayList<>();
         for (ControllableArea controlRoom : ControllableArea.values()) {

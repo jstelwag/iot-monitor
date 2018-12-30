@@ -4,11 +4,16 @@ import building.Building;
 import building.HeatZone;
 import redis.clients.jedis.Jedis;
 
-import java.io.Closeable;
+import java.io.Closeable;;
+
 import java.io.IOException;
 
 /**
- * Created by Jaap on 11-12-2016.
+ * Stores and retrieves different HeatZone states to Redis:
+ * - Default
+ * - Desired
+ * - Active
+ * = TODO Confirmed
  */
 public class HeatZoneStateDAO implements Closeable {
     private final Jedis jedis;
@@ -19,19 +24,29 @@ public class HeatZoneStateDAO implements Closeable {
         jedis = new Jedis("localhost");
     }
 
-    public boolean get(HeatZone zone) {
-        if (jedis.exists(zone.group + "." + zone.groupSequence + ".state")) {
-            return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state"));
+    public boolean getDesired(HeatZone zone) {
+        if (jedis.exists(zone.group + "." + zone.groupSequence + ".state-desired")) {
+            return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-desired"));
         }
         return getDefault(zone);
+    }
+
+    public boolean getActual(HeatZone zone) {
+        return jedis.exists(zone.group + "." + zone.groupSequence + ".state-actual")
+                && "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-actual"));
     }
 
     public boolean getDefault(HeatZone zone) {
         return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-default"));
     }
 
-    public HeatZoneStateDAO set(HeatZone zone, boolean state) {
-        jedis.setex(zone.group + "." + zone.groupSequence + ".state", TTL, state ? "T" : "F");
+    public HeatZoneStateDAO setDesired(HeatZone zone, boolean state) {
+        jedis.setex(zone.group + "." + zone.groupSequence + ".state-desired", TTL, state ? "T" : "F");
+        return this;
+    }
+
+    public HeatZoneStateDAO setActual(HeatZone zone, boolean state) {
+        jedis.setex(zone.group + "." + zone.groupSequence + ".state-actual", TTL, state ? "T" : "F");
         return this;
     }
 

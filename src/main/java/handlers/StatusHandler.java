@@ -59,7 +59,8 @@ public class StatusHandler extends AbstractHandler {
             for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
                 JSONObject zoneResponse = new JSONObject();
                 zoneResponse.put("zone", zone);
-                zoneResponse.put("state", zoneStates.get(zone));
+                zoneResponse.put("stateDesired", zoneStates.getDesired(zone));
+                zoneResponse.put("stateActual", zoneStates.getActual(zone));
                 zones.put(zoneResponse);
             }
 

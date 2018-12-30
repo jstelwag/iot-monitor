@@ -39,7 +39,7 @@ public class FurnaceHandler extends AbstractHandler {
             int pumpDesire = 0; // TODO refactor this for every pump
             HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
             for (HeatZone zone : Building.INSTANCE.zonesByGroup(HeatZone.ValveGroup.koetshuis_kelder)) {
-                if (zoneStates.get(zone)) {
+                if (zoneStates.getActual(zone)) {
                     pumpDesire++;
                 }
             }
