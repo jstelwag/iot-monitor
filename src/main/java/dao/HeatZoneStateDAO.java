@@ -19,6 +19,7 @@ public class HeatZoneStateDAO implements Closeable {
     private final Jedis jedis;
 
     final int TTL = 120;
+    final int TTL_ACTUAL = 600;
 
     public HeatZoneStateDAO() {
         jedis = new Jedis("localhost");
@@ -46,7 +47,7 @@ public class HeatZoneStateDAO implements Closeable {
     }
 
     public HeatZoneStateDAO setActual(HeatZone zone, boolean state) {
-        jedis.setex(zone.group + "." + zone.groupSequence + ".state-actual", TTL, state ? "T" : "F");
+        jedis.setex(zone.group + "." + zone.groupSequence + ".state-actual", TTL_ACTUAL, state ? "T" : "F");
         return this;
     }
 
