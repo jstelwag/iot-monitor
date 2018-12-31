@@ -4,7 +4,7 @@ import building.Building;
 import building.HeatZone;
 import redis.clients.jedis.Jedis;
 
-import java.io.Closeable;;
+import java.io.Closeable;
 
 import java.io.IOException;
 
@@ -13,13 +13,15 @@ import java.io.IOException;
  * - Default
  * - Desired
  * - Active
- * = TODO Confirmed
+ * = Confirmed
+ * - Override
  */
 public class HeatZoneStateDAO implements Closeable {
     private final Jedis jedis;
 
-    final int TTL = 120;
-    final int TTL_ACTUAL = 600;
+    final int TTL = 2 * 60; //seconds
+    final int TTL_ACTUAL = 30 * 60; //seconds
+    final int TTL_OVERRIDE = 48 * 60 * 60; //seconds
 
     public HeatZoneStateDAO() {
         jedis = new Jedis("localhost");
@@ -37,6 +39,13 @@ public class HeatZoneStateDAO implements Closeable {
                 && "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-actual"));
     }
 
+    public Boolean getOverride(HeatZone zone) {
+        if (!jedis.exists(zone.group + "." + zone.groupSequence + ".state-override")) {
+            return null;
+        }
+        return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-false"));
+    }
+
     public boolean getDefault(HeatZone zone) {
         return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-default"));
     }
@@ -48,6 +57,16 @@ public class HeatZoneStateDAO implements Closeable {
 
     public HeatZoneStateDAO setActual(HeatZone zone, boolean state) {
         jedis.setex(zone.group + "." + zone.groupSequence + ".state-actual", TTL_ACTUAL, state ? "T" : "F");
+        return this;
+    }
+
+    public HeatZoneStateDAO setOverride(HeatZone zone, boolean state) {
+        jedis.setex(zone.group + "." + zone.groupSequence + ".state-override", TTL_OVERRIDE, state ? "T" : "F");
+        return this;
+    }
+
+    public HeatZoneStateDAO removeOverride(HeatZone zone) {
+        jedis.del(zone.group + "." + zone.groupSequence + ".state-override");
         return this;
     }
 

@@ -25,26 +25,22 @@ public class ControlCalculator implements Runnable {
             double roomTemperature = temperatures.get(controllableArea);
 
             for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
-                if (HeatingControl.INSTANCE.overrides.containsKey(zone)) {
-                    zoneStates.setDesired(zone, HeatingControl.INSTANCE.overrides.get(zone));
-                } else {
-                    // todo add here an optimization algorithm
-                    if (!temperatures.has(controllableArea)){
-                        // Just guessing heat desire
-                        if (isWinter()) {
-                            zoneStates.setDesired(zone, zone.isPreferred);
-                        } else {
-                            zoneStates.setDesired(zone, false);
-                        }
-                    } else if (setpoint < roomTemperature) {
-                        zoneStates.setDesired(zone, false);
+                // todo add here an optimization algorithm
+                if (!temperatures.has(controllableArea)){
+                    // Just guessing heat desire
+                    if (isWinter()) {
+                        zoneStates.setDesired(zone, zone.isPreferred);
                     } else {
-                        // heating is needed
-                        if (setpoint - roomTemperature < 0.1) {
-                            zoneStates.setDesired(zone, zone.isPreferred);
-                        } else {
-                            zoneStates.setDesired(zone, true);
-                        }
+                        zoneStates.setDesired(zone, false);
+                    }
+                } else if (setpoint < roomTemperature) {
+                    zoneStates.setDesired(zone, false);
+                } else {
+                    // heating is needed
+                    if (setpoint - roomTemperature < 0.1) {
+                        zoneStates.setDesired(zone, zone.isPreferred);
+                    } else {
+                        zoneStates.setDesired(zone, true);
                     }
                 }
             }

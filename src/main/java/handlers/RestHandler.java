@@ -4,11 +4,13 @@ import building.Building;
 import building.ControllableArea;
 import building.HeatZone;
 import control.HeatingControl;
+import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import speaker.LogstashLogger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +51,7 @@ public class RestHandler extends AbstractHandler {
         Matcher matcher = pattern.matcher(lineIn + "/");
         SetpointDAO dao = new SetpointDAO();
         if (matcher.find()) {
-            System.out.println("/rest request for " + room);
+            LogstashLogger.INSTANCE.info("/rest request for " + room);
             if ("toggle".equals(matcher.group(2))) {
                 dao.setActive(room, !dao.isActive(room));
                 out.println("Toggled room " + room + " to " + dao.isActive(room));
@@ -70,19 +72,24 @@ public class RestHandler extends AbstractHandler {
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(lineIn);
         if (matcher.find() && StringUtils.isNumeric(matcher.group(2))) {
-            System.out.println("/rest request for " + valve);
+            LogstashLogger.INSTANCE.info("/rest request for " + valve);
             int sequence = Integer.parseInt(matcher.group(2));
             HeatZone zone = Building.INSTANCE.zoneById(valve, sequence);
-            // First remove the old override, then add new
-            HeatingControl.INSTANCE.overrides.remove(zone);
-            if ("on".equals(matcher.group(3))) {
-                HeatingControl.INSTANCE.overrides.put(zone, true);
-                out.println("Override " + zone + " on");
-            } else if ("off".equals(matcher.group(3))) {
-                HeatingControl.INSTANCE.overrides.put(zone, false);
-                out.println("Override " + zone + " off");
-            } else {
-                out.println("Removed vverride " + zone);
+
+            try (HeatZoneStateDAO stateDAO = new HeatZoneStateDAO()) {
+                if ("on".equals(matcher.group(3))) {
+                    stateDAO.setOverride(zone, true);
+                    out.println("Override " + zone + " on");
+                } else if ("off".equals(matcher.group(3))) {
+                    stateDAO.setOverride(zone, false);
+                    out.println("Override " + zone + " off");
+                } else {
+                    stateDAO.removeOverride(zone);
+                    out.println("Removed override " + zone);
+                }
+            } catch (IOException e) {
+                LogstashLogger.INSTANCE.error("Can't connect with state dao, " + e.getMessage());
+                out.println("Error: " + e.getMessage());
             }
         } else {
             out.println(lineIn + "?");

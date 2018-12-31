@@ -18,6 +18,7 @@ import java.util.TreeSet;
  * Organizes division of heat over the heat zones:
  * 1. sequential, time based
  * 2. with priority
+ * 3. or by a manual override
  *
  * At a certain time only a selection of valves / zones are active - other are closed on purpose so the heat is divided
  * fairly.
@@ -69,7 +70,11 @@ public class ZoneModulation implements Runnable {
                         double offset = setpointDAO.get(zone.controllableArea) - temperatureDAO.get(zone.controllableArea);
                         item.weight = item.weight + (int)offset * 20;
 
-                        item.weight = item.weight + new Random().nextInt(100);
+                        if (zoneDao.getOverride(zone) != null) {
+                            item.weight = (zoneDao.getOverride(zone) ? 1000 : 0);
+                        } else {
+                            item.weight = item.weight + new Random().nextInt(100);
+                        }
 
                         actual.add(item);
                     }

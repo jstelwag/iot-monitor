@@ -1,7 +1,6 @@
 package control;
 
 import building.Building;
-import building.ControllableArea;
 import building.Furnace;
 import building.HeatZone;
 import dao.HeatZoneStateDAO;
@@ -13,8 +12,6 @@ import java.util.*;
 public class HeatingControl {
 
     public final static HeatingControl INSTANCE = new HeatingControl();
-
-    public final SortedMap<HeatZone, Boolean> overrides = new TreeMap<>();
     public final Map<Furnace, ControlModulation> furnaceModulation = new HashMap<>();
 
     private HeatingControl() {
@@ -23,17 +20,6 @@ public class HeatingControl {
         for (Furnace furnace : Furnace.values()) {
             furnaceModulation.put(furnace, new ControlModulation());
         }
-    }
-
-    public List<HeatZone> overridesByRoom(ControllableArea room) {
-        List<HeatZone> retVal = new ArrayList<>();
-        for (HeatZone zone : overrides.keySet()) {
-            if (zone.controllableArea == room) {
-                retVal.add(zone);
-            }
-        }
-
-        return retVal;
     }
 
     public List<HeatZone.ValveGroup> valveGroupsByFurnace(Furnace furnace) {
