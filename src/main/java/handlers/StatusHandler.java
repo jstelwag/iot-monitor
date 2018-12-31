@@ -4,7 +4,6 @@ import building.Building;
 import building.ControllableArea;
 import building.HeatZone;
 import building.Room;
-import control.HeatingControl;
 import dao.BookingDAO;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
@@ -61,16 +60,10 @@ public class StatusHandler extends AbstractHandler {
                 zoneResponse.put("zone", zone);
                 zoneResponse.put("stateDesired", zoneStates.getDesired(zone));
                 zoneResponse.put("stateActual", zoneStates.getActual(zone));
+                if (zoneStates.getOverride(zone) != null) {
+                    zoneResponse.put("stateOverride", zoneStates.getOverride(zone));
+                }
                 zones.put(zoneResponse);
-            }
-
-            JSONArray overrides = new JSONArray();
-            roomResponse.put("overrides", overrides);
-            for (HeatZone zone : HeatingControl.INSTANCE.overridesByRoom(controllableArea)) {
-                JSONObject zoneResponse = new JSONObject();
-                zoneResponse.put("zone", zone);
-                overrides.put(zoneResponse);
-                zoneResponse.put("override", HeatingControl.INSTANCE.overrides.get(zone));
             }
         }
         IOUtils.closeQuietly(setpoints);
