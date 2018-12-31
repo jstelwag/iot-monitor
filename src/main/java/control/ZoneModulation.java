@@ -48,7 +48,6 @@ public class ZoneModulation implements Runnable {
 
     @Override
     public void run() {
-
         try (HeatZoneStateDAO zoneDao = new HeatZoneStateDAO();
              BookingDAO bookingDAO = new BookingDAO();
              TemperatureDAO temperatureDAO = new TemperatureDAO();
@@ -71,12 +70,14 @@ public class ZoneModulation implements Runnable {
                         item.weight = item.weight + (int)offset * 20;
 
                         if (zoneDao.getOverride(zone) != null) {
-                            item.weight = (zoneDao.getOverride(zone) ? 1000 : 0);
+                            item.weight = (zoneDao.getOverride(zone) ? 1000 : -1);
                         } else {
                             item.weight = item.weight + new Random().nextInt(100);
                         }
 
-                        actual.add(item);
+                        if (item.weight > 0) {
+                            actual.add(item);
+                        }
                     }
                 }
 
