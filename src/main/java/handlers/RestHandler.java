@@ -46,7 +46,7 @@ public class RestHandler extends AbstractHandler {
     /** /rest/room/on|off|toggle/ */
     void matchRoom(String roomText, String lineIn, PrintWriter out) throws IllegalArgumentException {
         ControllableArea room = ControllableArea.valueOf(roomText);
-        Pattern pattern = Pattern.compile(Pattern.quote("rest/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
+        Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(lineIn + "/");
         SetpointDAO dao = new SetpointDAO();
@@ -68,7 +68,7 @@ public class RestHandler extends AbstractHandler {
     /** /rest/valvegroup/sequence/on|off|remove/ */
     void matchValveOverride(String valveText, String lineIn, PrintWriter out) throws IllegalArgumentException {
         HeatZone.ValveGroup valve = HeatZone.ValveGroup.valueOf(valveText);
-        Pattern pattern = Pattern.compile(Pattern.quote("rest/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
+        Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(lineIn);
         if (matcher.find() && StringUtils.isNumeric(matcher.group(2))) {
