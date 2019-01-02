@@ -90,8 +90,9 @@ public class ZoneModulation implements Runnable {
                 int i = 0;
                 for (ModulationComparator actuallyOn : actualCandidates) {
                     zoneDao.setActual(actuallyOn.zone, true);
-                    if (++i > 9) {
-                        LogstashLogger.INSTANCE.info("Doing zone modulation, 10 zones of " + actualCandidates.size()
+                    if (++i > furnace.maxActiveZones) {
+                        LogstashLogger.INSTANCE.info("Doing zone modulation, " + furnace.maxActiveZones
+                                + " zones of " + actualCandidates.size()
                                 + " in use for furnace " + furnace);
                         break;
                     }
