@@ -3,9 +3,6 @@ import control.Setpoint;
 import control.ZoneModulation;
 import handlers.*;
 import lighting.AlwaysOn;
-import lighting.DawnTimer;
-import lighting.DuskTimer;
-import lighting.MidnightTimer;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
@@ -13,8 +10,6 @@ import org.eclipse.jetty.server.handler.ErrorHandler;
 import retriever.Beds24BookingRetriever;
 import speaker.*;
 import util.HeatingProperties;
-
-import java.util.Timer;
 
 
 public class Main {
@@ -85,8 +80,8 @@ public class Main {
         stateContext.setHandler(new StateHandler());
         ContextHandler statusContext = new ContextHandler("/status");
         statusContext.setHandler(new StatusHandler());
-        ContextHandler restContext = new ContextHandler("/rest");
-        restContext.setHandler(new RestHandler());
+        ContextHandler restContext = new ContextHandler("/rest/heating");
+        restContext.setHandler(new HeatingHandler());
         ContextHandler furnaceContext = new ContextHandler("/furnace");
         furnaceContext.setHandler(new FurnaceHandler());
         ContextHandler valveGroupContext = new ContextHandler("/valvegroup");

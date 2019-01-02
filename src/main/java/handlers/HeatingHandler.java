@@ -3,7 +3,6 @@ package handlers;
 import building.Building;
 import building.ControllableArea;
 import building.HeatZone;
-import control.HeatingControl;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import org.apache.commons.io.IOUtils;
@@ -21,24 +20,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by Jaap on 27-5-2016.
+ * Rest interface for heating:
+ * /rest/heating/setpoint/... setting the setpoint manually
+ * /rest/heating/valve/... setting individual valves
+ *
+ * settings are stored in Redis for a limited time.
  */
-public class RestHandler extends AbstractHandler {
+public class HeatingHandler extends AbstractHandler {
     @Override
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        Pattern restPattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
-        Matcher matcher = restPattern.matcher(s);
 
-        if (matcher.find()) {
-            String roomOrValve = matcher.group(1);
-            try {
-                matchRoom(roomOrValve, s, response.getWriter());
-            } catch (IllegalArgumentException e) {
-                matchValveOverride(roomOrValve, s, response.getWriter());
-            }
+        if (s != null && s.startsWith("/valve")) {
+            matchValveOverride(s, response.getWriter());
+        } else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            LogstashLogger.INSTANCE.warn("Wrong argument at rest " + s);
         }
-        response.setStatus(HttpServletResponse.SC_OK);
+
         response.setContentType("application/json");
         baseRequest.setHandled(true);
     }
@@ -65,13 +64,14 @@ public class RestHandler extends AbstractHandler {
         IOUtils.closeQuietly(dao);
     }
 
-    /** /rest/valvegroup/sequence/on|off|remove/ */
-    void matchValveOverride(String valveText, String lineIn, PrintWriter out) throws IllegalArgumentException {
-        HeatZone.ValveGroup valve = HeatZone.ValveGroup.valueOf(valveText);
-        Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
+    /** /valve/valvegroup/sequence/on|off|remove/ */
+    void matchValveOverride(String lineIn, PrintWriter out) throws IllegalArgumentException {
+        Pattern pattern = Pattern.compile(Pattern.quote("/valve/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(lineIn);
+
         if (matcher.find() && StringUtils.isNumeric(matcher.group(2))) {
+            HeatZone.ValveGroup valve = HeatZone.ValveGroup.valueOf(matcher.group(1));
             LogstashLogger.INSTANCE.info("/rest request for " + valve);
             int sequence = Integer.parseInt(matcher.group(2));
             HeatZone zone = Building.INSTANCE.zoneById(valve, sequence);
