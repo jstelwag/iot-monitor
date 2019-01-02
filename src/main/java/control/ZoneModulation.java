@@ -79,6 +79,8 @@ public class ZoneModulation implements Runnable {
                         if (item.weight > 0) {
                             actualCandidates.add(item);
                         }
+                        
+                        LogstashLogger.INSTANCE.info("Zone " + zone + " has weight: " + item.weight);
                     }
                 }
 
