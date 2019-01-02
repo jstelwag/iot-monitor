@@ -42,7 +42,7 @@ public class ZoneModulation implements Runnable {
         @Override
         public int compareTo(Object o) {
             //Reverse to descending
-            return -((ModulationComparator)o).weight.compareTo(weight);
+            return ((ModulationComparator)o).weight.compareTo(weight);
         }
     }
 
@@ -56,7 +56,14 @@ public class ZoneModulation implements Runnable {
             for (Furnace furnace : Furnace.values()) {
                 SortedSet<ModulationComparator> actualCandidates = new TreeSet<>();
                 for (HeatZone zone : Building.INSTANCE.zonesByFurnace(furnace)) {
-                    if (zoneDao.getDesired(zone)) {
+                    if (zoneDao.getOverride(zone) != null) {
+                        ModulationComparator item = new ModulationComparator(zone);
+                        if (zoneDao.getOverride(zone)) {
+                            item.weight = 1000;
+                            actualCandidates.add(item);
+                        }
+                        // Ignore the orverride == false, they are not added to the candidate list
+                    } else if (zoneDao.getDesired(zone)) {
                         ModulationComparator item = new ModulationComparator(zone);
                         if (zoneDao.getActual(zone)) {
                             // reduce point to reduce the chance the zone is active again
@@ -69,18 +76,8 @@ public class ZoneModulation implements Runnable {
 
                         double offset = setpointDAO.get(zone.controllableArea) - temperatureDAO.get(zone.controllableArea);
                         item.weight = item.weight + (int)(offset * 20);
-
-                        if (zoneDao.getOverride(zone) != null) {
-                            item.weight = (zoneDao.getOverride(zone) ? 1000 : -1);
-                        } else {
-                            item.weight = item.weight + new Random().nextInt(100);
-                        }
-
-                        if (item.weight > 0) {
-                            actualCandidates.add(item);
-                        }
-                        
-                        LogstashLogger.INSTANCE.info("Zone " + zone + " has weight: " + item.weight);
+                        item.weight = item.weight + new Random().nextInt(100);
+                        actualCandidates.add(item);
                     }
                 }
 
