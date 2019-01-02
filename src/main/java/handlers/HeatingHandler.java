@@ -67,7 +67,7 @@ public class HeatingHandler extends AbstractHandler {
     /** /valve/valvegroup/sequence/on|off|remove/ */
     void matchValveOverride(String lineIn, PrintWriter out) throws IllegalArgumentException {
         Pattern pattern = Pattern.compile(Pattern.quote("/valve/") + "(.*?)"
-                + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
+                + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(lineIn);
 
         if (matcher.find() && StringUtils.isNumeric(matcher.group(2))) {
