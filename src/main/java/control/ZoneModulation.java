@@ -52,8 +52,9 @@ public class ZoneModulation implements Runnable {
              BookingDAO bookingDAO = new BookingDAO();
              TemperatureDAO temperatureDAO = new TemperatureDAO();
              SetpointDAO setpointDAO = new SetpointDAO()) {
+
             for (Furnace furnace : Furnace.values()) {
-                SortedSet<ModulationComparator> actual = new TreeSet<>();
+                SortedSet<ModulationComparator> actualCandidates = new TreeSet<>();
                 for (HeatZone zone : Building.INSTANCE.zonesByFurnace(furnace)) {
                     if (zoneDao.getDesired(zone)) {
                         ModulationComparator item = new ModulationComparator(zone);
@@ -67,7 +68,7 @@ public class ZoneModulation implements Runnable {
                         }
 
                         double offset = setpointDAO.get(zone.controllableArea) - temperatureDAO.get(zone.controllableArea);
-                        item.weight = item.weight + (int)offset * 20;
+                        item.weight = item.weight + (int)(offset * 20);
 
                         if (zoneDao.getOverride(zone) != null) {
                             item.weight = (zoneDao.getOverride(zone) ? 1000 : -1);
@@ -76,20 +77,22 @@ public class ZoneModulation implements Runnable {
                         }
 
                         if (item.weight > 0) {
-                            actual.add(item);
+                            actualCandidates.add(item);
                         }
                     }
                 }
 
+                // Prepare control switch: first turn off all zones
                 for (HeatZone zone : Building.INSTANCE.zonesByFurnace(furnace)) {
-                    zoneDao.setDefault(zone, false);
+                    zoneDao.setActual(zone, false);
                 }
 
                 int i = 0;
-                for (ModulationComparator actuallyOn : actual) {
+                for (ModulationComparator actuallyOn : actualCandidates) {
                     zoneDao.setActual(actuallyOn.zone, true);
-                    if (++i > 10) {
-                        LogstashLogger.INSTANCE.info("Doing zone modulation, 10 zones of " + actual.size() + " in use");
+                    if (++i > 9) {
+                        LogstashLogger.INSTANCE.info("Doing zone modulation, 10 zones of " + actualCandidates.size()
+                                + " in use for furnace " + furnace);
                         break;
                     }
                 }

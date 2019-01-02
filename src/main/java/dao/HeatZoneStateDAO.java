@@ -28,22 +28,25 @@ public class HeatZoneStateDAO implements Closeable {
     }
 
     public boolean getDesired(HeatZone zone) {
-        if (jedis.exists(zone.group + "." + zone.groupSequence + ".state-desired")) {
-            return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-desired"));
+        String key = zone.group + "." + zone.groupSequence + ".state-desired";
+        if (jedis.exists(key)) {
+            return "T".equals(jedis.get(key));
         }
         return getDefault(zone);
     }
 
     public boolean getActual(HeatZone zone) {
-        return jedis.exists(zone.group + "." + zone.groupSequence + ".state-actual")
-                && "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-actual"));
+        String key = zone.group + "." + zone.groupSequence + ".state-actual";
+        return jedis.exists(key)
+                && "T".equals(jedis.get(key));
     }
 
     public Boolean getOverride(HeatZone zone) {
-        if (!jedis.exists(zone.group + "." + zone.groupSequence + ".state-override")) {
-            return null;
+        String key = zone.group + "." + zone.groupSequence + ".state-override";
+        if (jedis.exists(key)) {
+            return "T".equals(jedis.get(key));
         }
-        return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-override"));
+        return null;
     }
 
     public boolean getDefault(HeatZone zone) {
