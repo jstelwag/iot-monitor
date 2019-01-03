@@ -4,6 +4,7 @@ import building.Building;
 import building.Furnace;
 import building.HeatZone;
 import control.HeatingControl;
+import dao.FurnaceStateDAO;
 import dao.HeatZoneStateDAO;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
@@ -32,22 +33,29 @@ public class FurnaceHandler extends AbstractHandler {
 
         response.setContentType("application/json");
         if (matcher.find()) {
-            String rawFurnace = matcher.group(1);
-            Furnace furnace = Furnace.valueOf(rawFurnace);
+            Furnace furnace = Furnace.valueOf(matcher.group(1));
             LogstashLogger.INSTANCE.info("/furnace request: " + furnace);
 
             int pumpDesire = 0; // TODO refactor this for every pump
-            HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
-            for (HeatZone zone : Building.INSTANCE.zonesByGroup(HeatZone.ValveGroup.koetshuis_kelder)) {
-                if (zoneStates.getActual(zone)) {
-                    pumpDesire++;
+            try (HeatZoneStateDAO zoneStates = new HeatZoneStateDAO()) {
+                for (HeatZone zone : Building.INSTANCE.zonesByGroup(HeatZone.ValveGroup.koetshuis_kelder)) {
+                    if (zoneStates.getActual(zone)) {
+                        pumpDesire++;
+                    }
                 }
             }
-            IOUtils.closeQuietly(zoneStates);
+
+            boolean furnaceState;
+            int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(furnace);
+            try (FurnaceStateDAO furnaceStateDAO = new FurnaceStateDAO()) {
+                if (furnaceStateDAO.getOverride(furnace) != null) {
+                    furnaceState = furnaceStateDAO.getOverride(furnace);
+                } else {
+                    furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(furnace).control(furnaceDesire);
+                }
+            }
 
             response.setStatus(HttpServletResponse.SC_OK);
-            int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(furnace);
-            boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(furnace).control(furnaceDesire);
             if (furnaceState) {
                 response.getWriter().print("{\"furnace\"=\"ON\"");
             } else {
@@ -59,11 +67,15 @@ public class FurnaceHandler extends AbstractHandler {
                 response.getWriter().println(",\"pump\"=\"OFF\"}");
             }
 
-            //TODO, log only when there is a response
+            try (FluxLogger flux = new FluxLogger();
+                 FurnaceStateDAO furnaceStateDAO = new FurnaceStateDAO()) {
 
-            try (FluxLogger flux = new FluxLogger()) {
                 flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceDesire", Integer.toString(furnaceDesire)));
-                flux.message(LineProtocolUtil.protocolLine(furnace, "furnaceState", furnaceState ? "1i" : "0i"));
+                flux.message(LineProtocolUtil.protocolLine(furnace, "stateDesire", furnaceState ? "1i" : "0i"));
+                if (furnaceStateDAO.getOverride(furnace) != null) {
+                    flux.message(LineProtocolUtil.protocolLine(furnace, "stateOverride"
+                            , furnaceStateDAO.getOverride(furnace) ? "1i" : "0i"));
+                }
             }
         } else {
             LogstashLogger.INSTANCE.error("/furnace request: no furnace found " + s);

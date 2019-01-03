@@ -6,7 +6,7 @@ package building;
 public enum Furnace {
     koetshuis_kelder(Building.Construction.koetshuis, 10)
     , kasteel_torenkelder(Building.Construction.kasteel, 8)
-    , kasteel_zolder(Building.Construction.kasteel, 10)
+    , kasteel_zolder(Building.Construction.kasteel, 7)
     , kasteel_kelder(Building.Construction.kasteel, 8);
 
     Furnace(Building.Construction construction, int maxActiveZones) {

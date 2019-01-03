@@ -2,7 +2,9 @@ package handlers;
 
 import building.Building;
 import building.ControllableArea;
+import building.Furnace;
 import building.HeatZone;
+import dao.FurnaceStateDAO;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import org.apache.commons.io.IOUtils;
@@ -23,6 +25,7 @@ import java.util.regex.Pattern;
  * Rest interface for heating:
  * /rest/heating/setpoint/... setting the setpoint manually
  * /rest/heating/valve/... setting individual valves
+ * /rest/heating/furnace/ ... overriding furnaces
  *
  * settings are stored in Redis for a limited time.
  */
@@ -32,7 +35,9 @@ public class HeatingHandler extends AbstractHandler {
             throws IOException, ServletException {
 
         if (s != null && s.startsWith("/valve")) {
-            matchValveOverride(s, response.getWriter());
+            valveOverride(s, response.getWriter());
+        } else if (s != null && s.startsWith("/furnace")) {
+            furnaceOverride(s, response.getWriter());
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LogstashLogger.INSTANCE.warn("Wrong argument at rest " + s);
@@ -65,14 +70,14 @@ public class HeatingHandler extends AbstractHandler {
     }
 
     /** /valve/valvegroup/sequence/on|off|remove/ */
-    void matchValveOverride(String lineIn, PrintWriter out) throws IllegalArgumentException {
+    void valveOverride(String lineIn, PrintWriter out) throws IllegalArgumentException {
         Pattern pattern = Pattern.compile(Pattern.quote("/valve/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(lineIn);
 
         if (matcher.find() && StringUtils.isNumeric(matcher.group(2))) {
             HeatZone.ValveGroup valve = HeatZone.ValveGroup.valueOf(matcher.group(1));
-            LogstashLogger.INSTANCE.info("/rest request for " + valve);
+            LogstashLogger.INSTANCE.info("/rest request for valve " + valve);
             int sequence = Integer.parseInt(matcher.group(2));
             HeatZone zone = Building.INSTANCE.zoneById(valve, sequence);
 
@@ -86,6 +91,36 @@ public class HeatingHandler extends AbstractHandler {
                 } else {
                     stateDAO.removeOverride(zone);
                     out.println("Removed override " + zone);
+                }
+            } catch (IOException e) {
+                LogstashLogger.INSTANCE.error("Can't connect with state dao, " + e.getMessage());
+                out.println("Error: " + e.getMessage());
+            }
+        } else {
+            out.println(lineIn + "?");
+        }
+    }
+
+    /** /furnace/furnace/on|off|remove/ */
+    void furnaceOverride(String lineIn, PrintWriter out) throws IllegalArgumentException {
+        Pattern pattern = Pattern.compile(Pattern.quote("/furnace/") + "(.*?)"
+                + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
+        Matcher matcher = pattern.matcher(lineIn);
+
+        if (matcher.find()) {
+            Furnace furnace = Furnace.valueOf(matcher.group(1));
+            LogstashLogger.INSTANCE.info("/rest request for furnace " + furnace);
+
+            try (FurnaceStateDAO stateDAO = new FurnaceStateDAO()) {
+                if ("on".equals(matcher.group(2))) {
+                    stateDAO.setOverride(furnace, true);
+                    out.println("Override " + furnace + " on");
+                } else if ("off".equals(matcher.group(2))) {
+                    stateDAO.setOverride(furnace, false);
+                    out.println("Override " + furnace + " off");
+                } else {
+                    stateDAO.removeOverride(furnace);
+                    out.println("Removed override " + furnace);
                 }
             } catch (IOException e) {
                 LogstashLogger.INSTANCE.error("Can't connect with state dao, " + e.getMessage());
