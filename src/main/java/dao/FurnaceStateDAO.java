@@ -1,6 +1,5 @@
 package dao;
 
-import building.Building;
 import building.Furnace;
 import building.HeatZone;
 import redis.clients.jedis.Jedis;
@@ -32,7 +31,7 @@ public class FurnaceStateDAO implements Closeable {
     }
 
     public Boolean getOverride(Furnace furnace) {
-        String key = furnace + "." + ".state-override";
+        String key = furnace + ".state-override";
         if (jedis.exists(key)) {
             return "T".equals(jedis.get(key));
         }
@@ -41,16 +40,6 @@ public class FurnaceStateDAO implements Closeable {
 
     public boolean getDefault(HeatZone zone) {
         return "T".equals(jedis.get(zone.group + "." + zone.groupSequence + ".state-default"));
-    }
-
-    public FurnaceStateDAO setDesired(HeatZone zone, boolean state) {
-        jedis.setex(zone.group + "." + zone.groupSequence + ".state-desired", TTL, state ? "T" : "F");
-        return this;
-    }
-
-    public FurnaceStateDAO setActual(HeatZone zone, boolean state) {
-        jedis.setex(zone.group + "." + zone.groupSequence + ".state-actual", TTL_ACTUAL, state ? "T" : "F");
-        return this;
     }
 
     public FurnaceStateDAO setOverride(Furnace furnace, boolean state) {

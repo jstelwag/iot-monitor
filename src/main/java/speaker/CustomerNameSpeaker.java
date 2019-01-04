@@ -16,7 +16,7 @@ public class CustomerNameSpeaker implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Posting bookings to influx");
+        LogstashLogger.INSTANCE.info("Posting bookings to influx");
         try (FluxLogger flux = new FluxLogger(); BookingDAO bookings = new BookingDAO()) {
             for (Room room : Building.INSTANCE.allControllableRooms()) {
                 if (bookings.getNow(room) != null) {

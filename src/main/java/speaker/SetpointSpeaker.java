@@ -25,8 +25,6 @@ public class SetpointSpeaker implements Runnable {
             }
         } catch (UnknownHostException | SocketException e) {
             LogstashLogger.INSTANCE.error("Can't find InfluxDB for SetpointSpeaker " + e.getMessage());
-        } catch (IOException e) {
-            LogstashLogger.INSTANCE.error("Can't connect to Redis " + e.getMessage());
         }
         LogstashLogger.INSTANCE.info("Posted " + count + " setpoints to InfluxDB");
     }
