@@ -34,14 +34,14 @@ public class LineProtocolUtil {
 
     public static String protocolLine(HeatZone zone, String type, String value) {
         StringBuilder retVal = new StringBuilder();
-        retVal.append("valvegroup,name=\"").append(zone.group).append("\"");
-        retVal.append(",furnace=\"").append(zone.group.furnace).append("\"");
+        retVal.append("valvegroup,name=").append(zone.group).append("");
+        retVal.append(",furnace=").append(zone.group.furnace);
         retVal.append(",sequence=").append(zone.groupSequence).append('i');
         if (zone.controllableArea != null) {
-            retVal.append(",room=\"").append(zone.controllableArea).append("\",position=").append(zone.position);
+            retVal.append(",room=").append(zone.controllableArea).append(",position=").append(zone.position);
         }
         if (zone.area != null) {
-                retVal.append(",area=\"").append(escape(zone.area)).append("\"");
+                retVal.append(",area=").append(escape(zone.area)).append("");
         }
 
         retVal.append(' ').append(type).append('=').append(value);
@@ -51,9 +51,9 @@ public class LineProtocolUtil {
 
     public static String protocolLine(HeatZone.ValveGroup group, int sequence, String type, String value) {
         StringBuilder retVal = new StringBuilder();
-        retVal.append("valvegroup,name=\"");
-        retVal.append(group).append("\",sequence=").append(sequence).append('i');
-        retVal.append(",furnace=\"").append(group.furnace).append("\"");
+        retVal.append("valvegroup,name=");
+        retVal.append(group).append(",sequence=").append(sequence).append('i');
+        retVal.append(",furnace=").append(group.furnace).append("");
         retVal.append(' ').append(type).append('=').append(value);
 
         return retVal.toString();
@@ -61,20 +61,18 @@ public class LineProtocolUtil {
 
     public static String protocolLine(ControllableArea controllableArea, String type, String value) {
         StringBuilder retVal = new StringBuilder();
-        retVal.append("room,name=\"").append(controllableArea).append("\"");
-        retVal.append(' ').append(type).append('=').append(value);
+        retVal.append("room,name=").append(controllableArea).append(' ').append(type).append('=').append(value);
 
         return retVal.toString();
     }
 
     public static String protocolLine(Room room, String customer) {
-        return "booking,room=" + room + " customer=\"" + customer.replace("\"", " ") + "\"";
+        return "booking,room=" + room + " customer=" + escape(customer).replace("\"", " ");
     }
 
     public static String protocolLine(Furnace furnace, String type, String value) {
         StringBuilder retVal = new StringBuilder();
-        retVal.append("furnace,name=\"");
-        retVal.append(furnace).append("\" ").append(type).append('=').append(value);
+        retVal.append("furnace,name=").append(furnace).append(" ").append(type).append('=').append(value);
 
         return retVal.toString();
     }
