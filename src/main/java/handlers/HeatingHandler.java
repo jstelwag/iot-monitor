@@ -7,7 +7,6 @@ import building.HeatZone;
 import dao.FurnaceStateDAO;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -38,6 +37,8 @@ public class HeatingHandler extends AbstractHandler {
             valveOverride(s, response.getWriter());
         } else if (s != null && s.startsWith("/furnace")) {
             furnaceOverride(s, response.getWriter());
+        } else if (s != null && s.startsWith("/setpoint")) {
+            roomOverride(s, response.getWriter());
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LogstashLogger.INSTANCE.warn("Wrong argument at rest " + s);
@@ -47,26 +48,32 @@ public class HeatingHandler extends AbstractHandler {
         baseRequest.setHandled(true);
     }
 
-    /** /rest/room/on|off|toggle/ */
-    void matchRoom(String roomText, String lineIn, PrintWriter out) throws IllegalArgumentException {
-        ControllableArea room = ControllableArea.valueOf(roomText);
+    /** /setpoint/room/increase|decrease|remove/ */
+    void roomOverride(String lineIn, PrintWriter out) throws IllegalArgumentException {
         Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
-        Matcher matcher = pattern.matcher(lineIn + "/");
-        SetpointDAO dao = new SetpointDAO();
-        if (matcher.find()) {
-            LogstashLogger.INSTANCE.info("/rest request for " + room);
-            if ("toggle".equals(matcher.group(2))) {
-                dao.setActive(room, !dao.isActive(room));
-                out.println("Toggled room " + room + " to " + dao.isActive(room));
+        Matcher matcher = pattern.matcher(lineIn);
+
+        try (SetpointDAO dao = new SetpointDAO()) {
+            if (matcher.find()) {
+                ControllableArea room = ControllableArea.valueOf(matcher.group(2));
+                LogstashLogger.INSTANCE.info("/rest request for " + room);
+                if ("increase".equals(matcher.group(3))) {
+                    dao.setOverride(room, dao.getActual(room) + 0.5);
+                    out.println(dao.getActual(room));
+                } else if ("increase".equals(matcher.group(3))) {
+                    dao.setOverride(room, dao.getActual(room) - 0.5);
+                    out.println(dao.getActual(room));
+                } else if ("remove".equals(matcher.group(3))) {
+                    dao.removeOverride(room);
+                    out.println(dao.getActual(room));
+                } else {
+                    out.println(lineIn + "?");
+                }
             } else {
-                dao.setActive(room, "on".equals(matcher.group(2)));
-                out.println("Switched room " + room + " " + matcher.group(2));
+                out.println(lineIn + "?");
             }
-        } else {
-            out.println(lineIn + "?");
         }
-        IOUtils.closeQuietly(dao);
     }
 
     /** /valve/valvegroup/sequence/on|off|remove/ */

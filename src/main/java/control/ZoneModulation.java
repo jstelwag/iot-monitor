@@ -74,7 +74,7 @@ public class ZoneModulation implements Runnable {
                             item.weight = item.weight + 50;
                         }
 
-                        double offset = setpointDAO.get(zone.controllableArea) - temperatureDAO.get(zone.controllableArea);
+                        double offset = setpointDAO.getActual(zone.controllableArea) - temperatureDAO.get(zone.controllableArea);
                         item.weight = item.weight + (int)(offset * 20);
                         item.weight = item.weight + new Random().nextInt(100);
                         actualCandidates.add(item);

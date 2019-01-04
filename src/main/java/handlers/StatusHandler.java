@@ -42,7 +42,7 @@ public class StatusHandler extends AbstractHandler {
             JSONObject roomResponse = new JSONObject();
             statusResponse.getJSONArray("rooms").put(roomResponse);
             roomResponse.put("controllableArea", controllableArea);
-            roomResponse.put("setpoint", setpoints.get(controllableArea));
+            roomResponse.put("setpoint", setpoints.getActual(controllableArea));
             roomResponse.put("setpoint-default", setpoints.getDefault(controllableArea));
             roomResponse.put("active", setpoints.isActive(controllableArea));
             roomResponse.put("booking-now", bookings.getNow(controllableArea.room));

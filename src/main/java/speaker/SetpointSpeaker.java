@@ -20,7 +20,7 @@ public class SetpointSpeaker implements Runnable {
         try (FluxLogger flux = new FluxLogger(); SetpointDAO dao = new SetpointDAO()) {
             for (ControllableArea controllableArea : ControllableArea.values()) {
                 flux.message(LineProtocolUtil.protocolLine(controllableArea, "setpoint"
-                        , Double.toString(dao.get(controllableArea))));
+                        , Double.toString(dao.getActual(controllableArea))));
                 count++;
             }
         } catch (UnknownHostException | SocketException e) {

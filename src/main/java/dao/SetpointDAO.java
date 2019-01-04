@@ -5,7 +5,6 @@ import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.Calendar;
 
 /**
@@ -15,6 +14,8 @@ public class SetpointDAO implements Closeable {
     private final Jedis jedis;
 
     private final int TTL_BOOKINGS = 1800;
+    private final int TTL_OVERRIDE = 24 * 60 * 60;
+
     private final double DEFAULT_SETPOINT = 21.0;
     private final double DEFAULT_SETPOINT_BEDROOM = 19.5;
     private final double DEFAULT_SETPOINT_OFF = 12.0;
@@ -30,12 +31,23 @@ public class SetpointDAO implements Closeable {
         return Double.parseDouble(jedis.get(room + ".setpoint-default"));
     }
 
-    public double get(ControllableArea room) {
+    public double getActual(ControllableArea room) {
+        if (jedis.exists(room + ".setpoint-override")) {
+            return timeCorrected(Double.parseDouble(jedis.get(room + ".setpoint-override")));
+        }
         if (isActive(room)) {
             return timeCorrected(getDefault(room));
         }
 
         return DEFAULT_SETPOINT_OFF;
+    }
+
+    public void setOverride(ControllableArea room, double value) {
+        jedis.setex(room + ".setpoint-override", TTL_OVERRIDE, Double.toString(value));
+    }
+
+    public void removeOverride(ControllableArea room) {
+        jedis.del(room + ".setpoint-override");
     }
 
     public SetpointDAO setDefault(ControllableArea room, double value) {

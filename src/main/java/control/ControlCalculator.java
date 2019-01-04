@@ -21,7 +21,7 @@ public class ControlCalculator implements Runnable {
         TemperatureDAO temperatures = new TemperatureDAO();
         HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
         for (ControllableArea controllableArea : ControllableArea.values()) {
-            double setpoint = setpoints.get(controllableArea);
+            double setpoint = setpoints.getActual(controllableArea);
             double roomTemperature = temperatures.get(controllableArea);
 
             for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
