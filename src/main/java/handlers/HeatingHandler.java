@@ -61,7 +61,7 @@ public class HeatingHandler extends AbstractHandler {
                 if ("increase".equals(matcher.group(3))) {
                     dao.setOverride(room, dao.getActual(room) + 0.5);
                     out.println(dao.getActual(room));
-                } else if ("increase".equals(matcher.group(3))) {
+                } else if ("decrease".equals(matcher.group(3))) {
                     dao.setOverride(room, dao.getActual(room) - 0.5);
                     out.println(dao.getActual(room));
                 } else if ("remove".equals(matcher.group(3))) {
