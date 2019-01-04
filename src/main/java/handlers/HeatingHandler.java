@@ -33,6 +33,8 @@ public class HeatingHandler extends AbstractHandler {
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
+        response.setContentType("application/json");
+
         if (s != null && s.startsWith("/valve")) {
             valveOverride(s, response.getWriter());
         } else if (s != null && s.startsWith("/furnace")) {
@@ -60,18 +62,18 @@ public class HeatingHandler extends AbstractHandler {
                 LogstashLogger.INSTANCE.info("/rest request for " + room);
                 if ("increase".equals(matcher.group(3))) {
                     dao.setOverride(room, dao.getActual(room) + 0.5);
-                    out.println(dao.getActual(room));
+                    out.print("{\"setpoint\" : " + dao.getActual(room) + "}");
                 } else if ("decrease".equals(matcher.group(3))) {
                     dao.setOverride(room, dao.getActual(room) - 0.5);
-                    out.println(dao.getActual(room));
+                    out.print("{\"setpoint\" : " + dao.getActual(room) + "}");
                 } else if ("remove".equals(matcher.group(3))) {
                     dao.removeOverride(room);
-                    out.println(dao.getActual(room));
+                    out.print("{\"setpoint\" : " + dao.getActual(room) + "}");
                 } else {
                     out.println(lineIn + "?");
                 }
             } else {
-                out.println(lineIn + "?");
+                out.print(lineIn + "?");
             }
         }
     }
