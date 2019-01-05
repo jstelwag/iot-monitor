@@ -5,6 +5,7 @@ import building.Room;
 import knx.KNXAddress;
 import knx.KNXAddressList;
 import knx.KNXLink;
+import lighting.SwitchLights;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
@@ -23,7 +24,7 @@ import java.util.regex.Pattern;
 
 /**
  * Interfacing to KNX functions of given room. Use case:
- * /room/room-id/[all-off]/
+ * /room/room-id/[all-off|toggle|list]/
  */
 public class KNXRoomHandler extends AbstractHandler {
 
@@ -32,7 +33,7 @@ public class KNXRoomHandler extends AbstractHandler {
             throws IOException, ServletException {
         LogstashLogger.INSTANCE.info("KNX via http request " + s);
         response.setContentType("application/json");
-        Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
+        Pattern pattern = Pattern.compile(Pattern.quote("/room/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
                 + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(s);
         JSONObject knxResponse = new JSONObject();
@@ -40,20 +41,14 @@ public class KNXRoomHandler extends AbstractHandler {
             Room room = Room.valueOf(matcher.group(1));
             switch (matcher.group(2)) {
                 case "all-off":
-                    KNXAddressList knxList = new KNXAddressList();
-                    int switchCount = 0;
-                    Jedis jedis = new Jedis("localhost");
-                    jedis.set(room + ".all.state", "OFF");
-                    for (KNXAddress address : knxList.addressesByRoom(room, KNXAddress.Type.button)) {
-                        try {
-                            KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);
-                            switchCount++;
-                        } catch (KNXException | InterruptedException e) {
-                            LogstashLogger.INSTANCE.error("Failed to switch room " + address + ", " + e.getMessage());
-                        }
-                    }
+                    int switchCount = SwitchLights.allOff(room);
                     knxResponse.put("status", "OK");
-                    knxResponse.put("switches", switchCount);
+                    knxResponse.put("lightCount", switchCount);
+                    break;
+                case "toggle":
+                    switchCount = SwitchLights.toggleLights(room);
+                    knxResponse.put("status", "OK");
+                    knxResponse.put("lightCount", switchCount);
                     break;
                 default:
                     knxResponse.put("error", "Unknown command " + matcher.group(2) + " @" + s);

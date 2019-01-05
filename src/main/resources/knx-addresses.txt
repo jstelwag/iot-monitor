@@ -106,7 +106,7 @@
 1/0/135	button	koetshuis	plein	Buitenlamp bij voordeur
 1/0/136	button	koetshuis	room_e	Woonkamer staande lamp bij keuken/serre
 1/0/137	button	koetshuis	room_e	Eetkamer tafellamp
-1/0/138	button	koetshuis	room_e	Toilet
+1/0/138	button	koetshuis	room_e	Toilet en badkamer kamer f
 1/0/139	button	koetshuis	room_e	Hal spots plafond
 1/0/140	button	koetshuis	room_e	Eetkamer boven tafel
 1/0/141	button	koetshuis	room_f	Badkamer bij wastafel
@@ -123,8 +123,8 @@
 1/0/4	button	koetshuis	apartment_II	Woonkamer spots
 1/0/5	button	koetshuis	room_d	Plafondstraler
 1/0/6	button	koetshuis	room_d	Dakkapel spots
-1/0/8	button	koetshuis	room_f	Woonkamer spots plafond bij TV
-1/0/9	button	koetshuis	room_f	Slaapkamer spots plafond
+1/0/8	button	koetshuis	room_f	Slaapkamer spots plafond
+1/0/9	button	koetshuis	room_f	Woonkamer spots en lamp hal
 1/2/0	dimmer_relative	koetshuis	room_b	Plafonstraler
 1/2/1	dimmer_relative	koetshuis	room_c	Spots uitbouw
 1/2/10	dimmer_relative	koetshuis	room_f	Badkamer spots plafond

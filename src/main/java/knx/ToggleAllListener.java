@@ -1,5 +1,6 @@
 package knx;
 
+import lighting.SwitchLights;
 import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.CloseEvent;
@@ -21,22 +22,9 @@ public class ToggleAllListener implements NetworkLinkListener {
             String event = frameEvent.getFrame().toString();
             KNXAddress knx = addressList.findInString(event);
             if (knx != null && knx.type == KNXAddress.Type.homeserver) {
-                Jedis jedis = new Jedis("localhost");
-
-                boolean desiredState = !"ON".equals(jedis.get(knx.room + ".all.state"));
-                jedis.set(knx.room + ".all.state", desiredState ? "ON" : "OFF");
-                int switchCount = 0;
-                for (KNXAddress address : addressList.addressesByRoom(knx.room, KNXAddress.Type.button)) {
-                    try {
-                        KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), desiredState);
-                        switchCount++;
-                        Thread.sleep(50); //Wait a little to reduce LED switching peaks
-                    } catch (KNXException | InterruptedException e) {
-                        LogstashLogger.INSTANCE.error("Failed to toggle room " + address + ", " + e.getMessage());
-                    }
-                }
+                int switchCount = SwitchLights.toggleLights(knx.room);
                 LogstashLogger.INSTANCE.info("Toggled room " + knx.room + ", switched " + switchCount
-                        + " lights " + (desiredState ? "on" : "off"));
+                        + " lights.");
             }
         } catch (Exception e) {
             LogstashLogger.INSTANCE.error("Caught unexpected exception, " + e.getMessage());

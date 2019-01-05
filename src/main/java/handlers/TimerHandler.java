@@ -1,11 +1,8 @@
 package handlers;
 
-import building.Room;
-import knx.KNXLink;
 import lighting.*;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import speaker.FluxLogger;
 import speaker.LogstashLogger;
 
 import javax.servlet.ServletException;
@@ -14,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import tuwien.auto.calimero.GroupAddress;
 
 /**
  * Created by Jaap on 23-9-2016.
@@ -51,16 +46,16 @@ public class TimerHandler extends AbstractHandler {
                 Schedule schedule = new Schedule();
                 switch (matcher.group(1)) {
                     case "indoorToDawn":
-                        SwitchLights.switchLight(schedule.indoorToDawn, location, onOrOff);
+                        SwitchLights.switchPublicLight(schedule.indoorToDawn, location, onOrOff);
                         break;
                     case "indoorToMidnight":
-                        SwitchLights.switchLight(schedule.indoorToMidnight, location, onOrOff);
+                        SwitchLights.switchPublicLight(schedule.indoorToMidnight, location, onOrOff);
                         break;
                     case "outdoorToDawn":
-                        SwitchLights.switchLight(schedule.outdoorToDawn, location, onOrOff);
+                        SwitchLights.switchPublicLight(schedule.outdoorToDawn, location, onOrOff);
                         break;
                     case "outdoorToMidnight":
-                        SwitchLights.switchLight(schedule.outdoorToMidnight, location, onOrOff);
+                        SwitchLights.switchPublicLight(schedule.outdoorToMidnight, location, onOrOff);
                         break;
                     default:
                         response.getWriter().print("\"status\"=\"ERROR\"");

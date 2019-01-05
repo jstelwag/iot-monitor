@@ -11,11 +11,11 @@ public class DawnTimer implements Runnable {
         Jedis jedis = new Jedis("localhost");
         Schedule schedule = new Schedule();
         if (!"OFF".equals(jedis.get(Location.indoor + ".state")) && new Sun().dawn(5.0)) {
-            SwitchLights.switchLight(schedule.indoorToDawn, Location.indoor, false);
+            SwitchLights.switchPublicLight(schedule.indoorToDawn, Location.indoor, false);
         }
 
         if (!"OFF".equals(jedis.get(Location.outdoor + ".state")) && new Sun().dawn(0.0)) {
-            SwitchLights.switchLight(schedule.outdoorToDawn, Location.outdoor, false);
+            SwitchLights.switchPublicLight(schedule.outdoorToDawn, Location.outdoor, false);
         }
     }
 }
