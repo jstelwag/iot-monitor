@@ -53,6 +53,7 @@ public class FurnaceHandler extends AbstractHandler {
                 } else {
                     furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(furnace).control(furnaceDesire);
                 }
+                furnaceStateDAO.setDesire(furnace, furnaceState);
             }
 
             response.setStatus(HttpServletResponse.SC_OK);
