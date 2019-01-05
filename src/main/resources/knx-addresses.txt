@@ -146,44 +146,15 @@
 1/5/14	climate	koetshuis	room_e	status
 1/5/15	climate	koetshuis	room_e	stelgrootte
 1/5/16	climate	koetshuis	room_e	soll temperatuur
-1/5/2	climate	koetshuis	apartment_II	soll-basis
 1/5/21	climate	koetshuis	room_b	Actueel
-1/5/3	climate	koetshuis	apartment_II	modus
 1/5/31	climate	koetshuis	room_c	Actueel
-1/5/4	climate	koetshuis	apartment_II	status
 1/5/41	climate	koetshuis	room_d	Actueel
-1/5/5	climate	koetshuis	apartment_II	stelgrootte
 1/5/51	climate	koetshuis	room_e	Badkamer actueel
-1/5/6	climate	koetshuis	apartment_II	soll temperatuur
 1/5/61	climate	koetshuis	apartment_II	badkamer actueel
 1/5/70	climate	koetshuis	room_f	Actueel
-1/6/0	window	koetshuis	room_e	raam 1 move
-1/6/1	window	koetshuis	room_e	raam 1 stop
-1/6/2	window	koetshuis	room_e	raam 2 move
-1/6/21	window	koetshuis	apartment_II	raam 1 move
-1/6/22	window	koetshuis	apartment_II	raam 1 stop
-1/6/23	window	koetshuis	apartment_II	raam 2 move
-1/6/24	window	koetshuis	apartment_II	raam 2 stop
-1/6/25	window	koetshuis	apartment_II	raam 3 move
-1/6/26	window	koetshuis	apartment_II	raam 3 stop
-1/6/27	window	koetshuis	apartment_II	raam 4 move
-1/6/28	window	koetshuis	apartment_II	raam 4 stop
-1/6/29	window	koetshuis	apartment_II	ramen move
-1/6/3	window	koetshuis	room_e	raam 2 stop
-1/6/30	window	koetshuis	apartment_II	ramen stop
-1/6/4	window	koetshuis	room_e	raam 3 move
-1/6/5	window	koetshuis	room_e	raam 3 stop
-1/6/6	window	koetshuis	room_e	raam 4 move
-1/6/7	window	koetshuis	room_e	raam 4 stop
-1/6/8	window	koetshuis	room_e	ramen move
-1/6/9	window	koetshuis	room_e	ramen stop
 1/7/0	homeserver	koetshuis	apartment_II	appartement 2
 1/7/1	homeserver	koetshuis	room_b	kamer B (west)
-1/7/101	homeserver	koetshuis	apartment_II	scenes apartement 2
-1/7/102	homeserver	koetshuis	room_b	scenes kamer B
-1/7/103	homeserver	koetshuis	room_c	scenes kamer C
 1/7/104	homeserver	koetshuis	room_e	appartement 3 scenes
-1/7/105	homeserver	koetshuis	room_d	scenes kamer D
 1/7/2	homeserver	koetshuis	room_c	kamer C (oost)
 1/7/3	homeserver	koetshuis	room_d	kamer 3
 1/7/4	homeserver	koetshuis	room_e	appartement 3
