@@ -19,8 +19,7 @@ import java.util.regex.Pattern;
 
 /**
  * Interfacing to KNX functions of given room. Use case:
- * /room-id/[all-off|toggle]/
- * /list/
+ * /room-id/[all-off|toggle]|list/
  */
 public class KNXRoomHandler extends AbstractHandler {
 
@@ -46,28 +45,13 @@ public class KNXRoomHandler extends AbstractHandler {
                     knxResponse.put("status", "OK");
                     knxResponse.put("lightCount", switchCount);
                     break;
+                case "list":
+                    JSONObject roomResponse = lightList(room);
+                    knxResponse.put("status", "OK");
+                    knxResponse.put("knx", roomResponse);
                 default:
                     knxResponse.put("error", "Unknown command " + matcher.group(2) + " @" + s);
                     break;
-            }
-        } else if (s.startsWith("/list")) {
-            pattern = Pattern.compile(Pattern.quote("/list/") + "(.*?)" + Pattern.quote("/"));
-            matcher = pattern.matcher(s);
-            if (matcher.find()) {
-                Room room = Room.valueOf(matcher.group(1));
-                JSONObject roomResponse = new JSONObject();
-                roomResponse.put("name", room);
-                JSONArray lights = new JSONArray();
-                roomResponse.put("lights", lights);
-                for (KNXAddress address :new KNXAddressList().addressesByRoom(room, KNXAddress.Type.button)) {
-                    JSONObject lightResponse = new JSONObject();
-                    lights.put(lightResponse);
-                    lightResponse.put("name", address.description);
-                    lightResponse.put("address", address.address);
-                    lightResponse.put("type", address.type);
-                }
-                knxResponse.put("status", "OK");
-                knxResponse.put("knx", roomResponse);
             }
         } else {
             knxResponse.put("error", "Syntax not recognized for " + s);
@@ -76,5 +60,21 @@ public class KNXRoomHandler extends AbstractHandler {
         response.getWriter().println(knxResponse.toString(4));
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
+    }
+
+    private JSONObject lightList(Room room) {
+        JSONObject retVal = new JSONObject();
+        retVal.put("name", room);
+        JSONArray lights = new JSONArray();
+        retVal.put("lights", lights);
+        for (KNXAddress address :new KNXAddressList().addressesByRoom(room, KNXAddress.Type.button)) {
+            JSONObject lightResponse = new JSONObject();
+            lights.put(lightResponse);
+            lightResponse.put("name", address.description);
+            lightResponse.put("address", address.address);
+            lightResponse.put("type", address.type);
+        }
+
+        return retVal;
     }
 }
