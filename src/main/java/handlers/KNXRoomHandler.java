@@ -24,7 +24,8 @@ import java.util.regex.Pattern;
 
 /**
  * Interfacing to KNX functions of given room. Use case:
- * /room/room-id/[all-off|toggle|list]/
+ * /room/room-id/[all-off|toggle]/
+ * /list/
  */
 public class KNXRoomHandler extends AbstractHandler {
 
@@ -33,8 +34,8 @@ public class KNXRoomHandler extends AbstractHandler {
             throws IOException, ServletException {
         LogstashLogger.INSTANCE.info("KNX via http request " + s);
         response.setContentType("application/json");
-        Pattern pattern = Pattern.compile(Pattern.quote("/room/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
-                + Pattern.quote("/"));
+        Pattern pattern = Pattern.compile(Pattern.quote("/") + "room" + Pattern.quote("/")
+                + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(s);
         JSONObject knxResponse = new JSONObject();
         if (matcher.find()) {
