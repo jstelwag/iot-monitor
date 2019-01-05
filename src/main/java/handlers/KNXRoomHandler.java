@@ -29,7 +29,7 @@ public class KNXRoomHandler extends AbstractHandler {
             throws IOException, ServletException {
         LogstashLogger.INSTANCE.info("KNX via http request " + s);
         response.setContentType("application/json");
-        Pattern pattern = Pattern.compile(Pattern.quote("/") + Pattern.quote("/")
+        Pattern pattern = Pattern.compile(Pattern.quote("/")
                 + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
         Matcher matcher = pattern.matcher(s);
         JSONObject knxResponse = new JSONObject();
