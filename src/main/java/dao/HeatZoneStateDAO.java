@@ -34,7 +34,7 @@ public class HeatZoneStateDAO implements Closeable {
         }
         return getDefault(zone);
     }
-    
+
     public boolean getActual(HeatZone zone) {
         String key = zone.group + "." + zone.groupSequence + ".state-actual";
         return jedis.exists(key) && "T".equals(jedis.get(key));

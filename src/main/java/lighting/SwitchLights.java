@@ -20,7 +20,7 @@ public class SwitchLights {
         int retVal = 0;
         try (Jedis jedis = new Jedis("localhost")) {
             jedis.set(room + ".all.state", "OFF");
-            for (KNXAddress address : addressList.addressesByRoom(room, KNXAddress.Type.button)) {
+            for (KNXAddress address : addressList.addressesByRoom(room, "all")) {
                 try {
                     KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);
                     retVal++;
@@ -41,7 +41,7 @@ public class SwitchLights {
             desiredState = !"ON".equals(jedis.get(room + ".all.state"));
             jedis.set(room + ".all.state", desiredState ? "ON" : "OFF");
 
-            for (KNXAddress address : addressList.addressesByRoom(room, KNXAddress.Type.button)) {
+            for (KNXAddress address : addressList.addressesByRoom(room, "toggle")) {
                 try {
                     KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), desiredState);
                     retVal++;

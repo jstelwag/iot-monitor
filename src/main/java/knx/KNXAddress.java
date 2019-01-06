@@ -11,6 +11,7 @@ public class KNXAddress {
     public final Type type;
     public final Building.Construction construction;
     public final Room room;
+    public final String capabilities;
     public final String description;
 
     public enum Type {
@@ -25,11 +26,13 @@ public class KNXAddress {
         , homeserver
     }
 
-    public KNXAddress(String address, Type type, Building.Construction construction, Room room, String description) {
+    public KNXAddress(String address, Type type, Building.Construction construction, Room room, String cpabilities
+            , String description) {
         this.address = address;
         this.type = type;
         this.construction = construction;
         this.room = room;
+        this.capabilities = cpabilities;
         this.description = description;
     }
 

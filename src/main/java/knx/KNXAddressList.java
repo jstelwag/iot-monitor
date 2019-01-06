@@ -37,7 +37,7 @@ public class KNXAddressList {
                 if (addresses.put(address
                         , new KNXAddress(record.get(0), KNXAddress.Type.valueOf(record.get(1))
                                 , Building.Construction.valueOf(record.get(2))
-                                , Room.valueOf(record.get(3)), record.get(4))) != null) {
+                                , Room.valueOf(record.get(3)), record.get(4), record.get(5))) != null) {
                     LogstashLogger.INSTANCE.error("Duplicate address in knx-addresses.txt " + record.get(0));
                 }
                 if ("0".equals(address.split("/")[1])) {
@@ -45,17 +45,17 @@ public class KNXAddressList {
                     addresses.put(address.replace("/0/", "/1/")
                             , new KNXAddress(record.get(0), KNXAddress.Type.button_status
                                     , Building.Construction.valueOf(record.get(2))
-                                    , Room.valueOf(record.get(3)), record.get(4)));
+                                    , Room.valueOf(record.get(3)), record.get(4), record.get(5)));
                 } else if ("2".equals(address.split("/")[1])) {
                     // dimmer style device. expand
                     addresses.put(address.replace("/2/", "/3/")
                             , new KNXAddress(record.get(0), KNXAddress.Type.dimmer_absolute
                                     , Building.Construction.valueOf(record.get(2))
-                                    , Room.valueOf(record.get(3)), record.get(4)));
+                                    , Room.valueOf(record.get(3)), record.get(4), record.get(5)));
                     addresses.put(address.replace("/2/", "/4/")
                             , new KNXAddress(record.get(0), KNXAddress.Type.dimmer_status
                                     , Building.Construction.valueOf(record.get(2))
-                                    , Room.valueOf(record.get(3)), record.get(4)));
+                                    , Room.valueOf(record.get(3)), record.get(4), record.get(5)));
                 }
             }
         } catch (ArrayIndexOutOfBoundsException | IllegalArgumentException ea) {
@@ -94,6 +94,16 @@ public class KNXAddressList {
         List<KNXAddress> retVal = new ArrayList<>();
         for (KNXAddress address : addresses.values()) {
             if (type == address.type && room == address.room) {
+                retVal.add(address);
+            }
+        }
+        return retVal;
+    }
+
+    public List<KNXAddress> addressesByRoom(Room room, String capability) {
+        List<KNXAddress> retVal = new ArrayList<>();
+        for (KNXAddress address : addresses.values()) {
+            if (address.capabilities.contains(capability) && room == address.room) {
                 retVal.add(address);
             }
         }
