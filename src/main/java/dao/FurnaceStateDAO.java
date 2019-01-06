@@ -1,7 +1,6 @@
 package dao;
 
 import building.Furnace;
-import building.HeatZone;
 import redis.clients.jedis.Jedis;
 
 import java.io.Closeable;

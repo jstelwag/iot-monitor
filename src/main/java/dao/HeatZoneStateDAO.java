@@ -34,19 +34,10 @@ public class HeatZoneStateDAO implements Closeable {
         }
         return getDefault(zone);
     }
-
-    /**
-     * Actual heatzone state: valve state on or off AND if the furnace is on or off
-     * @param zone
-     * @return
-     * @throws IOException
-     */
-    public boolean getActual(HeatZone zone) throws IOException {
+    
+    public boolean getActual(HeatZone zone) {
         String key = zone.group + "." + zone.groupSequence + ".state-actual";
-        try (FurnaceStateDAO furnaceStateDAO = new FurnaceStateDAO()) {
-            return furnaceStateDAO.getDesire(zone.group.furnace) == null
-                    || (jedis.exists(key) && "T".equals(jedis.get(key)));
-        }
+        return jedis.exists(key) && "T".equals(jedis.get(key));
     }
 
     public Boolean getOverride(HeatZone zone) {
