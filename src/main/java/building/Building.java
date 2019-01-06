@@ -133,7 +133,7 @@ public class Building {
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 2, true, ControllableArea.room_2_bathroom, HeatZone.Position.floor, "Floor at shower"));
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 3, true, ControllableArea.room_3_bathroom, HeatZone.Position.floor)); // Very weak - floor at shower also warm
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 4, false, ControllableArea.room_3_bathroom, HeatZone.Position.wall, "Shower"));
-        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 5, false, ControllableArea.room_2_bathroom, HeatZone.Position.wall, "left at entrance"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 5, false, ControllableArea.room_3_bathroom, HeatZone.Position.wall, "Wall separating room 3"));
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 6, true, ControllableArea.room_3_bathroom, HeatZone.Position.wall, "wall separating the hall"));
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_zolder, 7, true, ControllableArea.room_3_bathroom, HeatZone.Position.radiator, "bedroom"));
 
