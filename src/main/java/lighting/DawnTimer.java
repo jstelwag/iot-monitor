@@ -10,7 +10,7 @@ public class DawnTimer implements Runnable {
     public void run() {
         Jedis jedis = new Jedis("localhost");
         Schedule schedule = new Schedule();
-        if (!"OFF".equals(jedis.get(Location.indoor + ".state")) && new Sun().dawn(5.0)) {
+        if (!"OFF".equals(jedis.get(Location.indoor + ".state")) && new Sun().dawn(-5.0)) {
             SwitchLights.switchPublicLight(schedule.indoorToDawn, Location.indoor, false);
         }
 

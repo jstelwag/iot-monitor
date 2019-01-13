@@ -11,8 +11,8 @@ import java.util.GregorianCalendar;
 public class Sun {
 
     private final HeatingProperties prop;
-    private final double DUSK_ZENITH = -85.0;
-    private final double DAWN_ZENTIH = -90.0;
+    private final double DUSK_ZENITH = 85.0;
+    private final double DAWN_ZENTIH = 90.0;
 
     private final double ZENTIH_THRESHOLD = 5.0;
 
