@@ -103,7 +103,7 @@
 1/0/132	button	koetshuis	hall_center	toggle,all	Spots onderaan trap
 1/0/133	button	koetshuis	hall_center	toggle,all	Spots plafond
 1/0/134	button	koetshuis	room_f	toggle,all	Slaapkamer wandlamp zuidmuur
-1/0/135	button	koetshuis	plein	toggle,all	Buitenlamp bij voordeur
+1/0/135	button	koetshuis	outside	toggle,all	Buitenlamp bij voordeur
 1/0/136	button	koetshuis	room_e	toggle,all	Woonkamer staande lamp bij serre
 1/0/137	button	koetshuis	room_e	toggle,all	Eetkamer tafellamp
 1/0/138	button	koetshuis	room_e	all	WC en badkamer kamer f
@@ -114,8 +114,8 @@
 1/0/143	button	koetshuis	room_e	toggle,all	Badkamer hanglamp
 1/0/144	button	koetshuis	room_e	none	Hal spots
 1/0/145	button	koetshuis	room_b	toggle,all	Westmuur links
-1/0/146	button	koetshuis	room_d	toggle,all	WCD a
-1/0/147	button	koetshuis	room_d	toggle,all	WCD b
+1/0/146	button	koetshuis	room_d	toggle,all	Hanglamp
+1/0/147	button	koetshuis	room_d	toggle,all	Staande lamp
 1/0/148	button	koetshuis	hall_center	toggle,all	Verdieping spot trap
 1/0/149	button	koetshuis	room_d	all	Badkamer spots & wastafel
 1/0/2	button	koetshuis	room_c	toggle,all	Plafondstraler
@@ -179,7 +179,7 @@
 2/0/115	button	koetshuis	apartment_I	toggle,all	Muur bij trap rechts
 2/0/116	button	koetshuis	apartment_I	all	WC afzuiging
 2/0/117	button	koetshuis	apartment_I	all	Terras buitenlamp
-2/0/118	button	koetshuis	plein	toggle,all	Buitenlamp voordeur buiten
+2/0/118	button	koetshuis	outside	toggle,all	Buitenlamp voordeur buiten
 2/0/119	button	koetshuis	hall_left	toggle,all	Hal plafond
 2/0/120	button	koetshuis	room_a	toggle,all	Bed midden
 2/0/121	button	koetshuis	room_a	toggle,all	Slaapkamer staande lamp
@@ -205,11 +205,11 @@
 2/5/18	climate	koetshuis	room_a	none	verschuiving gewenst
 2/7/1	homeserver	koetshuis	apartment_I	none	Alles aan/uit
 2/7/2	homeserver	koetshuis	room_a	none	Alles aan/uit
-3/0/101	button	koetshuis	plein	toggle,all	Buitenlamp wasruimte poort
-3/0/102	button	koetshuis	plein	toggle,all	Buitenlamp wasruimte links
+3/0/101	button	koetshuis	outside	toggle,all	Buitenlamp wasruimte poort
+3/0/102	button	koetshuis	outside	toggle,all	Buitenlamp wasruimte links
 3/0/103	button	koetshuis	laundry	toggle,all	TL schuur
-3/0/104	button	koetshuis	plein	toggle,all	Buitenlamp plataan entree
-3/0/105	button	koetshuis	plein	toggle,all	Buitenlamp wasruimte rechts
+3/0/104	button	koetshuis	outside	toggle,all	Buitenlamp plataan entree
+3/0/105	button	koetshuis	outside	toggle,all	Buitenlamp wasruimte rechts
 3/0/106	button	garden	yet_unknown	toggle,all	Buitenlamp lindeboom
 4/0/1	button	kasteel	room_1	toggle,all	Gang wand
 4/0/101	button	kasteel	room_1	toggle,all	Badkamer lampen
@@ -218,7 +218,7 @@
 4/0/104	button	kasteel	room_1	toggle,all	Bed links
 4/0/105	button	kasteel	room_1	toggle,all	Bed rechts
 4/0/106	button	kasteel	room_1	all	Slaapkamer afzuiging
-4/0/107	button	kasteel	plein	toggle,all	Buitenlamp voordeur
+4/0/107	button	kasteel	outside	toggle,all	Buitenlamp voordeur
 4/0/108	button	kasteel	room_1	toggle,all	Staande lamp 1
 4/0/109	button	kasteel	room_1	toggle,all	Staande lamp 2
 4/0/2	button	kasteel	room_1	toggle,all	Vloerspots

@@ -18,7 +18,7 @@ public enum Room {
     , laundry(Building.Construction.koetshuis, 0)
     , hall_left(Building.Construction.koetshuis, 0)
     , hall_center(Building.Construction.koetshuis, 0)
-    , plein(Building.Construction.koetshuis, 0)
+    , outside(Building.Construction.koetshuis, 0)
     , hall(Building.Construction.kasteel, 0)
     , hall_toilet(Building.Construction.kasteel, 0)
     , office(Building.Construction.kasteel, 0)
