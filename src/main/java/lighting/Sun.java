@@ -3,6 +3,7 @@ package lighting;
 import net.e175.klaus.solarpositioning.AzimuthZenithAngle;
 import net.e175.klaus.solarpositioning.DeltaT;
 import net.e175.klaus.solarpositioning.SPA;
+import speaker.LogstashLogger;
 import util.HeatingProperties;
 
 import java.util.GregorianCalendar;
@@ -11,7 +12,7 @@ public class Sun {
 
     private final HeatingProperties prop;
     private final double DUSK_ZENITH = -85.0;
-    private final double DAWN_ZENTIH = -95.0;
+    private final double DAWN_ZENTIH = -90.0;
 
     private final double ZENTIH_THRESHOLD = 5.0;
 
@@ -32,6 +33,9 @@ public class Sun {
 
     public boolean dusk(double bias) {
         AzimuthZenithAngle position = position();
+        LogstashLogger.INSTANCE.info("Test zenith " + position.getZenithAngle() + " / "
+                + (position.getZenithAngle() < (DUSK_ZENITH + bias)
+                && position.getZenithAngle() > (DUSK_ZENITH - ZENTIH_THRESHOLD + bias)));
         return position.getZenithAngle() < (DUSK_ZENITH + bias)
                 && position.getZenithAngle() > (DUSK_ZENITH - ZENTIH_THRESHOLD + bias);
     }

@@ -11,7 +11,7 @@ HOME=/home/jaap
 * * * * * curl localhost:8000/knxtemperatures/
 * * * * * curl localhost:8000/p1/
 */5 * * * * curl localhost:8000/timer/
-5 0 * * * curl localhost:8000/timer/midnight
+5 0 * * * curl localhost:8000/timer/midnight/
 * * * * * iot-runtime control >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime statespeaker >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime fluxtemperatures >> $HOME/runtime.log 2>&1

@@ -3,12 +3,14 @@ package handlers;
 import lighting.*;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.json.JSONObject;
 import speaker.LogstashLogger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,9 +25,13 @@ public class TimerHandler extends AbstractHandler {
 
         response.setContentType("application/json");
 
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("time", new Date());
+
         if (s != null && s.contains("midnight")) {
             try {
                 new MidnightTimer().run();
+                jsonResponse.put("midnight-timer", "OK");
                 response.getWriter().print("{\"midnighttimer\"=\"OK\"}");
             } catch (Exception e) {
                 LogstashLogger.INSTANCE.error("Failed with MidnightTimer " + e.getMessage());
