@@ -12,6 +12,7 @@ HOME=/home/jaap
 * * * * * curl localhost:8000/p1/
 */5 * * * * curl localhost:8000/timer/
 5 0 * * * curl localhost:8000/timer/midnight/
+30 7 * * * curl localhost:8000/timer/winter-morning/
 * * * * * iot-runtime control >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime statespeaker >> $HOME/runtime.log 2>&1
 * * * * * iot-runtime fluxtemperatures >> $HOME/runtime.log 2>&1

@@ -32,11 +32,14 @@ public class TimerHandler extends AbstractHandler {
             try {
                 new MidnightTimer().run();
                 jsonResponse.put("midnight-timer", "OK");
-                response.getWriter().print("{\"midnighttimer\"=\"OK\"}");
             } catch (Exception e) {
                 LogstashLogger.INSTANCE.error("Failed with MidnightTimer " + e.getMessage());
-                response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
+                jsonResponse.put("midnight-timer", "ERROR");
+                jsonResponse.put("error", e.getMessage());
             }
+        } else if (s != null && s.contains("winter-morning")) {
+            new WinterMorningTimer().run();
+            jsonResponse.put("winter-morning-timer", "OK");
         } else if (s != null && s.contains("manual")) {
             LogstashLogger.INSTANCE.info("Manual public light switch request: " + s);
             // /timer/manual/listname/location(indoor|outdoor)/on|off/
@@ -46,51 +49,59 @@ public class TimerHandler extends AbstractHandler {
             if (matcher.find()) {
                 boolean onOrOff = "on".equalsIgnoreCase(matcher.group(3));
                 Schedule.Location location = Schedule.Location.valueOf(matcher.group(2));
-                response.getWriter().print("{\"manual\"=\"" + matcher.group(1) + "\"");
-                response.getWriter().print(", \"switch\"=" + matcher.group(3) + "\"");
-                response.getWriter().print(", \"location\"=\"" + location + "\"");
+                jsonResponse.put("manual", matcher.group(1));
+                jsonResponse.put("switch", matcher.group(3));
+                jsonResponse.put("lights", onOrOff ? "on" : "off");
+                jsonResponse.put("location", location);
+
                 Schedule schedule = new Schedule();
                 switch (matcher.group(1)) {
                     case "indoorToDawn":
                         SwitchLights.switchPublicLight(schedule.indoorToDawn, location, onOrOff);
+                        jsonResponse.put("status", "OK");
                         break;
                     case "indoorToMidnight":
                         SwitchLights.switchPublicLight(schedule.indoorToMidnight, location, onOrOff);
+                        jsonResponse.put("status", "OK");
                         break;
                     case "outdoorToDawn":
                         SwitchLights.switchPublicLight(schedule.outdoorToDawn, location, onOrOff);
+                        jsonResponse.put("status", "OK");
                         break;
                     case "outdoorToMidnight":
                         SwitchLights.switchPublicLight(schedule.outdoorToMidnight, location, onOrOff);
+                        jsonResponse.put("status", "OK");
                         break;
                     default:
-                        response.getWriter().print("\"status\"=\"ERROR\"");
+                        jsonResponse.put("status", "ERROR");
+                        jsonResponse.put("error", "Unknown action " + matcher.group(1));
                 }
-                response.getWriter().print("}");
             } else {
+                jsonResponse.put("status", "ERROR");
+                jsonResponse.put("error", "Request not recognized " + s);
                 LogstashLogger.INSTANCE.warn("Unrecognized manual light request: " + s);
             }
         } else {
-            response.getWriter().print("[");
             try {
                 new DawnTimer().run();
-                response.getWriter().print("{\"dawntimer\"=\"OK\"}");
+                jsonResponse.put("dawn-timer", "OK");
             } catch (Exception e) {
                 LogstashLogger.INSTANCE.error("Failed with DawnTimer " + e.getMessage());
-                response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
+                jsonResponse.put("dawn-timer", "ERROR");
+                jsonResponse.put("error", e.getMessage());
             }
-            response.getWriter().print(",");
 
             try {
                 new DuskTimer().run();
-                response.getWriter().print("{\"dusktimer\"=\"OK\"}");
+                jsonResponse.put("dusk-timer", "OK");
             } catch (Exception e) {
                 LogstashLogger.INSTANCE.error("Failed with DuskTimer " + e.getMessage());
-                response.getWriter().print("{\"dawntimer\"=\"ERROR\"}");
+                jsonResponse.put("dusk-timer", "ERROR");
+                jsonResponse.put("error", e.getMessage());
             }
-            response.getWriter().println("]");
         }
 
+        response.getWriter().print(jsonResponse.toString());
         baseRequest.setHandled(true);
     }
 }

@@ -45,4 +45,9 @@ public class Sun {
         return position.getZenithAngle() > (DAWN_ZENTIH + bias)
                 && position.getZenithAngle() < (DAWN_ZENTIH + ZENTIH_THRESHOLD + bias);
     }
+
+    public boolean down(double bias) {
+        AzimuthZenithAngle position = position();
+        return position.getZenithAngle() > (DAWN_ZENTIH + bias);
+    }
 }
