@@ -34,16 +34,16 @@ public class Sun {
     public boolean dusk(double bias) {
         AzimuthZenithAngle position = position();
         LogstashLogger.INSTANCE.info("Test zenith " + position.getZenithAngle() + " / "
-                + (position.getZenithAngle() < (DUSK_ZENITH + bias)
-                && position.getZenithAngle() > (DUSK_ZENITH - ZENTIH_THRESHOLD + bias)));
-        return position.getZenithAngle() < (DUSK_ZENITH + bias)
-                && position.getZenithAngle() > (DUSK_ZENITH - ZENTIH_THRESHOLD + bias);
+                + (position.getZenithAngle() > (DUSK_ZENITH + bias)
+                && position.getZenithAngle() < (DUSK_ZENITH + ZENTIH_THRESHOLD + bias)));
+        return position.getZenithAngle() > (DUSK_ZENITH + bias)
+                && position.getZenithAngle() < (DUSK_ZENITH + ZENTIH_THRESHOLD + bias);
     }
 
     public boolean dawn(double bias) {
         AzimuthZenithAngle position = position();
-        return position.getZenithAngle() > (DAWN_ZENTIH + bias)
-                && position.getZenithAngle() < (DAWN_ZENTIH + ZENTIH_THRESHOLD + bias);
+        return position.getZenithAngle() < (DAWN_ZENTIH + bias)
+                && position.getZenithAngle() > (DAWN_ZENTIH - ZENTIH_THRESHOLD + bias);
     }
 
     public boolean down(double bias) {

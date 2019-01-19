@@ -5,7 +5,6 @@ import redis.clients.jedis.Jedis;
 
 public class DawnTimer implements Runnable {
 
-
     @Override
     public void run() {
         Jedis jedis = new Jedis("localhost");
