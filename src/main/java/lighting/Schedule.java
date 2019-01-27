@@ -42,10 +42,6 @@ public class Schedule {
 
         // 1/0/108	button	koetshuis	hall_coachhouse	Spots op verdieping
         alwaysOn.add("1/0/108");
-        // 1/0/132	button	koetshuis	hall_coachhouse	Spots onderaan trap
-        indoorToDawn.add("1/0/132");
-        // 1/0/133	button	koetshuis	hall_coachhouse	Spots plafond
-        indoorToDawn.add("1/0/133");
         // 1/0/139	button	koetshuis	room_e	Hal spots plafond
         indoorToMidnight.add("1/0/139");
         // 1/0/144	button	koetshuis	hall_coachhouse	toggle,all	Spots onderaan trap centrale hal
@@ -60,7 +56,6 @@ public class Schedule {
         indoorToMidnight.add("5/0/101");
         // 5/0/103	button	kasteel	hall_toilet	Lamp WC
         indoorToMidnight.add("5/0/103");
-
     }
 }
 

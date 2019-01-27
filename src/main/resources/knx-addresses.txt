@@ -103,7 +103,7 @@
 1/0/132	button	koetshuis	hall_coachhouse	toggle,all	Onbekend
 1/0/133	button	koetshuis	hall_coachhouse	toggle,all	Onbekend
 1/0/134	button	koetshuis	room_f	toggle,all	Slaapkamer wandlamp zuidmuur
-1/0/135	button	koetshuis	outside	toggle,all	Buitenlamp bij voordeur links
+1/0/135	button	koetshuis	outside	toggle,all	Buitenlamp voordeur links
 1/0/136	button	koetshuis	room_e	toggle,all	Woonkamer staande lamp bij serre
 1/0/137	button	koetshuis	room_e	toggle,all	Eetkamer tafellamp
 1/0/138	button	koetshuis	room_e	all	WC en badkamer kamer f

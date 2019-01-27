@@ -25,7 +25,8 @@ public class SwitchLights {
                     KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);
                     retVal++;
                 } catch (KNXException | InterruptedException e) {
-                    LogstashLogger.INSTANCE.error("Failed to switch room " + address + ", " + e.getMessage());
+                    LogstashLogger.INSTANCE.error("Failed to switch room " + room
+                            + "@" + address + ", " + e.getMessage());
                 }
             }
         }
@@ -47,7 +48,7 @@ public class SwitchLights {
                     retVal++;
                     Thread.sleep(50); //Wait a little to reduce LED switching peaks
                 } catch (KNXException | InterruptedException e) {
-                    LogstashLogger.INSTANCE.error("Failed to toggle room " + address + ", " + e.getMessage());
+                    LogstashLogger.INSTANCE.error("Failed to toggle room " + room + " @" + address + ", " + e.getMessage());
                 }
             }
         }
@@ -61,11 +62,13 @@ public class SwitchLights {
         try (Jedis jedis = new Jedis("localhost")) {
             jedis.set(location + ".state", onOrOff ? "ON" : "OFF");
             for (String address : lights) {
-                KNXLink.getInstance().writeBoolean(new GroupAddress(address), onOrOff);
-                Thread.sleep(100);
+                try {
+                    KNXLink.getInstance().writeBoolean(new GroupAddress(address), onOrOff);
+                    Thread.sleep(100);
+                } catch (KNXException | InterruptedException e) {
+                    LogstashLogger.INSTANCE.error("KNX switching problem @" + location + ", " + e.getMessage());
+                }
             }
-        } catch (KNXException | InterruptedException e) {
-            LogstashLogger.INSTANCE.error("KNX switching problem @" + location + ", " + e.getMessage());
         }
     }
 }
