@@ -18,7 +18,7 @@ import java.util.*;
 
 public class Beds24BookingRetriever implements Runnable {
 
-    final JSONObject request = new JSONObject();
+    private final JSONObject request = new JSONObject();
 
     public Beds24BookingRetriever(String apiKey, String propertyKey) {
         request.put("arrivalTo", FastDateFormat.getInstance("yyyyMMdd").format(DateUtils.addDays(new Date(), 2)));
@@ -79,9 +79,6 @@ public class Beds24BookingRetriever implements Runnable {
                     bookings.setTomorrow(room, null);
                 }
             }
-            //todo remove this
-            bookings.setNow(Room.room_3, "Lynn, Anna en Jaap");
-            bookings.setTonight(Room.room_3, "Lynn, Anna en Jaap");
             LogstashLogger.INSTANCE.info("Retrieved " + response.length() + " bookings");
         } catch (IOException | ParseException e) {
             LogstashLogger.INSTANCE.error("Unexpected response from beds24: " + responseBody);
