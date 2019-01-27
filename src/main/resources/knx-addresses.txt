@@ -118,6 +118,7 @@
 1/0/147	button	koetshuis	room_d	toggle,all	Staande lamp
 1/0/148	button	koetshuis	hall_coachhouse	toggle,all	Spots centrale trap
 1/0/149	button	koetshuis	room_d	all	Badkamer spots & wastafel
+1/0/150	button	koetshuis	room_e	all	Wastafel lamp
 1/0/2	button	koetshuis	room_c	toggle,all	Plafondstraler
 1/0/3	button	koetshuis	apartment_II	toggle,all	Slaap- & badkamer spots
 1/0/4	button	koetshuis	apartment_II	toggle,all	Woonkamer spots
@@ -237,6 +238,7 @@
 5/0/101	button	kasteel	office	toggle,all	Staande lamp
 5/0/102	button	kasteel	office	toggle,all	Staande lamp
 5/0/103	button	kasteel	hall_toilet	toggle,all	Lamp WC
+5/0/201	button	kasteel	office	none	Alle WCD's
 5/2/1	dimmer_relative	kasteel	office	none	Dimmer wandlampen
 5/5/1	climate	kasteel	office	none	actueel
 5/5/2	climate	kasteel	hall_castle	none	actueel

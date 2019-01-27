@@ -12,7 +12,7 @@ public enum Room {
     , room_d(Building.Construction.koetshuis, 20638)
     , room_e(Building.Construction.koetshuis, 109276)
     , room_f(Building.Construction.koetshuis, 109281)
-    , room_1(Building.Construction.kasteel, 23102)
+    , room_1(Building.Construction.kasteel, 0)
     , room_2(Building.Construction.kasteel, 22164)
     , room_3(Building.Construction.kasteel, 0)
     , laundry(Building.Construction.koetshuis, 0)
