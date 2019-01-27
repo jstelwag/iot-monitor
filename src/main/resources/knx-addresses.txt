@@ -233,7 +233,9 @@
 4/5/7	climate	kasteel	room_1	none	verschuiving actueel
 4/5/8	climate	kasteel	room_1	none	verschuiving gewenst
 4/7/0	homeserver	kasteel	room_1	none	centraal
-5/0/1	button	kasteel	office	toggle,all	Staande lamp
+5/0/1	button	kasteel	office	toggle,all	Wandlampen
+5/0/101	button	kasteel	office	toggle,all	Staande lamp
+5/0/102	button	kasteel	office	toggle,all  Staande lamp
 5/0/103	button	kasteel	hall_toilet	toggle,all	Lamp WC
 5/2/1	dimmer_relative	kasteel	office	none	Dimmer wandlampen
 5/5/1	climate	kasteel	office	none	actueel

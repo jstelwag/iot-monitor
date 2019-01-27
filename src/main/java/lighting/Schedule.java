@@ -56,8 +56,8 @@ public class Schedule {
         indoorToDawn.add("2/0/109");
         // 2/0/119	button	koetshuis	hall_coachhouse	Hal plafond
         indoorToDawn.add("2/0/119");
-        // 5/0/1	button	kasteel	office	Staande lamp
-        indoorToMidnight.add("5/0/1");
+        // 5/0/101	button	kasteel	office	toggle,all	Staande lamp
+        indoorToMidnight.add("5/0/101");
         // 5/0/103	button	kasteel	hall_toilet	Lamp WC
         indoorToMidnight.add("5/0/103");
 
