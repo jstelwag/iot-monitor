@@ -48,8 +48,8 @@ public class Schedule {
         indoorToDawn.add("1/0/133");
         // 1/0/139	button	koetshuis	room_e	Hal spots plafond
         indoorToMidnight.add("1/0/139");
-        // 1/0/144	button	koetshuis	room_e	Hal spots
-        indoorToMidnight.add("1/0/144");
+        // 1/0/144	button	koetshuis	hall_coachhouse	toggle,all	Spots onderaan trap centrale hal
+        indoorToDawn.add("1/0/144");
         // 1/0/148	button	koetshuis	hall_coachhouse	Verdieping spot trap
         indoorToDawn.add("1/0/148");
         // 2/0/109	button	koetshuis	hall_coachhouse	Spots plafond trap

@@ -100,8 +100,8 @@
 1/0/13	button	koetshuis	apartment_II	toggle,all	Serre spots
 1/0/130	button	koetshuis	apartment_II	toggle,all	Serre muurlamp
 1/0/131	button	koetshuis	apartment_II	toggle,all	Woonkamer tafellamp TV
-1/0/132	button	koetshuis	hall_coachhouse	toggle,all	Spots onderaan trap centrale hal
-1/0/133	button	koetshuis	hall_coachhouse	toggle,all	Spots plafond centrale ingang
+1/0/132	button	koetshuis	hall_coachhouse	toggle,all	Onbekend
+1/0/133	button	koetshuis	hall_coachhouse	toggle,all	Onbekend
 1/0/134	button	koetshuis	room_f	toggle,all	Slaapkamer wandlamp zuidmuur
 1/0/135	button	koetshuis	outside	toggle,all	Buitenlamp bij voordeur links
 1/0/136	button	koetshuis	room_e	toggle,all	Woonkamer staande lamp bij serre
@@ -112,7 +112,7 @@
 1/0/141	button	koetshuis	room_f	toggle,all	Badkamer bij wastafel
 1/0/142	button	koetshuis	room_e	all	WC lamp
 1/0/143	button	koetshuis	room_e	toggle,all	Badkamer hanglamp
-1/0/144	button	koetshuis	room_e	none	Hal spots
+1/0/144	button	koetshuis	hall_coachhouse	toggle,all	Spots onderaan trap centrale hal
 1/0/145	button	koetshuis	room_b	toggle,all	Westmuur links
 1/0/146	button	koetshuis	room_d	toggle,all	Hanglamp
 1/0/147	button	koetshuis	room_d	toggle,all	Staande lamp
