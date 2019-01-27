@@ -19,11 +19,11 @@ public class Schedule {
     public Schedule() {
         // ================= Outdoor
 
-        // 1/0/135	button	koetshuis	plein	Buitenlamp bij voordeur
+        // 1/0/135	button	koetshuis	plein	Buitenlamp bij kelder
         outdoorToDawn.add("1/0/135");
-        // 2/0/117	button	koetshuis	apartment_I	Terras buitenlamp
+        // 2/0/117	button	koetshuis	apartment_I	all	Terras buitenlamp
         outdoorToMidnight.add("2/0/117");
-        // 2/0/118	button	koetshuis	plein	Buitenlamp voordeur buiten
+        // 2/0/118	button	koetshuis	plein	Buitenlamp voordeur rechts
         outdoorToDawn.add("2/0/118");
         // 3/0/105	button	koetshuis	plein	Buitenlamp wasruimte rechts
         outdoorToMidnight.add("3/0/105");
@@ -31,10 +31,12 @@ public class Schedule {
         outdoorToMidnight.add("3/0/104");
         // 3/0/102	button	koetshuis	plein	Buitenlamp wasruimte links
         outdoorToMidnight.add("3/0/102");
-        // 3/0/101	button	koetshuis	plein	Buitenlamp wasruimte poort
+        // 3/0/101	button	koetshuis	plein	Buitenlamp muur plein
         outdoorToDawn.add("3/0/101");
-        // 3/0/106	button	garden	yet_unknown	koetshuis, buitenlamp lindeboom
+        // 3/0/106	button	garden	yet_unknown	kasteel, buitenlamp lindeboom
         outdoorToMidnight.add("3/0/106");
+        // 4/0/107	button	kasteel	outside	toggle,all	Buitenlamp kelder
+        outdoorToDawn.add("4/0/107");
 
         // ================= Indoor
 
