@@ -25,10 +25,9 @@ public class KNXAddressList {
 
     public KNXAddressList() {
         ClassLoader classLoader = getClass().getClassLoader();
-        Reader in = null;
         int lineNumber = 0;
-        try {
-            in = new InputStreamReader(classLoader.getResourceAsStream("knx-addresses.txt"));
+        try (Reader in = new InputStreamReader(
+                classLoader.getResourceAsStream("knx-addresses.txt"))) {
             Iterable<CSVRecord> records = CSVFormat.TDF.parse(in);
             for (CSVRecord record : records) {
                 lineNumber++;
@@ -63,8 +62,6 @@ public class KNXAddressList {
             throw ea;
         } catch (IOException e) {
             LogstashLogger.INSTANCE.error("Did not open knx-addresses.txt " + e.getMessage());
-        } finally {
-            IOUtils.closeQuietly(in);
         }
     }
 
