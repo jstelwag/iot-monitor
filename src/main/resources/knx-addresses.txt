@@ -73,7 +73,7 @@
 1/0/104	button	koetshuis	room_b	toggle,all	Bedlamp rechts
 1/0/105	button	koetshuis	room_b	toggle,all	Bedlamp links
 1/0/107	button	koetshuis	room_b	toggle,all	Spiegel douche
-1/0/108	button	koetshuis	hall_coachhouse	toggle,all	Spots op verdieping
+1/0/108	button	koetshuis	hall_coachhouse	toggle,all	Spots op verdieping centrale hal
 1/0/109	button	koetshuis	room_b	toggle,all	Tafellamp zithoek
 1/0/11	button	koetshuis	room_b	toggle,all	Spots raam
 1/0/110	button	koetshuis	room_b	toggle,all	Wandlamp douche
@@ -100,8 +100,8 @@
 1/0/13	button	koetshuis	apartment_II	toggle,all	Serre spots
 1/0/130	button	koetshuis	apartment_II	toggle,all	Serre muurlamp
 1/0/131	button	koetshuis	apartment_II	toggle,all	Woonkamer tafellamp TV
-1/0/132	button	koetshuis	hall_coachhouse	toggle,all	Spots onderaan trap
-1/0/133	button	koetshuis	hall_coachhouse	toggle,all	Spots plafond
+1/0/132	button	koetshuis	hall_coachhouse	toggle,all	Spots onderaan trap centrale hal
+1/0/133	button	koetshuis	hall_coachhouse	toggle,all	Spots plafond centrale ingang
 1/0/134	button	koetshuis	room_f	toggle,all	Slaapkamer wandlamp zuidmuur
 1/0/135	button	koetshuis	outside	toggle,all	Buitenlamp bij voordeur
 1/0/136	button	koetshuis	room_e	toggle,all	Woonkamer staande lamp bij serre
@@ -116,7 +116,7 @@
 1/0/145	button	koetshuis	room_b	toggle,all	Westmuur links
 1/0/146	button	koetshuis	room_d	toggle,all	Hanglamp
 1/0/147	button	koetshuis	room_d	toggle,all	Staande lamp
-1/0/148	button	koetshuis	hall_coachhouse	toggle,all	Verdieping spot trap
+1/0/148	button	koetshuis	hall_coachhouse	toggle,all	Verdieping spot centrale trap
 1/0/149	button	koetshuis	room_d	all	Badkamer spots & wastafel
 1/0/2	button	koetshuis	room_c	toggle,all	Plafondstraler
 1/0/3	button	koetshuis	apartment_II	toggle,all	Slaap- & badkamer spots
@@ -170,7 +170,7 @@
 2/0/106	button	koetshuis	apartment_I	toggle,all	Woonkamer spots muur oost
 2/0/107	button	koetshuis	room_a	all	WC
 2/0/108	button	koetshuis	apartment_I	toggle,all	Slaapkamer plafond
-2/0/109	button	koetshuis	hall_coachhouse	toggle,all	Spots plafond trap
+2/0/109	button	koetshuis	hall_coachhouse	toggle,all	Spots plafond trap links
 2/0/110	button	koetshuis	room_a	all	WC afzuiging
 2/0/111	button	koetshuis	room_a	toggle,all	Zithoek staande lamp
 2/0/112	button	koetshuis	room_a	toggle,all	Bed links
@@ -180,7 +180,7 @@
 2/0/116	button	koetshuis	apartment_I	all	WC afzuiging
 2/0/117	button	koetshuis	apartment_I	all	Terras buitenlamp
 2/0/118	button	koetshuis	outside	toggle,all	Buitenlamp voordeur buiten
-2/0/119	button	koetshuis	hall_coachhouse	toggle,all	Hal plafond
+2/0/119	button	koetshuis	hall_coachhouse	toggle,all	Plafondlamp hal links
 2/0/120	button	koetshuis	room_a	toggle,all	Bed midden
 2/0/121	button	koetshuis	room_a	toggle,all	Slaapkamer staande lamp
 2/0/122	button	koetshuis	room_a	toggle,all	Zithoek tafellamp

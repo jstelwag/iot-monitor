@@ -58,6 +58,9 @@ public class Sun {
 
     public boolean down(double bias) {
         AzimuthZenithAngle position = position();
-        return position.getZenithAngle() > (DAWN_ZENITH + bias);
+        boolean retVal = position.getZenithAngle() > (DAWN_ZENITH + bias);
+        LogstashLogger.INSTANCE.info("Down check, bias: " + bias + ", zenith: " + position.getZenithAngle()
+                + ", result: " + retVal);
+        return retVal;
     }
 }
