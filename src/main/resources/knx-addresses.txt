@@ -102,10 +102,10 @@
 1/0/131	button	koetshuis	apartment_II	toggle,all	Woonkamer tafellamp TV
 1/0/132	button	koetshuis	hall_coachhouse	toggle,all	Onbekend
 1/0/133	button	koetshuis	hall_coachhouse	toggle,all	Onbekend
-1/0/134	button	koetshuis	room_f	toggle,all	Slaapkamer wandlamp zuidmuur
+1/0/134	button	koetshuis	room_f	toggle,all	Slaapkamer staande lamp
 1/0/135	button	koetshuis	outside	toggle,all	Buitenlamp voordeur links
 1/0/136	button	koetshuis	room_e	toggle,all	Woonkamer staande lamp bij serre
-1/0/137	button	koetshuis	room_e	toggle,all	Eetkamer tafellamp
+1/0/137	button	koetshuis	room_e	toggle,all	Bedlampen
 1/0/138	button	koetshuis	room_e	all	WC en badkamer kamer f
 1/0/139	button	koetshuis	room_e	toggle,all	Hal spots plafond
 1/0/140	button	koetshuis	room_e	toggle,all	Lamp boven bed
@@ -125,7 +125,7 @@
 1/0/5	button	koetshuis	room_d	toggle,all	Plafondstraler
 1/0/6	button	koetshuis	room_d	toggle,all	Dakkapel spots
 1/0/8	button	koetshuis	room_f	toggle,all	Slaapkamer spots
-1/0/9	button	koetshuis	room_f	toggle,all	Woonkamer spots en lamp hal
+1/0/9	button	koetshuis	room_f	toggle,all	Woonkamer spots en hal
 1/2/0	dimmer_relative	koetshuis	room_b	none	Plafonstraler
 1/2/1	dimmer_relative	koetshuis	room_c	none	Spots raam
 1/2/10	dimmer_relative	koetshuis	room_f	none	Badkamer spots plafond
@@ -253,7 +253,5 @@
 6/0/106	button	kasteel	room_2	all	Afzuiging
 6/5/1	climate	kasteel	room_2	none	actueel
 6/5/11	climate	kasteel	room_3	none	actueel
-6/5/201	climate	kasteel	yet_unknown	none	kamer 2 & 3 CV ketel
-6/5/202	climate	kasteel	yet_unknown	none	kamer 2 & 3 CV ketel (status)
 6/7/0	homeserver	kasteel	room_2	none	centraal
 6/7/2	homeserver	kasteel	room_3	none	centraal
