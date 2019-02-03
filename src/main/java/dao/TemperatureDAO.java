@@ -4,7 +4,6 @@ import building.ControllableArea;
 import redis.clients.jedis.Jedis;
 
 import java.io.Closeable;
-import java.io.IOException;
 
 /**
  * Created by Jaap on 11-12-2016.
@@ -42,7 +41,7 @@ public class TemperatureDAO implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         jedis.close();
     }
 }

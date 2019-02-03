@@ -1,5 +1,6 @@
 package dao;
 
+import building.Building;
 import building.ControllableArea;
 import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
@@ -42,8 +43,18 @@ public class SetpointDAO implements Closeable {
         return DEFAULT_SETPOINT_OFF;
     }
 
+    /**
+     * Setpoint override the default setpoint. If it is a bookable room, the override
+     * will be removed after the TTL_OVERRIDE value.
+     * @param room
+     * @param value
+     */
     public void setOverride(ControllableArea room, double value) {
-        jedis.setex(room + ".setpoint-override", TTL_OVERRIDE, Double.toString(value));
+        if (room.room.beds24Id == null) {
+            jedis.set(room + ".setpoint-override", Double.toString(value));
+        } else {
+            jedis.setex(room + ".setpoint-override", TTL_OVERRIDE, Double.toString(value));
+        }
     }
 
     public void removeOverride(ControllableArea room) {
