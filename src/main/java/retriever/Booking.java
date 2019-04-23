@@ -50,7 +50,7 @@ public class Booking {
 
     public static Room roomById(long id) {
         for (Room room : Room.values()) {
-            if (room.beds24Id == id) {
+            if (room.beds24Id != null && room.beds24Id == id) {
                 return room;
             }
         }

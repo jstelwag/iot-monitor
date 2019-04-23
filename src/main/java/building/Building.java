@@ -92,7 +92,7 @@ public class Building {
     public List<Room> bookableRooms() {
         List<Room> retVal = new ArrayList<>();
         for (Room room : Room.values()) {
-            if (room.beds24Id > 0) {
+            if (room.beds24Id != null) {
                 retVal.add(room);
             }
         }

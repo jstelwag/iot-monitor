@@ -21,9 +21,7 @@ public enum Room {
     , hall_castle(Building.Construction.kasteel, null)
     , hall_toilet(Building.Construction.kasteel, null)
     , office(Building.Construction.kasteel, null)
-    , ballroom_south(Building.Construction.kasteel, null)
-    , ballroom_center(Building.Construction.kasteel, null)
-    , ballroom_north(Building.Construction.kasteel, null)
+    , ballroom(Building.Construction.kasteel, null)
     , kitchen(Building.Construction.kasteel, null)
     , yet_unknown(Building.Construction.kasteel, null); //Needed sofar for P1 meter
 

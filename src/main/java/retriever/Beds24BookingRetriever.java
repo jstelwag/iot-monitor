@@ -43,27 +43,31 @@ public class Beds24BookingRetriever implements Runnable {
                 JSONObject bedsBooking = response.getJSONObject(i);
                 if (bedsBooking.getInt("status") != 0) {
                     String name = (bedsBooking.getString("guestFirstName") + " " + bedsBooking.getString("guestName")).trim();
-                    Room room = Booking.roomById(bedsBooking.getLong("roomId"));
-
-                    if (room != null) {
-                        Booking booking = new Booking(DateUtils.parseDate(bedsBooking.getString("firstNight"), "yyyy-MM-dd")
-                                , DateUtils.parseDate(bedsBooking.getString("lastNight"), "yyyy-MM-dd")
-                                , room);
-
-                        if (booking.isOccupied()) {
-                            bookings.setNow(room, name);
-                            roomsNow.add(room);
-                        }
-                        if (booking.isBookedToday()) {
-                            bookings.setTonight(room, name);
-                            roomsTonight.add(room);
-                        }
-                        if (booking.isBookedTomorrow()) {
-                            bookings.setTomorrow(room, name);
-                            roomsTomorrow.add(room);
-                        }
+                    Long roomId = bedsBooking.getLong("roomId");
+                    if (roomId == null) {
+                        LogstashLogger.INSTANCE.error("No room id for " + name + " while retrieving beds24 bookings");
                     } else {
-                        LogstashLogger.INSTANCE.error("Unknown room id " + bedsBooking.toString(1));
+                        Room room = Booking.roomById(roomId);
+                        if (room != null) {
+                            Booking booking = new Booking(DateUtils.parseDate(bedsBooking.getString("firstNight"), "yyyy-MM-dd")
+                                    , DateUtils.parseDate(bedsBooking.getString("lastNight"), "yyyy-MM-dd")
+                                    , room);
+
+                            if (booking.isOccupied()) {
+                                bookings.setNow(room, name);
+                                roomsNow.add(room);
+                            }
+                            if (booking.isBookedToday()) {
+                                bookings.setTonight(room, name);
+                                roomsTonight.add(room);
+                            }
+                            if (booking.isBookedTomorrow()) {
+                                bookings.setTomorrow(room, name);
+                                roomsTomorrow.add(room);
+                            }
+                        } else {
+                            LogstashLogger.INSTANCE.error("Unknown room id " + bedsBooking.toString(1));
+                        }
                     }
                 }
             }

@@ -243,8 +243,8 @@
 5/5/1	climate	kasteel	office	none	actueel
 5/5/2	climate	kasteel	hall_castle	none	actueel
 5/5/3	climate	kasteel	hall_toilet	none	actueel
-5/5/4	climate	kasteel	ballroom_south	none	actueel
-5/5/5	climate	kasteel	ballroom_center	none	actueel
+5/5/4	climate	kasteel	ballroom	none	actueel
+5/5/5	climate	kasteel	ballroom	none	actueel
 6/0/101	button	kasteel	room_2	all	Badkamer lampen
 6/0/102	button	kasteel	room_2	all	Badkamer afzuiging
 6/0/103	button	kasteel	room_2	all	Badkamer spiegel

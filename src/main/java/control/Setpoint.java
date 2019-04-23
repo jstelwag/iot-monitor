@@ -33,8 +33,7 @@ public class Setpoint implements Runnable {
                         || bookings.isOccupiedTonight(room)
                         || (temperatures.get(Building.INSTANCE.firstControllableArea(room)) < LONG_PREHEAT_THRESHOLD && bookings.isOccupiedTomorrow(room))
                         || (bookings.isOccupiedNow(room) && now.before(heatingOffTime));
-                List<ControllableArea> rooms = Building.INSTANCE.findControllableAreas(room);
-                for (ControllableArea controlRoom : rooms) {
+                for (ControllableArea controlRoom : Building.INSTANCE.findControllableAreas(room)) {
                     setpoints.setActive(controlRoom, active);
                 }
             }

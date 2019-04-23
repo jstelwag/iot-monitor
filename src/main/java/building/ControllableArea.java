@@ -22,9 +22,9 @@ public enum ControllableArea {
     hall_toilet(Room.hall_castle, new GroupAddress(5,5,3)),
     hall_storage(Room.hall_castle, null),
     office(Room.office, new GroupAddress(5,5,1)),
-    ballroom_south(Room.ballroom_south, new GroupAddress(5,5,4)),
-    ballroom_center(Room.ballroom_center, new GroupAddress(5,5,5)),
-    ballroom_north(Room.ballroom_north, null),
+    ballroom_south(Room.ballroom, new GroupAddress(5,5,4)),
+    ballroom_center(Room.ballroom, null),
+//    ballroom_north(Room.ballroom, null),
     tower_kitchen(Room.kitchen, null);
 
     ControllableArea(Room room, GroupAddress temperatureSensor) {

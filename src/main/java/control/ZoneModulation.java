@@ -70,7 +70,7 @@ public class ZoneModulation implements Runnable {
                             item.weight = item.weight - 50;
                         }
 
-                        if (bookingDAO.isOccupiedNow(zone.controllableArea.room)) {
+                        if (zone.controllableArea.room.beds24Id != null && bookingDAO.isOccupiedNow(zone.controllableArea.room)) {
                             item.weight = item.weight + 50;
                         }
 

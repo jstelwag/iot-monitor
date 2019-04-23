@@ -19,7 +19,7 @@ public class CustomerNameSpeaker implements Runnable {
         LogstashLogger.INSTANCE.info("Posting bookings to influx");
         try (FluxLogger flux = new FluxLogger(); BookingDAO bookings = new BookingDAO()) {
             for (Room room : Building.INSTANCE.allControllableRooms()) {
-                if (bookings.getNow(room) != null) {
+                if (room.beds24Id != null && bookings.getNow(room) != null) {
                     flux.message(LineProtocolUtil.protocolLine(room, bookings.getNow(room)));
                 }
             }
