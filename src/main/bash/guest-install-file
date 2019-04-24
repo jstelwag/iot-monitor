@@ -7,9 +7,9 @@ sudo fallocate -l $3M $IMAGES_HOME/$1.img
 sudo virt-install \
 --name=$1 --ram=$2 --vcpus=3 \
 --file=$IMAGES_HOME/$1.img  --network bridge:br0 \
---nographics --os-type=linux --os-variant=ubuntu16.04 --virt-type=kvm \
+--nographics --os-type=linux --os-variant=ubuntu18.04 --virt-type=kvm \
 --noapic --noacpi \
---location http://nl.archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64/ \
+--location http://nl.archive.ubuntu.com/ubuntu/dists/bionic/main/installer-amd64/ \
 --extra-args="serial console=ttyS0,57600"
 
 exit 0
