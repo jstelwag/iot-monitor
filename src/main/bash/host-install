@@ -15,8 +15,9 @@ echo
 echo   bridges:
 echo     br0:
 echo       interfaces: [ens33]
+echo       dhcp4: yes
 
-sudo nano /etc/netplan/
+sudo nano /etc/netplan/50-cloud-init.yaml
 
 
 cat <<EOF >>/tmp/br.xml 
@@ -31,3 +32,16 @@ sudo virsh net-start br0
 sudo virsh net-autostart br0
 
 
+sudo apt-get install mysql-server 
+sudo systemctl start mysql 
+sudo systemctl enable mysql
+
+sudo mysql -uroot -p 
+UPDATE mysql.user SET authentication_string = PASSWORD('password') WHERE User = 'root'; 
+FLUSH PRIVILEGES;
+exit
+
+echo sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf 
+echo bind-address = 0.0.0.0 
+echo server-id = 1 
+echo log_bin = /var/log/mysql/mysql-bin.log
