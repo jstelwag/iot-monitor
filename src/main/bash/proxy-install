@@ -58,3 +58,13 @@ EOF
 sudo mv /tmp/backup.sh /usr/local/bin
 sudo chmod +x /usr/local/bin/backup.sh
 (crontab -l 2>/dev/null; echo "0 2 * * * /usr/local/bin/backup.sh") | crontab -
+
+echo installing pagespeed
+wget https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_amd64.deb
+sudo dpkg -i mod-pagespeed-stable*.deb
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+sudo service apache2 restart
+
+exit 0
+
+
