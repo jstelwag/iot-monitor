@@ -1,8 +1,8 @@
 #!/bin/bash
 # Proxy server (apache)
-sudo apt install qemu qemu-kvm libvirt-bin bridge-utils virt-manager 
-sudo service libvirtd start 
-sudo update-rc.d libvirtd enable 
+sudo apt install qemu qemu-kvm libvirt-bin bridge-utils virt-manager
+sudo service libvirtd start
+sudo update-rc.d libvirtd enable
 
 echo Update network configuration to support bridge network:
 echo network:
@@ -20,28 +20,62 @@ echo       dhcp4: yes
 sudo nano /etc/netplan/50-cloud-init.yaml
 
 
-cat <<EOF >>/tmp/br.xml 
+cat <<EOF >>/tmp/br.xml
 <network>
   <name>br0</name>
   <forward mode='bridge'/>
-  <bridge name='br0'/> 
-</network> 
-EOF 
-sudo virsh net-define /tmp/br.xml 
+  <bridge name='br0'/>
+</network>
+EOF
+sudo virsh net-define /tmp/br.xml
 sudo virsh net-start br0
 sudo virsh net-autostart br0
 
-
-sudo apt-get install mysql-server 
-sudo systemctl start mysql 
+sudo apt-get install mysql-server
+sudo systemctl start mysql
 sudo systemctl enable mysql
 
-sudo mysql -uroot -p 
-UPDATE mysql.user SET authentication_string = PASSWORD('password') WHERE User = 'root'; 
+echo set root password for mysql
+sudo mysql -uroot -p
+UPDATE mysql.user SET authentication_string = PASSWORD('password') WHERE User = 'root';
 FLUSH PRIVILEGES;
-exit
 
-echo sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf 
-echo bind-address = 0.0.0.0 
-echo server-id = 1 
+echo sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+echo bind-address = 0.0.0.0
+
+echo As master MySQL server ===========================
+echo server-id = 1
 echo log_bin = /var/log/mysql/mysql-bin.log
+
+echo load data into the database (master only) : change password with one from keepass
+CREATE USER 'kasteelnijswiller'@'%' IDENTIFIED BY 'password';
+CREATE USER 'schlosshotel'@'%' IDENTIFIED BY 'password';
+CREATE DATABASE kasteelnijswiller;
+CREATE DATABASE schlosshotel;
+GRANT ALL PRIVILEGES ON kasteelnijswiller.* to 'kasteelnijswiller'@'%';
+GRANT ALL PRIVILEGES ON schlosshotel.* to 'schlosshotel'@'%';
+
+GRANT USAGE ON *.* TO 'dump'@'localhost' IDENTIFIED BY 'mickey mouse';
+GRANT SELECT, LOCK TABLES ON `mysql`.* TO 'dump'@'localhost';
+GRANT SELECT, LOCK TABLES, SHOW VIEW, EVENT, TRIGGER ON `kasteelnijswiller`.* TO 'dump'@'localhost';
+GRANT SELECT, LOCK TABLES, SHOW VIEW, EVENT, TRIGGER ON `schlosshotel`.* TO 'dump'@'localhost';
+
+FLUSH PRIVILEGES;
+
+echo Restore the data
+aws s3 cp s3://automated-mysql-backups/kasteelnijswiller.sql .
+sudo mysql -uroot -p kasteelnijswiller < kasteelnijswiller.sql
+aws s3 cp s3://automated-mysql-backups/schlosshotel.sql .
+sudo mysql -uroot -p schlosshotel < schlosshotel.sql
+
+echo Backup script
+cat <<EOF >>/tmp/backup-db.sh
+mysqldump -udump -pmickey schlosshotel > schlosshotel.sql
+aws s3 cp schlosshotel.sql s3://automated-mysql-backups
+mysqldump -udump -pmickey kasteelnijswiller > kasteelnijswiller.sql
+aws s3 cp kasteelnijswiller.sql s3://automated-mysql-backups
+exit 0
+EOF
+sudo mv /tmp/backup-db.sh /usr/local/bin
+sudo chmod +x /usr/local/bin/backup-db.sh
+(crontab -l 2>/dev/null; echo "0 3 * * * /usr/local/bin/backup-db.sh") | crontab -
