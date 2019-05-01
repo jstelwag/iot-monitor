@@ -57,25 +57,26 @@ public class TimerHandler extends AbstractHandler {
                 Schedule schedule = new Schedule();
                 switch (matcher.group(1)) {
                     case "indoorToDawn":
-                        SwitchLights.switchPublicLight(schedule.indoorToDawn, location, onOrOff);
+                        SwitchLights.switchLights(schedule.indoorToDawn, onOrOff);
                         jsonResponse.put("status", "OK");
                         break;
                     case "indoorToMidnight":
-                        SwitchLights.switchPublicLight(schedule.indoorToMidnight, location, onOrOff);
+                        SwitchLights.switchLights(schedule.indoorToMidnight, onOrOff);
                         jsonResponse.put("status", "OK");
                         break;
                     case "outdoorToDawn":
-                        SwitchLights.switchPublicLight(schedule.outdoorToDawn, location, onOrOff);
+                        SwitchLights.switchLights(schedule.outdoorToDawn, onOrOff);
                         jsonResponse.put("status", "OK");
                         break;
                     case "outdoorToMidnight":
-                        SwitchLights.switchPublicLight(schedule.outdoorToMidnight, location, onOrOff);
+                        SwitchLights.switchLights(schedule.outdoorToMidnight, onOrOff);
                         jsonResponse.put("status", "OK");
                         break;
                     default:
                         jsonResponse.put("status", "ERROR");
                         jsonResponse.put("error", "Unknown action " + matcher.group(1));
                 }
+
             } else {
                 jsonResponse.put("status", "ERROR");
                 jsonResponse.put("error", "Request not recognized " + s);

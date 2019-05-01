@@ -16,6 +16,10 @@ import static lighting.Schedule.*;
 public class SwitchLights {
     static KNXAddressList addressList = new KNXAddressList();
 
+    public enum LightState {
+        Dusk, Midnight, Dawn, WinterMorning
+    }
+
     public static int allOff(Room room) {
         int retVal = 0;
         try (Jedis jedis = new Jedis("localhost")) {
@@ -56,14 +60,25 @@ public class SwitchLights {
         return desiredState ? retVal : -retVal;
     }
 
-    public static void switchPublicLight(List<String> lights, Location location, boolean onOrOff) {
+    public static void switchLights(List<String> lights, boolean on) {
+        LogstashLogger.INSTANCE.info("Switching - lights " + (on ? "on" : "off"));
+        for (String address : lights) {
+            try {
+                KNXLink.getInstance().writeBoolean(new GroupAddress(address), on);
+                Thread.sleep(100);
+            } catch (KNXException | InterruptedException e) {
+                 LogstashLogger.INSTANCE.error("KNX switching problem " + e.getMessage());
+            }
+        }
+    }
 
-        LogstashLogger.INSTANCE.info("Switching " + location + " - lights " + (onOrOff ? "on" : "off"));
+    public static void switchPublicLight(List<String> lights, Location location, LightState state) {
+        LogstashLogger.INSTANCE.info("Switching " + location + " - lights " + state);
         try (Jedis jedis = new Jedis("localhost")) {
-            jedis.set(location + ".state", onOrOff ? "ON" : "OFF");
+            jedis.set(location + ".state", state.name());
             for (String address : lights) {
                 try {
-                    KNXLink.getInstance().writeBoolean(new GroupAddress(address), onOrOff);
+                    KNXLink.getInstance().writeBoolean(new GroupAddress(address), (state == LightState.Dusk || state == LightState.WinterMorning));
                     Thread.sleep(100);
                 } catch (KNXException | InterruptedException e) {
                     LogstashLogger.INSTANCE.error("KNX switching problem @" + location + ", " + e.getMessage());

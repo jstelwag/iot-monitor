@@ -1,6 +1,7 @@
 package lighting;
 
 import lighting.Schedule.Location;
+import lighting.SwitchLights.LightState;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -13,8 +14,8 @@ public class WinterMorningTimer implements Runnable {
     public void run() {
         Schedule schedule = new Schedule();
         if (new Sun().down(0.0)) {
-            SwitchLights.switchPublicLight(schedule.indoorToMidnight, Location.indoor, true);
-            SwitchLights.switchPublicLight(schedule.outdoorToMidnight, Location.outdoor, true);
+            SwitchLights.switchPublicLight(schedule.indoorToMidnight, Location.indoor, LightState.WinterMorning);
+            SwitchLights.switchPublicLight(schedule.outdoorToMidnight, Location.outdoor, LightState.WinterMorning);
         }
     }
 }
