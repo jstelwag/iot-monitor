@@ -32,6 +32,10 @@ public class Sun {
         return position;
     }
 
+    /**
+    * @param bias Larger is to switch later in the evening
+    * @return true if the sun is set.
+    */
     public boolean dusk(double bias) {
         if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) > 12) {
             AzimuthZenithAngle position = position();
