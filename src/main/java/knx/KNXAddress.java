@@ -7,6 +7,7 @@ import building.Room;
  * Created by Jaap on 15-12-2016.
  */
 public class KNXAddress {
+    /** Most KNX addresses have a series of addresses for the same device. This is the first defining address. */
     public final String address;
     public final Type type;
     public final Building.Construction construction;
@@ -26,13 +27,13 @@ public class KNXAddress {
         , homeserver
     }
 
-    public KNXAddress(String address, Type type, Building.Construction construction, Room room, String cpabilities
+    public KNXAddress(String address, Type type, Building.Construction construction, Room room, String capabilities
             , String description) {
         this.address = address;
         this.type = type;
         this.construction = construction;
         this.room = room;
-        this.capabilities = cpabilities;
+        this.capabilities = capabilities;
         this.description = description;
     }
 

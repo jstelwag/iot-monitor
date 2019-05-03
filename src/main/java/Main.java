@@ -98,6 +98,8 @@ public class Main {
         p1Context.setHandler(new P1Handler());
         ContextHandler timerContext = new ContextHandler("/timer");
         timerContext.setHandler(new TimerHandler());
+        ContextHandler knxUpdateContext = new ContextHandler("/knx-update");
+        knxUpdateContext.setHandler(new KNXStateUpdateHandler());
 
         ContextHandler echoContext = new ContextHandler("/echo");
         echoContext.setHandler(new EchoHandler());
@@ -105,7 +107,7 @@ public class Main {
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
                 , furnaceContext, knxtemperatures, redisContext, knxContext, roomContext, p1Context
-                , timerContext, echoContext});
+                , timerContext, knxUpdateContext, echoContext});
         return contexts;
     }
 
