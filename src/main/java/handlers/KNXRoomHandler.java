@@ -92,11 +92,12 @@ public class KNXRoomHandler extends AbstractHandler {
         retVal.put("state", state);
         try (LightingStateDAO dao = new LightingStateDAO()) {
             for (KNXAddress address : new KNXAddressList().addressesByRoom(room, KNXAddress.Type.button)) {
-                JSONObject stateResponse = new JSONObject();
-                state.put(stateResponse);
-                stateResponse.put("address", address.address);
-                stateResponse.put("type", address.type);
-                stateResponse.put("state", dao.getState(address.address));
+                if (dao.getState(address.address) != null) {
+                    JSONObject stateResponse = new JSONObject();
+                    state.put(stateResponse);
+                    stateResponse.put("address", address.address);
+                    stateResponse.put("state", dao.getState(address.address));
+                }
             }
         } catch (IOException e) {
              LogstashLogger.INSTANCE.error("Failed to retrieve room state " + e.getMessage());
