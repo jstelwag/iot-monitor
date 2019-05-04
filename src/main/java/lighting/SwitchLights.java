@@ -9,11 +9,17 @@ import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
+import dao.LightingStateDAO;
 import static lighting.Schedule.*;
 
 public class SwitchLights {
+
+    public static final double ON_THRESHOLD = 0.3;
+
     static KNXAddressList addressList = new KNXAddressList();
 
     public enum LightState {
@@ -22,16 +28,13 @@ public class SwitchLights {
 
     public static int allOff(Room room) {
         int retVal = 0;
-        try (Jedis jedis = new Jedis("localhost")) {
-            jedis.set(room + ".all.state", "OFF");
-            for (KNXAddress address : addressList.addressesByRoom(room, "all")) {
-                try {
-                    KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);
-                    retVal++;
-                } catch (KNXException | InterruptedException e) {
-                    LogstashLogger.INSTANCE.error("Failed to switch room " + room
-                            + "@" + address + ", " + e.getMessage());
-                }
+        for (KNXAddress address : addressList.addressesByRoom(room, "all")) {
+            try {
+                KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);
+                retVal++;
+            } catch (KNXException | InterruptedException e) {
+                LogstashLogger.INSTANCE.error("Failed to switch room " + room
+                        + "@" + address + ", " + e.getMessage());
             }
         }
 
@@ -40,20 +43,25 @@ public class SwitchLights {
 
     public static int toggleLights(Room room) {
         int retVal = 0;
-        boolean desiredState;
 
-        try (Jedis jedis = new Jedis("localhost")) {
-            desiredState = !"ON".equals(jedis.get(room + ".all.state"));
-            jedis.set(room + ".all.state", desiredState ? "ON" : "OFF");
+        Set<KNXAddress> roomLights = addressList.addressesByRoom(room, "toggle");
+        int onCount = 0;
+        try (LightingStateDAO dao = new LightingStateDAO()) {
+            for (KNXAddress address : roomLights) {
+                if (dao.getState(address.address)) onCount++;
+            }
+        } catch (IOException e) {
+            LogstashLogger.INSTANCE.error("Failed to connect to Redis for state count: " + e.getMessage());
+        }
+        boolean desiredState = onCount/roomLights.size() < ON_THRESHOLD;
 
-            for (KNXAddress address : addressList.addressesByRoom(room, "toggle")) {
-                try {
-                    KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), desiredState);
-                    retVal++;
-                    Thread.sleep(50); //Wait a little to reduce LED switching peaks
-                } catch (KNXException | InterruptedException e) {
-                    LogstashLogger.INSTANCE.error("Failed to toggle room " + room + " @" + address + ", " + e.getMessage());
-                }
+        for (KNXAddress address : roomLights) {
+            try {
+                KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), desiredState);
+                retVal++;
+                Thread.sleep(50); //Wait a little to reduce LED switching peaks
+            } catch (KNXException | InterruptedException e) {
+                LogstashLogger.INSTANCE.error("Failed to toggle room " + room + " @" + address + ", " + e.getMessage());
             }
         }
 

@@ -32,16 +32,16 @@ public class KNXStateUpdateHandler extends AbstractHandler {
             for (KNXAddress address : addressList.addressesByType(KNXAddress.Type.button)) {
                 if (dao.getStateTTL(address.address) < MIN_TTL) {
                     try {
-                        boolean state = KNXLink.getInstance().readBoolean(new GroupAddress(address.address.replace("/0/", "/1/")));
-                        dao.setState(address.address, state);
-                        response.getWriter().println("Updated state for " + address);
-                    } catch (KNXException | InterruptedException e) {
                         if (ignoreErrorAddresses.contains(address.address)) {
                             response.getWriter().println("Ignoring " + address);
                         } else {
-                            response.getWriter().println("Error occurred for " + address + ": " + e.toString());
-                            LogstashLogger.INSTANCE.error("Failed reading " + address + " while updating the state " + e.toString());
+                            boolean state = KNXLink.getInstance().readBoolean(new GroupAddress(address.address.replace("/0/", "/1/")));
+                            dao.setState(address.address, state);
+                            response.getWriter().println("Updated state for " + address);
                         }
+                    } catch (KNXException | InterruptedException e) {
+                        response.getWriter().println("Error occurred for " + address + ": " + e.toString());
+                        LogstashLogger.INSTANCE.error("Failed reading " + address + " while updating the state " + e.toString());
                     }
                 }
             }
