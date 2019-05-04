@@ -1,6 +1,7 @@
 package handlers;
 
 import building.Room;
+import dao.LightingStateDAO;
 import knx.KNXAddress;
 import knx.KNXAddressList;
 import lighting.SwitchLights;
@@ -19,7 +20,7 @@ import java.util.regex.Pattern;
 
 /**
  * Interfacing to KNX functions of given room. Use case:
- * /room-id/[all-off|toggle]|list/
+ * /room-id/[all-off|toggle]|list|state/
  */
 public class KNXRoomHandler extends AbstractHandler {
 
@@ -49,6 +50,12 @@ public class KNXRoomHandler extends AbstractHandler {
                     JSONObject roomResponse = lightList(room);
                     knxResponse.put("status", "OK");
                     knxResponse.put("knx", roomResponse);
+                    break;
+                case "state":
+                    JSONObject stateResponse = state(room);
+                    knxResponse.put("status", "OK");
+                    knxResponse.put("knx", stateResponse);
+                    break;
                 default:
                     knxResponse.put("error", "Unknown command " + matcher.group(2) + " @" + s);
                     break;
@@ -67,7 +74,7 @@ public class KNXRoomHandler extends AbstractHandler {
         retVal.put("name", room);
         JSONArray lights = new JSONArray();
         retVal.put("lights", lights);
-        for (KNXAddress address :new KNXAddressList().addressesByRoom(room, KNXAddress.Type.button)) {
+        for (KNXAddress address : new KNXAddressList().addressesByRoom(room, KNXAddress.Type.button)) {
             JSONObject lightResponse = new JSONObject();
             lights.put(lightResponse);
             lightResponse.put("name", address.description);
@@ -75,6 +82,25 @@ public class KNXRoomHandler extends AbstractHandler {
             lightResponse.put("type", address.type);
         }
 
+        return retVal;
+    }
+
+    private JSONObject state(Room room) {
+        JSONObject retVal = new JSONObject();
+        retVal.put("name", room);
+        JSONArray state = new JSONArray();
+        retVal.put("state", state);
+        try (LightingStateDAO dao = new LightingStateDAO()) {
+            for (KNXAddress address : new KNXAddressList().addressesByRoom(room, KNXAddress.Type.button)) {
+                JSONObject stateResponse = new JSONObject();
+                state.put(stateResponse);
+                stateResponse.put("address", address.address);
+                stateResponse.put("type", address.type);
+                stateResponse.put("state", dao.getState(address.address));
+            }
+        } catch (IOException e) {
+             LogstashLogger.INSTANCE.error("Failed to retrieve room state " + e.getMessage());
+        }
         return retVal;
     }
 }
