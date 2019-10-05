@@ -49,7 +49,7 @@ public class Schedule {
         // 1/0/148	button	koetshuis	hall_coachhouse	Verdieping spot trap
         indoorToDawn.add("1/0/148");
         // 2/0/109	button	koetshuis	hall_coachhouse	Spots plafond trap
-        indoorToDawn.add("2/0/109");
+        alwaysOn.add("2/0/109");
         // 2/0/119	button	koetshuis	hall_coachhouse	Hal plafond
         indoorToDawn.add("2/0/119");
         // 5/0/101	button	kasteel	office	toggle,all	Staande lamp

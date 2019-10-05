@@ -34,31 +34,35 @@ public class KNXRoomHandler extends AbstractHandler {
         Matcher matcher = pattern.matcher(s);
         JSONObject knxResponse = new JSONObject();
         if (matcher.find()) {
-            Room room = Room.valueOf(matcher.group(1));
-            switch (matcher.group(2)) {
-                case "all-off":
-                    int switchCount = SwitchLights.allOff(room);
-                    knxResponse.put("status", "OK");
-                    knxResponse.put("lightCount", switchCount);
-                    break;
-                case "toggle":
-                    switchCount = SwitchLights.toggleLights(room);
-                    knxResponse.put("status", "OK");
-                    knxResponse.put("lightCount", switchCount);
-                    break;
-                case "list":
-                    JSONObject roomResponse = lightList(room);
-                    knxResponse.put("status", "OK");
-                    knxResponse.put("knx", roomResponse);
-                    break;
-                case "state":
-                    JSONObject stateResponse = state(room);
-                    knxResponse.put("status", "OK");
-                    knxResponse.put("knx", stateResponse);
-                    break;
-                default:
-                    knxResponse.put("error", "Unknown command " + matcher.group(2) + " @" + s);
-                    break;
+            try {
+                Room room = Room.valueOf(matcher.group(1));
+                switch (matcher.group(2)) {
+                    case "all-off":
+                        int switchCount = SwitchLights.allOff(room);
+                        knxResponse.put("status", "OK");
+                        knxResponse.put("lightCount", switchCount);
+                        break;
+                    case "toggle":
+                        switchCount = SwitchLights.toggleLights(room);
+                        knxResponse.put("status", "OK");
+                        knxResponse.put("lightCount", switchCount);
+                        break;
+                    case "list":
+                        JSONObject roomResponse = lightList(room);
+                        knxResponse.put("status", "OK");
+                        knxResponse.put("knx", roomResponse);
+                        break;
+                    case "state":
+                        JSONObject stateResponse = state(room);
+                        knxResponse.put("status", "OK");
+                        knxResponse.put("knx", stateResponse);
+                        break;
+                    default:
+                        knxResponse.put("error", "Unknown command " + matcher.group(2) + " @" + s);
+                        break;
+                }
+            } catch (IllegalArgumentException e) {
+                knxResponse.put("error", "Check if this room '" + matcher.group(1) + "' exists.");
             }
         } else {
             knxResponse.put("error", "Syntax not recognized for " + s);
