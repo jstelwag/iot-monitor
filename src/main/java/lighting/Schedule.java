@@ -47,9 +47,9 @@ public class Schedule {
         // 1/0/144	button	koetshuis	hall_coachhouse	toggle,all	Spots onderaan trap centrale hal
         indoorToDawn.add("1/0/144");
         // 1/0/148	button	koetshuis	hall_coachhouse	Verdieping spot trap
-        indoorToDawn.add("1/0/148");
+        alwaysOn.add("1/0/148");
         // 2/0/109	button	koetshuis	hall_coachhouse	Spots plafond trap
-        alwaysOn.add("2/0/109");
+        indoorToDawn.add("2/0/109");
         // 2/0/119	button	koetshuis	hall_coachhouse	Hal plafond
         indoorToDawn.add("2/0/119");
         // 5/0/101	button	kasteel	office	toggle,all	Staande lamp
