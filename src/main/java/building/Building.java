@@ -155,8 +155,8 @@ public class Building {
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 8, true, ControllableArea.hall_storage, HeatZone.Position.wall));
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 9, true, ControllableArea.hall_toilet, HeatZone.Position.wall));
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 10, true, ControllableArea.room_2, HeatZone.Position.floor, "convector south 1"));
-        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 11, false, ControllableArea.room_2, HeatZone.Position.floor, "convector south 2"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 11, true, ControllableArea.room_2, HeatZone.Position.floor, "convector south 2"));
         zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 12, true, ControllableArea.room_2, HeatZone.Position.floor, "convector west 1"));
-        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 13, false, ControllableArea.room_2, HeatZone.Position.floor, "convector west 2"));
+        zones.add(new HeatZone(HeatZone.ValveGroup.kasteel_hal, 13, true, ControllableArea.room_2, HeatZone.Position.floor, "convector west 2"));
     }
 }

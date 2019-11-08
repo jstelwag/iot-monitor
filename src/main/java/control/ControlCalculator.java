@@ -17,37 +17,37 @@ public class ControlCalculator implements Runnable {
     public void run() {
         LogstashLogger.INSTANCE.info("Calculating state");
 
-        SetpointDAO setpoints = new SetpointDAO();
-        TemperatureDAO temperatures = new TemperatureDAO();
-        HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
-        for (ControllableArea controllableArea : ControllableArea.values()) {
-            double setpoint = setpoints.getActual(controllableArea);
-            double roomTemperature = temperatures.get(controllableArea);
+        try (SetpointDAO setpoints = new SetpointDAO();
+             TemperatureDAO temperatures = new TemperatureDAO();
+             HeatZoneStateDAO zoneStates = new HeatZoneStateDAO()) {
+            for (ControllableArea controllableArea : ControllableArea.values()) {
+                double setpoint = setpoints.getActual(controllableArea);
+                double roomTemperature = temperatures.get(controllableArea);
 
-            for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
-                // todo add here an optimization algorithm
-                if (!temperatures.has(controllableArea)){
-                    // Just guessing heat desire
-                    if (isWinter()) {
-                        zoneStates.setDesired(zone, zone.isPreferred);
-                    } else {
+                for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
+                    // todo add here an optimization algorithm
+                    if (!temperatures.has(controllableArea)){
+                        // Just guessing heat desire
+                        if (isWinter()) {
+                            zoneStates.setDesired(zone, zone.isPreferred);
+                        } else {
+                            zoneStates.setDesired(zone, false);
+                        }
+                    } else if (setpoint < roomTemperature) {
                         zoneStates.setDesired(zone, false);
-                    }
-                } else if (setpoint < roomTemperature) {
-                    zoneStates.setDesired(zone, false);
-                } else {
-                    // heating is needed
-                    if (setpoint - roomTemperature < 0.1) {
-                        zoneStates.setDesired(zone, zone.isPreferred);
                     } else {
-                        zoneStates.setDesired(zone, true);
+                        // heating is needed
+                        if (setpoint - roomTemperature < 0.1) {
+                            zoneStates.setDesired(zone, zone.isPreferred);
+                        } else {
+                            zoneStates.setDesired(zone, true);
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            System.out.println("DAO exception " + e.getMessage());
         }
-        IOUtils.closeQuietly(setpoints);
-        IOUtils.closeQuietly(temperatures);
-        IOUtils.closeQuietly(zoneStates);
     }
 
     private boolean isWinter() {
