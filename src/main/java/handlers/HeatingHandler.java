@@ -7,6 +7,7 @@ import building.HeatZone;
 import dao.FurnaceStateDAO;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
+import dao.TemperatureDAO;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
@@ -41,6 +42,8 @@ public class HeatingHandler extends AbstractHandler {
             furnaceOverride(s, response.getWriter());
         } else if (s != null && s.startsWith("/setpoint")) {
             roomOverride(s, response.getWriter());
+        } else if (s != null && s.startsWith("/temperature")) {
+            temperature(s, response.getWriter());
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             LogstashLogger.INSTANCE.warn("Wrong argument at rest " + s);
@@ -50,7 +53,9 @@ public class HeatingHandler extends AbstractHandler {
         baseRequest.setHandled(true);
     }
 
-    /** /setpoint/room/increase|decrease|remove/ */
+    /**
+     * /setpoint/room/increase|decrease|remove/
+     */
     void roomOverride(String lineIn, PrintWriter out) throws IllegalArgumentException {
         Pattern pattern = Pattern.compile(Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
@@ -78,7 +83,9 @@ public class HeatingHandler extends AbstractHandler {
         }
     }
 
-    /** /valve/valvegroup/sequence/on|off|remove/ */
+    /**
+     * /valve/valvegroup/sequence/on|off|remove/
+     */
     void valveOverride(String lineIn, PrintWriter out) throws IllegalArgumentException {
         Pattern pattern = Pattern.compile(Pattern.quote("/valve/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
@@ -110,7 +117,9 @@ public class HeatingHandler extends AbstractHandler {
         }
     }
 
-    /** /furnace/furnace/on|off|remove/ */
+    /**
+     * /furnace/furnace/on|off|remove/
+     */
     void furnaceOverride(String lineIn, PrintWriter out) throws IllegalArgumentException {
         Pattern pattern = Pattern.compile(Pattern.quote("/furnace/") + "(.*?)"
                 + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
@@ -134,6 +143,30 @@ public class HeatingHandler extends AbstractHandler {
             } catch (IOException e) {
                 LogstashLogger.INSTANCE.error("Can't connect with state dao, " + e.getMessage());
                 out.println("Error: " + e.getMessage());
+            }
+        } else {
+            out.println(lineIn + "?");
+        }
+    }
+
+    /**
+     * /temperature/controllableArea/value/
+     */
+    void temperature(String lineIn, PrintWriter out) throws IllegalArgumentException {
+        Pattern pattern = Pattern.compile(Pattern.quote("/temperature/") + "(.*?)"
+                + Pattern.quote("/") + "(.*?)" + Pattern.quote("/"));
+        Matcher matcher = pattern.matcher(lineIn);
+
+        if (matcher.find()) {
+            ControllableArea area = ControllableArea.valueOf(matcher.group(1));
+            try (TemperatureDAO tempDAO = new TemperatureDAO()) {
+                if (StringUtils.isNumeric(matcher.group(2))) {
+                    tempDAO.set(area, Double.parseDouble(matcher.group(2)));
+                    out.println("Set " + area + ": " + matcher.group(2));
+                } else {
+                    LogstashLogger.INSTANCE.error("Non-numeric value for " + area + ": " + matcher.group(2));
+                    out.println("Non-numeric value for " + area + ": " + matcher.group(2));
+                }
             }
         } else {
             out.println(lineIn + "?");
