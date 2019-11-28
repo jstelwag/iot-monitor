@@ -160,7 +160,7 @@ public class HeatingHandler extends AbstractHandler {
         if (matcher.find()) {
             ControllableArea area = ControllableArea.valueOf(matcher.group(1));
             try (TemperatureDAO tempDAO = new TemperatureDAO()) {
-                if (StringUtils.isNumeric(matcher.group(2))) {
+                if (StringUtils.isNumeric(matcher.group(2).replace(".", ""))) {
                     tempDAO.set(area, Double.parseDouble(matcher.group(2)));
                     out.println("Set " + area + ": " + matcher.group(2));
                 } else {
