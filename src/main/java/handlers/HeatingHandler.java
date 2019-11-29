@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
  * /rest/heating/setpoint/... setting the setpoint manually
  * /rest/heating/valve/... setting individual valves
  * /rest/heating/furnace/ ... overriding furnaces
+ * /rest/heating/temperatue/ ... temperature input from raspi / dallas sensors
  *
  * settings are stored in Redis for a limited time.
  */
