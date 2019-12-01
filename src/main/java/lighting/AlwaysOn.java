@@ -15,7 +15,7 @@ public class AlwaysOn {
                 Thread.sleep(500);
             }
         } catch (KNXException | InterruptedException e) {
-            LogstashLogger.INSTANCE.error("Always on knx swithching problem " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Always on knx switching problem " + e.getMessage());
         }
     }
 }

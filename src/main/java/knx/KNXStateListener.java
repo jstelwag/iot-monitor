@@ -18,24 +18,26 @@ public class KNXStateListener implements NetworkLinkListener {
 
     @Override
     public void indication(FrameEvent frameEvent) {
-       try {
+        try {
             String event = frameEvent.getFrame().toString();
             KNXAddress knx = addressList.findInString(event);
 
+            //TODO test if this is correct, not sure if the tdpu codes are in order
+            //https://doc.qt.io/QtKNX/qknxtpdu.html
             if (knx != null) {
                 if (knx.type == KNXAddress.Type.button_status) {
                     try (LightingStateDAO dao = new LightingStateDAO()) {
                         boolean status = true;
-                        if (event.endsWith("80")) {
+                        if (event.endsWith("80") || event.endsWith("40")) {
                             status = false;
-                        } else if (!event.endsWith("81")) {
+                        } else if (!(event.endsWith("81") || event.endsWith("41"))) {
                             LogstashLogger.INSTANCE.error("Unknown tpdu response for " + knx + " " + event);
                         }
                         dao.setState(knx.address, status);
                         LogstashLogger.INSTANCE.info("Button for " + knx + " with value " + status);
                     }
                 }
-            }
+           }
         } catch (Exception e) {
             LogstashLogger.INSTANCE.error("Caught unexpected exception, " + e.getMessage());
         }
