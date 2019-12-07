@@ -25,16 +25,17 @@ public class SetpointControl implements Runnable {
         try (SetpointDAO setpointDAO = new SetpointDAO();
             BookingDAO bookingDAO = new BookingDAO()) {
             for (Room room : Building.INSTANCE.allControllableRooms()) {
-                boolean active = room.beds24Id == null
-                        || isOccupied(bookingDAO.getFirstCheckinTime(room));
                 Double preheatSetpoint = preheatSetpoint(bookingDAO.getFirstCheckinTime(room)
                         , Building.INSTANCE.firstControllableArea(room).preheatRampTimeHours);
                 for (ControllableArea controlRoom : Building.INSTANCE.findControllableAreas(room)) {
-                    if (preheatSetpoint != null) {
+                    if (room.beds24Id == null) {
+                        // Not a bookable room
+                        setpointDAO.setDefault(controlRoom, setpointDAO.getHardDefault(controlRoom));
+                    } else if (isOccupied(bookingDAO.getFirstCheckinTime(room))) {
+                        setpointDAO.setDefault(controlRoom, setpointDAO.getHardDefault(controlRoom));
+                    } else if (preheatSetpoint != null) {
                         setpointDAO.setDefault(controlRoom, preheatSetpoint);
                         setpointDAO.setPreheatSetpoint(controlRoom, preheatSetpoint);
-                    } else if (active) {
-                        setpointDAO.setDefault(controlRoom, setpointDAO.getHardDefault(controlRoom));
                     } else {
                         setpointDAO.setDefault(controlRoom, SetpointDAO.DEFAULT_SETPOINT_OFF);
                     }

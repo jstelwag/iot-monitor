@@ -2,7 +2,6 @@ package dao;
 
 import building.ControllableArea;
 import redis.clients.jedis.Jedis;
-import speaker.LogstashLogger;
 
 import java.io.Closeable;
 import java.util.Calendar;
