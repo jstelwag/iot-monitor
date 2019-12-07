@@ -13,12 +13,11 @@ import java.util.Calendar;
 public class SetpointDAO implements Closeable {
     private final Jedis jedis;
 
-    private final int TTL_BOOKINGS = 1800;
     private final int TTL_OVERRIDE = 24 * 60 * 60;
 
     private final double DEFAULT_SETPOINT = 21.0;
     private final double DEFAULT_SETPOINT_BEDROOM = 19.5;
-    public final double DEFAULT_SETPOINT_OFF = 12.0;
+    public static final double DEFAULT_SETPOINT_OFF = 12.0;
 
     public SetpointDAO() {
         jedis = new Jedis("localhost");
@@ -35,11 +34,7 @@ public class SetpointDAO implements Closeable {
         if (jedis.exists(room + ".setpoint-override")) {
             return timeCorrected(Double.parseDouble(jedis.get(room + ".setpoint-override")));
         }
-        if (isActive(room)) {
-            return timeCorrected(getDefault(room));
-        }
-
-        return DEFAULT_SETPOINT_OFF;
+        return timeCorrected(getDefault(room));
     }
 
     /**
@@ -68,54 +63,49 @@ public class SetpointDAO implements Closeable {
         jedis.set(room + ".setpoint-preheat", Double.toString(value));
     }
 
-    public boolean isActive(ControllableArea room) {
-        if (!jedis.exists(room + ".heating-active")) {
-            LogstashLogger.INSTANCE.warn(room + ".heating-active not available in Redis");
-            return true;
+    public double getHardDefault(ControllableArea area) {
+        switch (area) {
+            case apartment_II:
+                return DEFAULT_SETPOINT_BEDROOM;
+            case room_f_bathroom:
+                return DEFAULT_SETPOINT_BEDROOM;
+            case room_1:
+                return DEFAULT_SETPOINT_BEDROOM;
+            case hall:
+                return DEFAULT_SETPOINT_BEDROOM;
+            default:
+                return DEFAULT_SETPOINT;
         }
-        return "T".equals(jedis.get(room + ".heating-active"));
-    }
-
-    public void setActive(ControllableArea room, boolean active) {
-        jedis.setex(room + ".heating-active", TTL_BOOKINGS, active ? "T" : "F");
-    }
-
-    public SetpointDAO populateDefault() {
-        for (ControllableArea area : ControllableArea.values()) {
-            setDefault(area, DEFAULT_SETPOINT);
-        }
-        setDefault(ControllableArea.apartment_II_bedroom, DEFAULT_SETPOINT_BEDROOM);
-        setDefault(ControllableArea.room_f_bathroom, DEFAULT_SETPOINT_BEDROOM);
-        setDefault(ControllableArea.room_1, DEFAULT_SETPOINT_BEDROOM);
-        setDefault(ControllableArea.hall, DEFAULT_SETPOINT_BEDROOM);
-        return this;
     }
 
     private double timeCorrected(double in) {
-        switch (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-            case 22:
-                return in - 0.5;
-            case 23:
-                return in - 0.8;
-            case 0:
-                return in - 2.5;
-            case 1:
-                return in - 2.5;
-            case 2:
-                return in - 2.5;
-            case 3:
-                return in - 2.0;
-            case 4:
-                return in - 2.0;
-            case 5:
-                return in - 1.0;
-            case 6:
-                return in - 0.8;
-            case 7:
-                return in - 0.5;
-            default:
-                return in;
+        if (in > DEFAULT_SETPOINT_OFF) {
+            switch (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+                case 22:
+                    return in - 0.5;
+                case 23:
+                    return in - 0.8;
+                case 0:
+                    return in - 2.5;
+                case 1:
+                    return in - 2.5;
+                case 2:
+                    return in - 2.5;
+                case 3:
+                    return in - 2.0;
+                case 4:
+                    return in - 2.0;
+                case 5:
+                    return in - 1.0;
+                case 6:
+                    return in - 0.8;
+                case 7:
+                    return in - 0.5;
+                default:
+                    return in;
+            }
         }
+        return in;
     }
 
     @Override

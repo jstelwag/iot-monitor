@@ -18,7 +18,6 @@ public class HeatingControl {
 
     private HeatingControl() {
         new HeatZoneStateDAO().populateDefault().close();
-        new SetpointDAO().populateDefault().close();
         for (Furnace furnace : Furnace.values()) {
             furnaceModulation.put(furnace, new ControlModulation());
         }

@@ -31,12 +31,12 @@ public class SetpointControl implements Runnable {
                         , Building.INSTANCE.firstControllableArea(room).preheatRampTimeHours);
                 for (ControllableArea controlRoom : Building.INSTANCE.findControllableAreas(room)) {
                     if (preheatSetpoint != null) {
-                        setpointDAO.setActive(controlRoom, true);
                         setpointDAO.setDefault(controlRoom, preheatSetpoint);
                         setpointDAO.setPreheatSetpoint(controlRoom, preheatSetpoint);
-                        LogstashLogger.INSTANCE.info("Preheating " + room + ": " + preheatSetpoint);
+                    } else if (active) {
+                        setpointDAO.setDefault(controlRoom, setpointDAO.getHardDefault(controlRoom));
                     } else {
-                        setpointDAO.setActive(controlRoom, active);
+                        setpointDAO.setDefault(controlRoom, SetpointDAO.DEFAULT_SETPOINT_OFF);
                     }
                 }
             }

@@ -8,7 +8,6 @@ import dao.BookingDAO;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
-import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
@@ -34,63 +33,57 @@ public class StatusHandler extends AbstractHandler {
         statusResponse.put("occupiedTonight", new JSONArray());
         statusResponse.put("occupiedTomorrow", new JSONArray());
 
-        SetpointDAO setpoints = new SetpointDAO();
-        TemperatureDAO temperatures = new TemperatureDAO();
-        HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
-        BookingDAO bookings = new BookingDAO();
-        for (ControllableArea controllableArea : ControllableArea.values()) {
-            JSONObject roomResponse = new JSONObject();
-            statusResponse.getJSONArray("rooms").put(roomResponse);
-            roomResponse.put("controllableArea", controllableArea);
-            roomResponse.put("setpoint", setpoints.getActual(controllableArea));
-            roomResponse.put("setpoint-default", setpoints.getDefault(controllableArea));
-            roomResponse.put("active", setpoints.isActive(controllableArea));
-            roomResponse.put("booking-now", bookings.getNow(controllableArea.room));
-            roomResponse.put("booking-tonight", bookings.getTonight(controllableArea.room));
-            roomResponse.put("booking-tomorrow", bookings.getTomorrow(controllableArea.room));
+        try (SetpointDAO setpointDAO = new SetpointDAO();
+                TemperatureDAO temperatureDAO = new TemperatureDAO();
+                BookingDAO bookingDAO = new BookingDAO();
+                HeatZoneStateDAO zoneStateDAO = new HeatZoneStateDAO()) {
 
-            if (temperatures.getActual(controllableArea) != null) {
-                roomResponse.put("temperature", temperatures.getActual(controllableArea));
-            }
+            for (ControllableArea controllableArea : ControllableArea.values()) {
+                JSONObject roomResponse = new JSONObject();
+                statusResponse.getJSONArray("rooms").put(roomResponse);
+                roomResponse.put("controllableArea", controllableArea);
+                roomResponse.put("setpoint", setpointDAO.getActual(controllableArea));
+                roomResponse.put("setpoint-default", setpointDAO.getDefault(controllableArea));
 
-            JSONArray zones = new JSONArray();
-            roomResponse.put("zones", zones);
-            for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
-                JSONObject zoneResponse = new JSONObject();
-                zoneResponse.put("zone", zone);
-                zoneResponse.put("stateDesired", zoneStates.getDesired(zone));
-                zoneResponse.put("stateActual", zoneStates.getActual(zone));
-                if (zoneStates.getOverride(zone) != null) {
-                    zoneResponse.put("stateOverride", zoneStates.getOverride(zone));
+                if (temperatureDAO.getActual(controllableArea) != null) {
+                    roomResponse.put("temperature", temperatureDAO.getActual(controllableArea));
                 }
-                zones.put(zoneResponse);
-            }
-        }
-        IOUtils.closeQuietly(setpoints);
-        IOUtils.closeQuietly(temperatures);
-        IOUtils.closeQuietly(zoneStates);
 
-        for (Room room : Building.INSTANCE.allControllableRooms()) {
-            if (bookings.isOccupiedNow(room)) {
-                JSONObject bookingNow = new JSONObject();
-                statusResponse.getJSONArray("occupiedNow").put(bookingNow);
-                bookingNow.put("name", bookings.getNow(room));
-                bookingNow.put("room", room);
+                JSONArray zones = new JSONArray();
+                roomResponse.put("zones", zones);
+                for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
+                    JSONObject zoneResponse = new JSONObject();
+                    zoneResponse.put("zone", zone);
+                    zoneResponse.put("stateDesired", zoneStateDAO.getDesired(zone));
+                    zoneResponse.put("stateActual", zoneStateDAO.getActual(zone));
+                    if (zoneStateDAO.getOverride(zone) != null) {
+                        zoneResponse.put("stateOverride", zoneStateDAO.getOverride(zone));
+                    }
+                    zones.put(zoneResponse);
+                }
             }
-            if (bookings.isOccupiedTonight(room)) {
-                JSONObject bookingTonight = new JSONObject();
-                statusResponse.getJSONArray("occupiedTonight").put(bookingTonight);
-                bookingTonight.put("name", bookings.getTonight(room));
-                bookingTonight.put("room", room);
-            }
-            if (bookings.isOccupiedTomorrow(room)) {
-                JSONObject bookingTomorrow = new JSONObject();
-                statusResponse.getJSONArray("occupiedTomorrow").put(bookingTomorrow);
-                bookingTomorrow.put("name", bookings.getTomorrow(room));
-                bookingTomorrow.put("room", room);
+
+            for (Room room : Building.INSTANCE.allControllableRooms()) {
+                if (bookingDAO.isOccupiedNow(room)) {
+                    JSONObject bookingNow = new JSONObject();
+                    statusResponse.getJSONArray("occupiedNow").put(bookingNow);
+                    bookingNow.put("name", bookingDAO.getNow(room));
+                    bookingNow.put("room", room);
+                }
+                if (bookingDAO.isOccupiedTonight(room)) {
+                    JSONObject bookingTonight = new JSONObject();
+                    statusResponse.getJSONArray("occupiedTonight").put(bookingTonight);
+                    bookingTonight.put("name", bookingDAO.getTonight(room));
+                    bookingTonight.put("room", room);
+                }
+                if (bookingDAO.isOccupiedTomorrow(room)) {
+                    JSONObject bookingTomorrow = new JSONObject();
+                    statusResponse.getJSONArray("occupiedTomorrow").put(bookingTomorrow);
+                    bookingTomorrow.put("name", bookingDAO.getTomorrow(room));
+                    bookingTomorrow.put("room", room);
+                }
             }
         }
-        IOUtils.closeQuietly(bookings);
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
