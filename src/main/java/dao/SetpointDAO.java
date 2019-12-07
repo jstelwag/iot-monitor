@@ -61,9 +61,12 @@ public class SetpointDAO implements Closeable {
         jedis.del(room + ".setpoint-override");
     }
 
-    public SetpointDAO setDefault(ControllableArea room, double value) {
+    public void setDefault(ControllableArea room, double value) {
         jedis.set(room + ".setpoint-default", Double.toString(value));
-        return this;
+    }
+
+    public void setPreheatSetpoint(ControllableArea room, double value) {
+        jedis.set(room + ".setpoint-preheat", Double.toString(value));
     }
 
     public boolean isActive(ControllableArea room) {
@@ -74,12 +77,11 @@ public class SetpointDAO implements Closeable {
         return "T".equals(jedis.get(room + ".heating-active"));
     }
 
-    public SetpointDAO setActive(ControllableArea room, boolean active) {
+    public void setActive(ControllableArea room, boolean active) {
         jedis.setex(room + ".heating-active", TTL_BOOKINGS, active ? "T" : "F");
-        return this;
     }
 
-    public SetpointDAO populateDefault() {
+    public void populateDefault() {
         for (ControllableArea area : ControllableArea.values()) {
             setDefault(area, DEFAULT_SETPOINT);
         }
@@ -87,8 +89,6 @@ public class SetpointDAO implements Closeable {
         setDefault(ControllableArea.room_f_bathroom, DEFAULT_SETPOINT_BEDROOM);
         setDefault(ControllableArea.room_1, DEFAULT_SETPOINT_BEDROOM);
         setDefault(ControllableArea.hall, DEFAULT_SETPOINT_BEDROOM);
-
-        return this;
     }
 
     private double timeCorrected(double in) {

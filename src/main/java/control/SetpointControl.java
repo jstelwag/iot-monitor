@@ -33,6 +33,7 @@ public class SetpointControl implements Runnable {
                     if (preheatSetpoint != null) {
                         setpointDAO.setActive(controlRoom, true);
                         setpointDAO.setDefault(controlRoom, preheatSetpoint);
+                        setpointDAO.setPreheatSetpoint(controlRoom, preheatSetpoint);
                         LogstashLogger.INSTANCE.info("Preheating " + room + ": " + preheatSetpoint);
                     } else {
                         setpointDAO.setActive(controlRoom, active);
@@ -51,7 +52,7 @@ public class SetpointControl implements Runnable {
 
     private Double preheatSetpoint(Date checkin, int hourThreshold) {
         if (checkin != null) {
-            Date preheatStart = DateUtils.addHours(new Date(), -hourThreshold);
+            Date preheatStart = DateUtils.addHours(checkin, -hourThreshold);
             long diffHours = (new Date().getTime() - preheatStart.getTime()) / (60*60*1000);
 
             if (diffHours < hourThreshold && diffHours > 0) {
