@@ -5,10 +5,8 @@ import building.ControllableArea;
 import building.Room;
 import dao.BookingDAO;
 import dao.SetpointDAO;
-import dao.TemperatureDAO;
 import org.apache.commons.lang3.time.DateUtils;
 import speaker.LogstashLogger;
-import util.HeatingProperties;
 
 import java.util.Date;
 
@@ -47,7 +45,7 @@ public class SetpointControl implements Runnable {
     }
 
     private boolean isOccupied(Date checkin) {
-        if (checkin.compareTo(new Date()) < 0) {
+        if (checkin != null && checkin.compareTo(new Date()) < 0) {
             return true;
         }
         return false;
