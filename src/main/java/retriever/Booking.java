@@ -64,6 +64,6 @@ public class Booking implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return this.checkinTime.compareTo(((Booking)o).checkinTime);
+        return checkinTime.compareTo(((Booking)o).checkinTime);
     }
 }

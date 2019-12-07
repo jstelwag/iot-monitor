@@ -58,22 +58,24 @@ public class Beds24BookingRetriever implements Runnable {
                             Booking booking = new Booking(DateUtils.parseDate(bedsBooking.getString("firstNight"), "yyyy-MM-dd")
                                     , DateUtils.parseDate(bedsBooking.getString("lastNight"), "yyyy-MM-dd")
                                     , room);
-                            if (!bookings.containsKey(room)) {
-                                bookings.put(room, new HashSet<Booking>());
-                            }
-                            bookings.get(room).add(booking);
+                            if (booking.checkoutTime.compareTo(new Date()) > 0) {
+                                if (!bookings.containsKey(room)) {
+                                    bookings.put(room, new TreeSet<>());
+                                }
+                                bookings.get(room).add(booking);
 
-                            if (booking.isOccupied()) {
-                                bookingDAO.setNow(room, name);
-                                roomsNow.add(room);
-                            }
-                            if (booking.isBookedToday()) {
-                                bookingDAO.setTonight(room, name);
-                                roomsTonight.add(room);
-                            }
-                            if (booking.isBookedTomorrow()) {
-                                bookingDAO.setTomorrow(room, name);
-                                roomsTomorrow.add(room);
+                                if (booking.isOccupied()) {
+                                    bookingDAO.setNow(room, name);
+                                    roomsNow.add(room);
+                                }
+                                if (booking.isBookedToday()) {
+                                    bookingDAO.setTonight(room, name);
+                                    roomsTonight.add(room);
+                                }
+                                if (booking.isBookedTomorrow()) {
+                                    bookingDAO.setTomorrow(room, name);
+                                    roomsTomorrow.add(room);
+                                }
                             }
                         } else {
                             LogstashLogger.INSTANCE.error("Unknown room id " + bedsBooking.toString(1));
