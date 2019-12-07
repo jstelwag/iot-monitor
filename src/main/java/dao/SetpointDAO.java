@@ -64,7 +64,7 @@ public class SetpointDAO implements Closeable {
 
     public double getHardDefault(ControllableArea area) {
         switch (area) {
-            case apartment_II:
+            case apartment_II_bedroom:
                 return DEFAULT_SETPOINT_BEDROOM;
             case room_f_bathroom:
                 return DEFAULT_SETPOINT_BEDROOM;
