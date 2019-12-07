@@ -1,6 +1,5 @@
 package dao;
 
-import building.Building;
 import building.ControllableArea;
 import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
@@ -81,7 +80,7 @@ public class SetpointDAO implements Closeable {
         jedis.setex(room + ".heating-active", TTL_BOOKINGS, active ? "T" : "F");
     }
 
-    public void populateDefault() {
+    public SetpointDAO populateDefault() {
         for (ControllableArea area : ControllableArea.values()) {
             setDefault(area, DEFAULT_SETPOINT);
         }
@@ -89,6 +88,7 @@ public class SetpointDAO implements Closeable {
         setDefault(ControllableArea.room_f_bathroom, DEFAULT_SETPOINT_BEDROOM);
         setDefault(ControllableArea.room_1, DEFAULT_SETPOINT_BEDROOM);
         setDefault(ControllableArea.hall, DEFAULT_SETPOINT_BEDROOM);
+        return this;
     }
 
     private double timeCorrected(double in) {
