@@ -31,8 +31,6 @@ public class Main {
             new ControlCalculator().run();
         } else if ("modulate".equals(args[0])) {
             new ZoneModulation().run();
-        } else if ("customerspeaker".equals(args[0])) {
-            new CustomerNameSpeaker().run();
         } else if ("beds24".equals(args[0])) {
             new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
         } else if ("roomreset".equals(args[0])) {

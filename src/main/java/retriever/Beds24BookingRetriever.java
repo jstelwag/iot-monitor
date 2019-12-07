@@ -96,9 +96,6 @@ public class Beds24BookingRetriever implements Runnable {
             }
 
             for (Room room : bookings.keySet()) {
-                for (Booking booking : bookings.get(room)) {
-                    System.out.println("Room " + room + ": " + booking.checkinTime);
-                }
                 bookingDAO.setFirstCheckinTime(room, bookings.get(room).first().checkinTime);
             }
             LogstashLogger.INSTANCE.info("Retrieved " + response.length() + " bookings");
