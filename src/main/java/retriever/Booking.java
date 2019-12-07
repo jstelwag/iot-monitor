@@ -6,7 +6,7 @@ import util.HeatingProperties;
 
 import java.util.Date;
 
-public class Booking {
+public class Booking implements Comparable {
 
     public final Date firstNight;
     public final Date lastNight;
@@ -60,5 +60,10 @@ public class Booking {
     @Override
     public String toString() {
         return room + " " + firstNight + "/" + lastNight;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return this.checkinTime.compareTo(((Booking)o).checkinTime);
     }
 }

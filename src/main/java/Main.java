@@ -1,5 +1,5 @@
 import control.ControlCalculator;
-import control.Setpoint;
+import control.SetpointControl;
 import control.ZoneModulation;
 import handlers.*;
 import lighting.AlwaysOn;
@@ -22,7 +22,7 @@ public class Main {
         } else if ("setpointspeaker".equals(args[0])) {
             new SetpointSpeaker().run();
         } else if ("setpoint".equals(args[0])) {
-            new Setpoint().run();
+            new SetpointControl().run();
         } else if ("fluxtemperatures".equals(args[0])) {
             new RoomtemperatureSpeaker().run();
         } else if ("statespeaker".equals(args[0])) {

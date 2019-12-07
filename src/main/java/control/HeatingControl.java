@@ -5,9 +5,11 @@ import building.Furnace;
 import building.HeatZone;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
-import org.apache.commons.io.IOUtils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class HeatingControl {
 
@@ -15,8 +17,8 @@ public class HeatingControl {
     public final Map<Furnace, ControlModulation> furnaceModulation = new HashMap<>();
 
     private HeatingControl() {
-        IOUtils.closeQuietly(new HeatZoneStateDAO().populateDefault());
-        IOUtils.closeQuietly(new SetpointDAO().populateDefault());
+        new HeatZoneStateDAO().populateDefault().close();
+        new SetpointDAO().populateDefault().close();
         for (Furnace furnace : Furnace.values()) {
             furnaceModulation.put(furnace, new ControlModulation());
         }
@@ -37,13 +39,13 @@ public class HeatingControl {
     /** @return the number of open zones in reach of given furnace */
     public int furnaceDesire(Furnace furnace) {
         int furnaceDesire = 0;
-        HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
-        for (HeatZone.ValveGroup group : HeatingControl.INSTANCE.valveGroupsByFurnace(furnace)) {
-            for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
-                if (zoneStates.getActual(zone)) furnaceDesire++;
+        try (HeatZoneStateDAO zoneStates = new HeatZoneStateDAO()) {
+            for (HeatZone.ValveGroup group : HeatingControl.INSTANCE.valveGroupsByFurnace(furnace)) {
+                for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
+                    if (zoneStates.getActual(zone)) furnaceDesire++;
+                }
             }
         }
-        IOUtils.closeQuietly(zoneStates);
         return furnaceDesire;
     }
 }

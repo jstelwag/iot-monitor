@@ -19,7 +19,7 @@ public class SetpointDAO implements Closeable {
 
     private final double DEFAULT_SETPOINT = 21.0;
     private final double DEFAULT_SETPOINT_BEDROOM = 19.5;
-    private final double DEFAULT_SETPOINT_OFF = 12.0;
+    public final double DEFAULT_SETPOINT_OFF = 12.0;
 
     public SetpointDAO() {
         jedis = new Jedis("localhost");

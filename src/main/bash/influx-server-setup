@@ -35,6 +35,7 @@ cat <<EOF >udp
  enabled = true
  bind-address = ":8087"
  database = "domotica"
+ precision = "s"
 EOF
 sudo bash -c "cat udp >> /etc/influxdb/influxdb.conf"
 

@@ -27,7 +27,7 @@ public class ControlCalculator implements Runnable {
                 for (HeatZone zone : Building.INSTANCE.zonesByRoom(controllableArea)) {
                     // todo add here an optimization algorithm
                     if (!temperatures.has(controllableArea)){
-                        // Just guessing heat desire
+                        LogstashLogger.INSTANCE.info("Guessing the temperature for " + controllableArea);
                         if (isWinter()) {
                             zoneStates.setDesired(zone, zone.isPreferred);
                         } else {
@@ -46,7 +46,7 @@ public class ControlCalculator implements Runnable {
                 }
             }
         } catch (Exception e) {
-            System.out.println("DAO exception " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Error at accessing Redis by controlling the temperature: " + e.getMessage());
         }
     }
 
@@ -58,6 +58,6 @@ public class ControlCalculator implements Runnable {
                 || now.get(Calendar.MONTH) == Calendar.FEBRUARY
                 || now.get(Calendar.MONTH) == Calendar.MARCH)
                 && now.get(Calendar.HOUR_OF_DAY) > 7
-                && now.get(Calendar.HOUR_OF_DAY) < 21;
+                && now.get(Calendar.HOUR_OF_DAY) < 22;
     }
 }

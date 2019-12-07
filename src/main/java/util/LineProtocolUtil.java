@@ -34,7 +34,7 @@ public class LineProtocolUtil {
 
     public static String protocolLine(HeatZone zone, String type, String value) {
         StringBuilder retVal = new StringBuilder();
-        retVal.append("valvegroup,name=").append(zone.group).append("");
+        retVal.append("valvegroup,name=").append(zone.group);
         retVal.append(",furnace=").append(zone.group.furnace);
         retVal.append(",sequence=").append(zone.groupSequence).append('i');
         if (zone.controllableArea != null) {

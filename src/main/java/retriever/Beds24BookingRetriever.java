@@ -21,7 +21,7 @@ public class Beds24BookingRetriever implements Runnable {
     private final JSONObject request = new JSONObject();
 
     public Beds24BookingRetriever(String apiKey, String propertyKey) {
-        request.put("arrivalTo", FastDateFormat.getInstance("yyyyMMdd").format(DateUtils.addDays(new Date(), 2)));
+        request.put("arrivalTo", FastDateFormat.getInstance("yyyyMMdd").format(DateUtils.addDays(new Date(), 3)));
         request.put("arrivalFrom", FastDateFormat.getInstance("yyyyMMdd").format(DateUtils.addDays(new Date(), -10)));
         request.put("authentication", new JSONObject().put("apiKey", apiKey).put("propKey", propertyKey));
     }
@@ -33,7 +33,12 @@ public class Beds24BookingRetriever implements Runnable {
         List<Room> roomsTonight = new ArrayList<>();
         List<Room> roomsTomorrow = new ArrayList<>();
 
-        try (BookingDAO bookings = new BookingDAO()) {
+        Map<Room, Set<Booking>> bookings = new HashMap<>();
+
+        List<Room> nextOccupation = new ArrayList<>();
+        List<Room> currentOccupation = new ArrayList<>();
+
+        try (BookingDAO bookingDAO = new BookingDAO()) {
             responseBody = Request.Post("https://www.beds24.com/api/json/getBookings")
                     .version(HttpVersion.HTTP_1_1)
                     .bodyString(request.toString(), ContentType.APPLICATION_JSON)
@@ -41,7 +46,8 @@ public class Beds24BookingRetriever implements Runnable {
             JSONArray response = new JSONArray(responseBody);
             for (int i = 0; i < response.length(); i++) {
                 JSONObject bedsBooking = response.getJSONObject(i);
-                if (bedsBooking.getInt("status") != 0) {
+                //Status values: https://api.beds24.com/json/getBookings
+                if (bedsBooking.getInt("status") == 1 || bedsBooking.getInt("status") == 2) {
                     String name = (bedsBooking.getString("guestFirstName") + " " + bedsBooking.getString("guestName")).trim();
                     Long roomId = bedsBooking.getLong("roomId");
                     if (roomId == null) {
@@ -52,17 +58,21 @@ public class Beds24BookingRetriever implements Runnable {
                             Booking booking = new Booking(DateUtils.parseDate(bedsBooking.getString("firstNight"), "yyyy-MM-dd")
                                     , DateUtils.parseDate(bedsBooking.getString("lastNight"), "yyyy-MM-dd")
                                     , room);
+                            if (!bookings.containsKey(room)) {
+                                bookings.put(room, new HashSet<Booking>());
+                            }
+                            bookings.get(room).add(booking);
 
                             if (booking.isOccupied()) {
-                                bookings.setNow(room, name);
+                                bookingDAO.setNow(room, name);
                                 roomsNow.add(room);
                             }
                             if (booking.isBookedToday()) {
-                                bookings.setTonight(room, name);
+                                bookingDAO.setTonight(room, name);
                                 roomsTonight.add(room);
                             }
                             if (booking.isBookedTomorrow()) {
-                                bookings.setTomorrow(room, name);
+                                bookingDAO.setTomorrow(room, name);
                                 roomsTomorrow.add(room);
                             }
                         } else {
@@ -74,13 +84,19 @@ public class Beds24BookingRetriever implements Runnable {
 
             for (Room room : Building.INSTANCE.bookableRooms()) {
                 if (!roomsNow.contains(room)) {
-                    bookings.setNow(room, null);
+                    bookingDAO.setNow(room, null);
                 }
                 if (!roomsTonight.contains(room)) {
-                    bookings.setTonight(room, null);
+                    bookingDAO.setTonight(room, null);
                 }
                 if (!roomsTomorrow.contains(room)) {
-                    bookings.setTomorrow(room, null);
+                    bookingDAO.setTomorrow(room, null);
+                }
+            }
+
+            for (Room room : bookings.keySet()) {
+                for (Booking booking : bookings.get(room)) {
+                    System.out.println("Room " + room + ": " + booking.checkinTime);
                 }
             }
             LogstashLogger.INSTANCE.info("Retrieved " + response.length() + " bookings");

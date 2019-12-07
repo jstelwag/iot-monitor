@@ -13,10 +13,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * If a room is unused, turn off the heating
- * When the room is occupied to(morrow)night or it is still 2 hours before checkout, the heating should be switched on
+ * If a room is unused, turn off the heating.
+ * Ramp up the setpoint to it's default value to allow the room to heat up in the hours before an empty room
+ * gets occupied.
  */
-public class Setpoint implements Runnable {
+public class SetpointControl implements Runnable {
 
     private final double LONG_PREHEAT_THRESHOLD = 16.0;
 

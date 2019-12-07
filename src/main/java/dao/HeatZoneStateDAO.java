@@ -6,8 +6,6 @@ import redis.clients.jedis.Jedis;
 
 import java.io.Closeable;
 
-import java.io.IOException;
-
 /**
  * Stores and retrieves different HeatZone states to Redis:
  * - Default
@@ -193,7 +191,7 @@ public class HeatZoneStateDAO implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         jedis.close();
     }
 }
