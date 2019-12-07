@@ -15,7 +15,6 @@ import java.util.Date;
 public class BookingDAO implements Closeable {
 
     private final Jedis jedis;
-
     private final int TTL_BOOKINGS = 60*30;
 
     public BookingDAO() {

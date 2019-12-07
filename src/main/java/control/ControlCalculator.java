@@ -6,7 +6,6 @@ import building.HeatZone;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
-import org.apache.commons.io.IOUtils;
 import speaker.LogstashLogger;
 
 import java.util.Calendar;

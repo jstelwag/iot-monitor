@@ -4,7 +4,6 @@ import building.Building;
 import building.Furnace;
 import building.HeatZone;
 import dao.HeatZoneStateDAO;
-import dao.SetpointDAO;
 
 import java.util.HashMap;
 import java.util.LinkedList;

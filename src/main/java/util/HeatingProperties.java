@@ -15,7 +15,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package util;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import tuwien.auto.calimero.knxnetip.KNXnetIPConnection;
 
@@ -30,15 +29,11 @@ public class HeatingProperties {
     public double latitude, longitude;
 
     public HeatingProperties()  {
-        InputStream inputStream = null;
         Properties prop = new Properties();
-        try {
-             inputStream = new FileInputStream("/etc/monitor.conf");
+        try (InputStream inputStream = new FileInputStream("/etc/monitor.conf")) {
              prop.load(inputStream);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            IOUtils.closeQuietly(inputStream);
         }
 
         masterPort = Integer.parseInt(prop.getProperty("master.port").trim());

@@ -26,21 +26,21 @@ public class StateHandler extends AbstractHandler {
         LogstashLogger.INSTANCE.info("State request");
         JSONArray stateResponse = new JSONArray();
 
-        HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
-        for (HeatZone.ValveGroup group : HeatZone.ValveGroup.values()) {
-            JSONObject groupsResponse = new JSONObject();
-            stateResponse.put(groupsResponse);
-            groupsResponse.put("name", group);
-            groupsResponse.put("states", new JSONArray());
-            for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
-                JSONObject state = new JSONObject();
-                state.put("sequence", zone.groupSequence);
-                state.put("valueDesired", zoneStates.getDesired(zone));
-                state.put("valueActual", zoneStates.getActual(zone));
-                groupsResponse.getJSONArray("states").put(state);
+        try (HeatZoneStateDAO zoneStateDAO = new HeatZoneStateDAO()) {
+            for (HeatZone.ValveGroup group : HeatZone.ValveGroup.values()) {
+                JSONObject groupsResponse = new JSONObject();
+                stateResponse.put(groupsResponse);
+                groupsResponse.put("name", group);
+                groupsResponse.put("states", new JSONArray());
+                for (HeatZone zone : Building.INSTANCE.zonesByGroup(group)) {
+                    JSONObject state = new JSONObject();
+                    state.put("sequence", zone.groupSequence);
+                    state.put("valueDesired", zoneStateDAO.getDesired(zone));
+                    state.put("valueActual", zoneStateDAO.getActual(zone));
+                    groupsResponse.getJSONArray("states").put(state);
+                }
             }
         }
-        IOUtils.closeQuietly(zoneStates);
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);

@@ -16,7 +16,6 @@ public class FurnaceStateDAO implements Closeable {
     private final Jedis jedis;
 
     final int TTL = 2 * 60; //seconds
-    final int TTL_ACTUAL = 30 * 60; //seconds
     final int TTL_OVERRIDE = 48 * 60 * 60; //seconds
 
     public FurnaceStateDAO() {
@@ -31,9 +30,8 @@ public class FurnaceStateDAO implements Closeable {
         return null;
     }
 
-    public FurnaceStateDAO setDesire(Furnace furnace, boolean state) {
+    public void setDesire(Furnace furnace, boolean state) {
         jedis.setex(furnace + ".state-desire", TTL, state ? "T" : "F");
-        return this;
     }
 
     public Boolean getOverride(Furnace furnace) {
@@ -44,14 +42,12 @@ public class FurnaceStateDAO implements Closeable {
         return null;
     }
 
-    public FurnaceStateDAO setOverride(Furnace furnace, boolean state) {
+    public void setOverride(Furnace furnace, boolean state) {
         jedis.setex(furnace + ".state-override", TTL_OVERRIDE, state ? "T" : "F");
-        return this;
     }
 
-    public FurnaceStateDAO removeOverride(Furnace furnace) {
+    public void removeOverride(Furnace furnace) {
         jedis.del(furnace + ".state-override");
-        return this;
     }
 
     @Override

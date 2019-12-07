@@ -4,7 +4,6 @@ import building.Building;
 import building.HeatZone;
 import control.HeatingControl;
 import dao.HeatZoneStateDAO;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import speaker.FluxLogger;
 import speaker.LogstashLogger;
@@ -22,7 +21,7 @@ public class IoTRequestDispatcher {
 
     public IoTRequestDispatcher(String lineIn) {
         if (StringUtils.isEmpty(lineIn)) {
-            System.out.println("Empty request");
+            LogstashLogger.INSTANCE.warn("Empty IoT request");
             this.lineIn = "empty:void";
         } else {
             this.lineIn = lineIn.trim();
@@ -70,23 +69,23 @@ public class IoTRequestDispatcher {
     public String actuatorsOut() {
         StringBuilder response = new StringBuilder();
 
-        HeatZoneStateDAO zoneStates = new HeatZoneStateDAO();
-        for (HeatZone zone : Building.INSTANCE.zonesByGroup(device(lineIn))) {
-            response.append(zoneStates.getActual(zone) ? "1" : "0");
-        }
-
-        if (device(lineIn) == HeatZone.ValveGroup.koetshuis_trap_15) {
-            int pumpDesire = 0;
+        try (HeatZoneStateDAO zoneStateDAO = new HeatZoneStateDAO()) {
             for (HeatZone zone : Building.INSTANCE.zonesByGroup(device(lineIn))) {
-                if (zoneStates.getActual(zone)) pumpDesire++;
+                response.append(zoneStateDAO.getActual(zone) ? "1" : "0");
             }
-            int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(device(lineIn).furnace);
-            boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(device(lineIn).furnace).control(furnaceDesire);
-            response.append(furnaceState && pumpDesire >= 5 ? "1" : "0");
-            //TODO shut down pump as soon as furnace is in boiler mode
+
+            if (device(lineIn) == HeatZone.ValveGroup.koetshuis_trap_15) {
+                int pumpDesire = 0;
+                for (HeatZone zone : Building.INSTANCE.zonesByGroup(device(lineIn))) {
+                    if (zoneStateDAO.getActual(zone)) pumpDesire++;
+                }
+                int furnaceDesire = HeatingControl.INSTANCE.furnaceDesire(device(lineIn).furnace);
+                boolean furnaceState = HeatingControl.INSTANCE.furnaceModulation.get(device(lineIn).furnace).control(furnaceDesire);
+                response.append(furnaceState && pumpDesire >= 5 ? "1" : "0");
+                //TODO shut down pump as soon as furnace is in boiler mode
+            }
         }
         response.append("E");
-        IOUtils.closeQuietly(zoneStates);
         return response.toString();
     }
 }

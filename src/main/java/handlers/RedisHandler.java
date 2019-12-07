@@ -1,6 +1,5 @@
 package handlers;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
@@ -22,21 +21,21 @@ public class RedisHandler extends AbstractHandler {
     @Override
     public void handle(String s, Request request, HttpServletRequest httpServletRequest, HttpServletResponse response)
             throws IOException, ServletException {
-        Jedis jedis = new Jedis("localhost");
-        List<String> all = new ArrayList<>(jedis.keys("*"));
-        Collections.sort(all);
 
         JSONArray redisResponse = new JSONArray();
-        for (String key : all) {
-            redisResponse.put(new JSONObject().put(key, new JSONObject()
-                    .put("value", jedis.get(key))
-                    .put("ttl", jedis.ttl(key))));
-        }
+        try (Jedis jedis = new Jedis("localhost")) {
+            List<String> all = new ArrayList<>(jedis.keys("*"));
+            Collections.sort(all);
 
-        IOUtils.closeQuietly(jedis);
+            for (String key : all) {
+                redisResponse.put(new JSONObject().put(key, new JSONObject()
+                        .put("value", jedis.get(key))
+                        .put("ttl", jedis.ttl(key))));
+            }
+        }
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(new JSONObject().put("dump", redisResponse).toString(2));
+        response.getWriter().println(new JSONObject().put("redis", redisResponse).toString(2));
         request.setHandled(true);
     }
 }

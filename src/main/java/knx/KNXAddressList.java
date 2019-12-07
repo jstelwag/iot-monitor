@@ -4,7 +4,6 @@ import building.Building;
 import building.Room;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.io.IOUtils;
 import speaker.LogstashLogger;
 import java.io.*;
 import java.util.HashSet;

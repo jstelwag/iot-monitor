@@ -23,9 +23,8 @@ public class LightingStateDAO implements Closeable {
         return null;
     }
 
-    public LightingStateDAO setState(String address, boolean state) {
+    public void setState(String address, boolean state) {
         jedis.setex(address + ".state", TTL, state ? "T" : "F");
-        return this;
     }
 
      public long getStateTTL(String address) {

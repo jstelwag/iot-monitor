@@ -12,6 +12,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import speaker.LogstashLogger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ public class StatusHandler extends AbstractHandler {
     @Override
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        System.out.println("Status request");
+        LogstashLogger.INSTANCE.info("Status request " + s);
         JSONObject statusResponse = new JSONObject();
         statusResponse.put("rooms", new JSONArray());
         statusResponse.put("occupiedNow", new JSONArray());
