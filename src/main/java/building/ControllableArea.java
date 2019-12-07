@@ -4,7 +4,7 @@ import tuwien.auto.calimero.GroupAddress;
 
 public enum ControllableArea {
     /** new GroupAddress(2, 5, 1) apartment_I sensor is in outer wall, too low temp */
-    apartment_I(Room.apartment_I, null, 36),
+    apartment_I(Room.apartment_I, new GroupAddress(2, 5, 1), 36),
     apartment_II(Room.apartment_II, new GroupAddress(1, 5, 1), 24),
     apartment_II_bedroom(Room.apartment_II, new GroupAddress(1, 5, 61), 24),
     room_a(Room.room_a, new GroupAddress(2, 5, 11), 36),

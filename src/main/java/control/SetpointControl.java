@@ -7,10 +7,10 @@ import dao.BookingDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
 import org.apache.commons.lang3.time.DateUtils;
+import speaker.LogstashLogger;
 import util.HeatingProperties;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * If a room is unused, turn off the heating.
@@ -21,23 +21,47 @@ public class SetpointControl implements Runnable {
 
     private final double LONG_PREHEAT_THRESHOLD = 16.0;
 
+    private final double PREHEAT_START_TEMP = 15.0;
+    private final double PREHEAT_FINAL_TEMP = 20.0;
+
     @Override
     public void run() {
-        Date now = new Date();
-        Date heatingOffTime = DateUtils.addHours(HeatingProperties.checkoutTime(now), -2);
-
-        try (SetpointDAO setpoints = new SetpointDAO();
-            BookingDAO bookings = new BookingDAO();
-            TemperatureDAO temperatures = new TemperatureDAO()) {
+        try (SetpointDAO setpointDAO = new SetpointDAO();
+            BookingDAO bookingDAO = new BookingDAO()) {
             for (Room room : Building.INSTANCE.allControllableRooms()) {
                 boolean active = room.beds24Id == null
-                        || bookings.isOccupiedTonight(room)
-                        || (temperatures.get(Building.INSTANCE.firstControllableArea(room)) < LONG_PREHEAT_THRESHOLD && bookings.isOccupiedTomorrow(room))
-                        || (bookings.isOccupiedNow(room) && now.before(heatingOffTime));
+                        || isOccupied(bookingDAO.getFirstCheckinTime(room));
+                Double preheatSetpoint = preheatSetpoint(bookingDAO.getFirstCheckinTime(room)
+                        , Building.INSTANCE.firstControllableArea(room).preheatRampTimeHours);
                 for (ControllableArea controlRoom : Building.INSTANCE.findControllableAreas(room)) {
-                    setpoints.setActive(controlRoom, active);
+                    if (preheatSetpoint != null) {
+                        setpointDAO.setActive(controlRoom, true);
+                        setpointDAO.setDefault(controlRoom, preheatSetpoint);
+                        LogstashLogger.INSTANCE.info("Preheating " + room + ": " + preheatSetpoint);
+                    } else {
+                        setpointDAO.setActive(controlRoom, active);
+                    }
                 }
             }
         }
+    }
+
+    private boolean isOccupied(Date checkin) {
+        if (checkin.compareTo(new Date()) < 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private Double preheatSetpoint(Date checkin, int hourThreshold) {
+        if (checkin != null) {
+            Date preheatStart = DateUtils.addHours(new Date(), -hourThreshold);
+            long diffHours = (new Date().getTime() - preheatStart.getTime()) / (60*60*1000);
+
+            if (diffHours < hourThreshold && diffHours > 0) {
+                return PREHEAT_START_TEMP + (PREHEAT_FINAL_TEMP - PREHEAT_START_TEMP) * diffHours/hourThreshold;
+            }
+        }
+        return null;
     }
 }

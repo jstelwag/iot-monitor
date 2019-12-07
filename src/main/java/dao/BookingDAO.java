@@ -1,6 +1,7 @@
 package dao;
 
 import building.Room;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import redis.clients.jedis.Jedis;
@@ -57,16 +58,22 @@ public class BookingDAO implements Closeable {
      * Check-in date and time of the first booking on given room. If the date is in the past, the room is already occupied.
      * If the booking is more than DAY_AHEAD days (it was 3) in the future, null is returned.
      */
-    public Date getFirstCheckinTime(Room room) throws ParseException {
-        if (jedis.exists(room + ".first-booking-date")) {
-            return DateUtils.parseDate(jedis.get(room + ".first-checkin-time"), "yyyyMMdd HH:mm");
+    public Date getFirstCheckinTime(Room room) {
+        try {
+            if (jedis.exists(room + ".first-booking-date")) {
+                return DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.parse(jedis.get(room + ".first-checkin-time"));
+            }
+        } catch (ParseException e) {
+            LogstashLogger.INSTANCE.error("Could not parse date " + jedis.get(room + ".first-checkin-time")
+                    + " for room " + room);
         }
         return null;
     }
 
     public void setFirstCheckinTime(Room room, Date date) {
         jedis.setex(room + ".first-checkin-time"
-                , TTL_BOOKINGS, FastDateFormat.getInstance("yyyyMMdd HH:mm").format(date));
+                , TTL_BOOKINGS, DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.format(date));
+
     }
 
     public BookingDAO setTomorrow(Room room, String name) {
