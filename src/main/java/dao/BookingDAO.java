@@ -1,10 +1,14 @@
 package dao;
 
 import building.Room;
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
 
 import java.io.Closeable;
+import java.text.ParseException;
+import java.util.Date;
 
 /**
  * Created by Jaap on 11-12-2016.
@@ -47,6 +51,22 @@ public class BookingDAO implements Closeable {
 
     public String getTomorrow(Room room) {
         return jedis.get(room + ".booking-tomorrow");
+    }
+
+    /**
+     * Check-in date and time of the first booking on given room. If the date is in the past, the room is already occupied.
+     * If the booking is more than DAY_AHEAD days (it was 3) in the future, null is returned.
+     */
+    public Date getFirstCheckinTime(Room room) throws ParseException {
+        if (jedis.exists(room + ".first-booking-date")) {
+            return DateUtils.parseDate(jedis.get(room + ".first-checkin-time"), "yyyyMMdd HH:mm");
+        }
+        return null;
+    }
+
+    public void setFirstCheckinTime(Room room, Date date) {
+        jedis.setex(room + ".first-checkin-time"
+                , TTL_BOOKINGS, FastDateFormat.getInstance("yyyyMMdd HH:mm").format(date));
     }
 
     public BookingDAO setTomorrow(Room room, String name) {

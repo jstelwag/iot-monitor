@@ -20,8 +20,10 @@ public class Beds24BookingRetriever implements Runnable {
 
     private final JSONObject request = new JSONObject();
 
+    private final int DAYS_AHEAD = 3;
+
     public Beds24BookingRetriever(String apiKey, String propertyKey) {
-        request.put("arrivalTo", FastDateFormat.getInstance("yyyyMMdd").format(DateUtils.addDays(new Date(), 3)));
+        request.put("arrivalTo", FastDateFormat.getInstance("yyyyMMdd").format(DateUtils.addDays(new Date(), DAYS_AHEAD)));
         request.put("arrivalFrom", FastDateFormat.getInstance("yyyyMMdd").format(DateUtils.addDays(new Date(), -10)));
         request.put("authentication", new JSONObject().put("apiKey", apiKey).put("propKey", propertyKey));
     }
@@ -33,10 +35,7 @@ public class Beds24BookingRetriever implements Runnable {
         List<Room> roomsTonight = new ArrayList<>();
         List<Room> roomsTomorrow = new ArrayList<>();
 
-        Map<Room, Set<Booking>> bookings = new HashMap<>();
-
-        List<Room> nextOccupation = new ArrayList<>();
-        List<Room> currentOccupation = new ArrayList<>();
+        Map<Room, SortedSet<Booking>> bookings = new HashMap<>();
 
         try (BookingDAO bookingDAO = new BookingDAO()) {
             responseBody = Request.Post("https://www.beds24.com/api/json/getBookings")
@@ -100,6 +99,7 @@ public class Beds24BookingRetriever implements Runnable {
                 for (Booking booking : bookings.get(room)) {
                     System.out.println("Room " + room + ": " + booking.checkinTime);
                 }
+                bookingDAO.setFirstCheckinTime(room, bookings.get(room).first().checkinTime);
             }
             LogstashLogger.INSTANCE.info("Retrieved " + response.length() + " bookings");
         } catch (IOException | ParseException e) {
