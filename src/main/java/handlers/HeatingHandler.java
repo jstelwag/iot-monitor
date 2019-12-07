@@ -109,9 +109,6 @@ public class HeatingHandler extends AbstractHandler {
                     stateDAO.removeOverride(zone);
                     out.println("Removed override " + zone);
                 }
-            } catch (IOException e) {
-                LogstashLogger.INSTANCE.error("Can't connect with state dao, " + e.getMessage());
-                out.println("Error: " + e.getMessage());
             }
         } else {
             out.println(lineIn + "?");

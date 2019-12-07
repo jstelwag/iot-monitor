@@ -9,7 +9,6 @@ import dao.SetpointDAO;
 import dao.TemperatureDAO;
 import speaker.LogstashLogger;
 
-import java.io.IOException;
 import java.util.Random;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -97,8 +96,6 @@ public class ZoneModulation implements Runnable {
                     }
                 }
             }
-        } catch (IOException e) {
-            LogstashLogger.INSTANCE.error("Failed to connect with Redis " + e.getMessage());
         }
     }
 }
