@@ -2,8 +2,6 @@ package dao;
 
 import building.Room;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.apache.commons.lang3.time.FastDateFormat;
 import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
 
@@ -59,12 +57,13 @@ public class BookingDAO implements Closeable {
      * If the booking is more than DAY_AHEAD days (it was 3) in the future, null is returned.
      */
     public Date getFirstCheckinTime(Room room) {
+        String key = room + ".first-checkin-time";
         try {
-            if (jedis.exists(room + ".first-booking-date")) {
-                return DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.parse(jedis.get(room + ".first-checkin-time"));
+            if (jedis.exists(key)) {
+                return DateFormatUtils.ISO_8601_EXTENDED_DATETIME_TIME_ZONE_FORMAT.parse(jedis.get(key));
             }
         } catch (ParseException e) {
-            LogstashLogger.INSTANCE.error("Could not parse date " + jedis.get(room + ".first-checkin-time")
+            LogstashLogger.INSTANCE.error("Could not parse date " + jedis.get(key)
                     + " for room " + room);
         }
         return null;

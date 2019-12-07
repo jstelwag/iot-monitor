@@ -17,8 +17,6 @@ import java.util.Date;
  */
 public class SetpointControl implements Runnable {
 
-    private final double LONG_PREHEAT_THRESHOLD = 16.0;
-
     private final double PREHEAT_START_TEMP = 15.0;
     private final double PREHEAT_FINAL_TEMP = 20.0;
 
