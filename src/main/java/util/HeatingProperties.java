@@ -63,7 +63,7 @@ public class HeatingProperties {
     }
 
     public static Date checkoutTime(Date day) {
-        return DateUtils.setMinutes(DateUtils.setHours(day, 11), 0);
+        return DateUtils.setMinutes(DateUtils.setHours(day, 10), 0);
     }
 
     public static Date checkinTime(Date day) {
