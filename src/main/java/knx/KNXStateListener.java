@@ -1,27 +1,16 @@
 package knx;
 
-import speaker.LogstashLogger;
 import dao.LightingStateDAO;
-import tuwien.auto.calimero.link.NetworkLinkListener;
-import tuwien.auto.calimero.CloseEvent;
-import tuwien.auto.calimero.FrameEvent;
+import speaker.LogstashLogger;
 
 /**
  * Listen to status messages and update state in Redis
  */
-public class KNXStateListener implements NetworkLinkListener {
-
-    KNXAddressList addressList = new KNXAddressList();
+public class KNXStateListener implements EventHandler {
 
     @Override
-    public void confirmation(FrameEvent frameEvent) {}
-
-    @Override
-    public void indication(FrameEvent frameEvent) {
+    public void onEvent(String event, KNXAddress knx) {
         try {
-            String event = frameEvent.getFrame().toString();
-            KNXAddress knx = addressList.findInString(event);
-
             //TODO test if this is correct, not sure if the tdpu codes are in order
             //https://doc.qt.io/QtKNX/qknxtpdu.html
             if (knx != null) {
@@ -41,10 +30,5 @@ public class KNXStateListener implements NetworkLinkListener {
         } catch (Exception e) {
             LogstashLogger.INSTANCE.error("Caught unexpected exception, " + e.getMessage());
         }
-    }
-
-    @Override
-    public void linkClosed(CloseEvent closeEvent) {
-        LogstashLogger.INSTANCE.info("State listener closing");
     }
 }

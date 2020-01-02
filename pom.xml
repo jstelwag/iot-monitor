@@ -96,6 +96,11 @@
             <version>1.5</version> <!-- version 1.6 produces errors -->
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
+        <dependency>
             <groupId>net.e175.klaus</groupId>
             <artifactId>solarpositioning</artifactId>
             <version>0.0.9</version>

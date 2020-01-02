@@ -32,7 +32,7 @@ public class SwitchLights {
             try {
                 KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);
                 retVal++;
-            } catch (KNXException | InterruptedException e) {
+            } catch (KNXException e) {
                 LogstashLogger.INSTANCE.error("Failed to switch room " + room
                         + "@" + address + ", " + e.getMessage());
             }

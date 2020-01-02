@@ -1,20 +1,24 @@
 package knx;
 
+import org.apache.commons.collections4.map.PassiveExpiringMap;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
 import tuwien.auto.calimero.datapoint.StateDP;
-
 import tuwien.auto.calimero.link.KNXNetworkLink;
 import tuwien.auto.calimero.link.KNXNetworkLinkIP;
+import tuwien.auto.calimero.link.medium.TPSettings;
 import tuwien.auto.calimero.process.ProcessCommunicator;
 import tuwien.auto.calimero.process.ProcessCommunicatorImpl;
 import util.HeatingProperties;
 
-import java.net.*;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
-
-import tuwien.auto.calimero.link.medium.TPSettings;
 
 /**
  * Link to the KNX bus. Retrieve and write data through this class
@@ -22,34 +26,42 @@ import tuwien.auto.calimero.link.medium.TPSettings;
 public class KNXLink {
 
     private static KNXLink INSTANCE = null;
-
-    private InetSocketAddress knxIP;
+    private InetSocketAddress[] knxIP = {null, null};
     private InetAddress localIp;
-    private int localPortStart;
+    private int[] localPortStart = {10000, 20000};
+
+    private int robin = 0;
 
     public static final long CLOSE_TIMEOUT_MS = 60000;
 
-    private long lastCheck = System.currentTimeMillis();
+    private long[] lastCheck = {System.currentTimeMillis(), System.currentTimeMillis()};
 
-    private KNXNetworkLink knxLink = null;
-    private ProcessCommunicator pc = null;
+    /** KNX events that come in via both knx bridges are kept in this map in order to ensure an event is handled only once */
+    private final Map<String, String> eventMap = new PassiveExpiringMap(1000);
+    private final List<EventHandler> events = new LinkedList<>();
+    private final KNXAddressList addressList = new KNXAddressList();
 
-    private final KNXEventListener listener = new KNXEventListener();
-    private final KNXStateListener stateListener = new KNXStateListener();
-    private final ToggleAllListener toggleListener = new ToggleAllListener();
+    private KNXNetworkLink[] knxLink = {null, null};
+    private ProcessCommunicator[] pc = {null, null};
 
     protected KNXLink() {
         HeatingProperties prop = new HeatingProperties();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                close(0);
+                close(0, 0);
+                close(1,0);
             }
         });
+
+        events.add(new KNXStateListener());
+        events.add(new ToggleAllListener());
+        events.add(new KNXEventLogger());
+
         try {
-            knxIP = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
+            knxIP[0] = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
+            knxIP[1] = new InetSocketAddress(InetAddress.getByName("192.168.178.120"), prop.knxPort);
             localIp = InetAddress.getByName(prop.localIp);
-            localPortStart = prop.localPort;
         } catch (UnknownHostException e) {
             LogstashLogger.INSTANCE.error("Could not initialize KNX link settings " + e.getMessage());
         }
@@ -63,34 +75,49 @@ public class KNXLink {
         return INSTANCE;
     }
 
-    private ProcessCommunicator pc() throws KNXException, InterruptedException {
-        if (knxLink == null || !knxLink.isOpen()) {
-            LogstashLogger.INSTANCE.info("There is no KNX link, creating the connection");
+    public synchronized void eventHandler(String event) {
+        if (!eventMap.containsKey(event)) {
+            eventMap.put(event, "null");
+        } else {
+            KNXAddress knx = addressList.findInString(event);
+            if (knx != null) {
+                for (EventHandler handler : events) {
+                    handler.onEvent(event, knx);
+                }
+            } else {
+                LogstashLogger.INSTANCE.warn("Unknown address for event " + event);
+            }
+        }
+    }
+
+    private ProcessCommunicator pc() throws KNXException {
+        robin = robin == 0 ? 1 : 0;
+        if (knxLink[robin] == null || !knxLink[robin].isOpen()) {
+            LogstashLogger.INSTANCE.info(String.format("KNX link #%d, is closed, creating the connection", robin));
             connect();
-        } else if (lastCheck + 300000 < System.currentTimeMillis()) {
+        } else if (lastCheck[robin] + 300000 < System.currentTimeMillis()) {
             lastCheck();
             //Check the connection every five minutes
             if(!testConnection()) {
-                LogstashLogger.INSTANCE.warn("Connection test failure, restarting connection");
-                close(CLOSE_TIMEOUT_MS);
+                LogstashLogger.INSTANCE.warn(String.format("Connection test failure at #%d, restarting connection", robin));
+                close(robin, CLOSE_TIMEOUT_MS);
                 connect();
             }
         }
 
-        return pc;
+        return pc[robin];
     }
 
-    private void open() throws KNXException, InterruptedException, ConnectException {
-        int port = new Random().nextInt(10000) + localPortStart;
-        LogstashLogger.INSTANCE.info("Opening knx from port " + port);
+    private void open() throws KNXException, InterruptedException {
+        int port = new Random().nextInt(10000) + localPortStart[robin];
+        LogstashLogger.INSTANCE.info(String.format("Opening knx #%d from port %d", robin, port));
         InetSocketAddress localAddress = new InetSocketAddress(localIp, port);
         LogstashLogger.INSTANCE.info("Connecting KNX link @" + localAddress.toString());
 
-        knxLink = KNXNetworkLinkIP.newTunnelingLink(localAddress
-                , knxIP, false
+        knxLink[robin] = KNXNetworkLinkIP.newTunnelingLink(localAddress
+                , knxIP[robin], false
                 , TPSettings.TP1);
-        pc = new ProcessCommunicatorImpl(knxLink);
-
+        pc[robin] = new ProcessCommunicatorImpl(knxLink[robin]);
     }
 
     private void connect() throws KNXException {
@@ -98,31 +125,30 @@ public class KNXLink {
         try {
             open();
             open = true;
-        } catch (KNXException | InterruptedException | ConnectException e) {
-            LogstashLogger.INSTANCE.warn("Connection to knx failed, but i will retry " + e.getMessage());
-            close(CLOSE_TIMEOUT_MS);
+        } catch (KNXException | InterruptedException e) {
+            LogstashLogger.INSTANCE.warn(String.format("Connection to knx[%d] failed, but i will retry %s", robin, e.getMessage()));
+            close(robin, CLOSE_TIMEOUT_MS);
             try {
                 open();
                 open = true;
-            } catch (KNXException | InterruptedException | ConnectException e1) {
+            } catch (KNXException | InterruptedException e1) {
                 LogstashLogger.INSTANCE.warn("Second connection attempt to knx failed, i give up " + e1.getMessage());
             }
         }
 
         if (open && testConnection()) {
-            knxLink.addLinkListener(listener);
-            knxLink.addLinkListener(stateListener);
-            knxLink.addLinkListener(toggleListener);
-            LogstashLogger.INSTANCE.info("Connected to knx " + knxIP + " @" + knxLink.getKNXMedium().getDeviceAddress());
+            knxLink[robin].addLinkListener(new KNXEventListener());
+            LogstashLogger.INSTANCE.info(String.format("Connected #%d to knx %s @ %s", robin, knxIP[robin]
+                    , knxLink[robin].getKNXMedium().getDeviceAddress()));
         } else {
-            LogstashLogger.INSTANCE.error("knx link connection failed, closing without retrying");
-            close(CLOSE_TIMEOUT_MS);
-            throw new KNXException("Failed to connect to KNX bus");
+            LogstashLogger.INSTANCE.error(String.format("knx link #%d connection failed, closing without retrying", robin));
+            close(robin, CLOSE_TIMEOUT_MS);
+            throw new KNXException("Failed to connect to KNX bus #" + robin);
         }
     }
 
     public void lastCheck() {
-        lastCheck = System.currentTimeMillis();
+        lastCheck[robin] = System.currentTimeMillis();
     }
 
     /** Check the status of a device on the KNX bus, if it responds, it it OK */
@@ -130,12 +156,12 @@ public class KNXLink {
         //Bathroom room 1, ventilation
         GroupAddress address = new GroupAddress(4, 1, 103);
         try {
-            pc.readBool(address);
+            pc[robin].readBool(address);
         } catch (KNXException | InterruptedException e) {
             //Bathroom room 2, ventilation
             address = new GroupAddress(6, 1, 102);
             try {
-                pc.readBool(address);
+                pc[robin].readBool(address);
             } catch (KNXException | InterruptedException e1) {
                 LogstashLogger.INSTANCE.warn("KNXLink not connected, knx test requests failed, "
                         + e.getMessage() + " and " + e1.getMessage());
@@ -145,18 +171,16 @@ public class KNXLink {
         return true;
     }
 
-    public void close(long sleep) {
-        LogstashLogger.INSTANCE.info("Closing knx connection");
-        if (pc != null) {
-            pc.detach();
-            pc = null;
+    public void close(int robin, long sleep) {
+        LogstashLogger.INSTANCE.info("Closing knx connection #" + robin);
+        if (pc[robin] != null) {
+            pc[robin].detach();
+            pc[robin] = null;
         }
-        if (knxLink != null) {
-            knxLink.removeLinkListener(listener);
-            knxLink.removeLinkListener(stateListener);
-            knxLink.removeLinkListener(toggleListener);
-            knxLink.close();
-            knxLink = null;
+        if (knxLink[robin] != null) {
+            knxLink[robin].removeLinkListener(new KNXEventListener());
+            knxLink[robin].close();
+            knxLink[robin] = null;
         }
         try {
             Thread.sleep(sleep);
@@ -172,7 +196,7 @@ public class KNXLink {
             return retVal;
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.warn("readFloat reported an exception, " + e.getMessage());
-            lastCheck = 0;
+            lastCheck[robin] = 0;
             throw e;
         }
     }
@@ -184,7 +208,7 @@ public class KNXLink {
             return retVal;
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.warn("readBoolean reported an exception, " + e.getMessage());
-            lastCheck = 0;
+            lastCheck[robin] = 0;
             throw e;
         }
     }
@@ -196,7 +220,7 @@ public class KNXLink {
             return retVal;
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.warn("readInt reported an exception, " + e.getMessage());
-            lastCheck = 0;
+            lastCheck[robin] = 0;
             throw e;
         }
     }
@@ -208,40 +232,40 @@ public class KNXLink {
             return retVal;
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.warn("readString reported an exception, " + e.getMessage());
-            lastCheck = 0;
+            lastCheck[robin] = 0;
             throw e;
         }
     }
 
-    public void writeFloat(GroupAddress address, float soll) throws KNXException, InterruptedException {
+    public void writeFloat(GroupAddress address, float soll) throws KNXException {
         try {
             pc().write(address, soll, true);
             lastCheck();
-        } catch (KNXException | InterruptedException e) {
+        } catch (KNXException e) {
             LogstashLogger.INSTANCE.warn("writeInt reported an exception, " + e.getMessage());
-            lastCheck = 0;
+            lastCheck[robin] = 0;
             throw e;
         }
     }
 
-    public void writeBoolean(GroupAddress address, boolean soll) throws KNXException, InterruptedException {
+    public void writeBoolean(GroupAddress address, boolean soll) throws KNXException {
         try {
             pc().write(address, soll);
             lastCheck();
-        } catch (KNXException | InterruptedException e) {
+        } catch (KNXException e) {
             LogstashLogger.INSTANCE.warn("writeBoolean reported an exception, " + e.getMessage());
-            lastCheck = 0;
+            lastCheck[robin] = 0;
             throw e;
         }
     }
 
-    public void writeInt(GroupAddress address, int soll) throws KNXException, InterruptedException {
+    public void writeInt(GroupAddress address, int soll) throws KNXException {
         try {
             pc().write(address, soll, ProcessCommunicator.UNSCALED);
             lastCheck();
-        } catch (KNXException | InterruptedException e) {
+        } catch (KNXException e) {
             LogstashLogger.INSTANCE.warn("writeInt reported an exception, " + e.getMessage());
-            lastCheck = 0;
+            lastCheck[robin] = 0;
             throw e;
         }
     }

@@ -159,7 +159,7 @@ public class KNXHandler extends AbstractHandler {
         try {
             KNXLink.getInstance().writeFloat(address, soll);
             retVal.put("status", "OK");
-        } catch (KNXException | InterruptedException e) {
+        } catch (KNXException e) {
             retVal.put("error", e.getMessage());
         }
 
@@ -175,7 +175,7 @@ public class KNXHandler extends AbstractHandler {
         try {
             KNXLink.getInstance().writeBoolean(address, soll);
             retVal.put("status", "OK");
-        } catch (KNXException | InterruptedException e) {
+        } catch (KNXException e) {
             retVal.put("error", e.getMessage());
         }
 
@@ -191,7 +191,7 @@ public class KNXHandler extends AbstractHandler {
         try {
             KNXLink.getInstance().writeInt(address, soll);
             retVal.put("status", "OK");
-        } catch (KNXException | InterruptedException e) {
+        } catch (KNXException e) {
             retVal.put("error", e.getMessage());
         }
 
