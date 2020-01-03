@@ -128,6 +128,7 @@ public class KNXLink {
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.warn(String.format("Connection to knx[%d] failed, but i will retry %s", robin, e.getMessage()));
             close(robin, CLOSE_TIMEOUT_MS);
+            robin = robin == 0 ? 1 : 0;
             try {
                 open();
                 open = true;

@@ -23,7 +23,7 @@ public class KNXStateListener implements EventHandler {
                             LogstashLogger.INSTANCE.error("Unknown tpdu response for " + knx + " " + event);
                         }
                         dao.setState(knx.address, status);
-                        LogstashLogger.INSTANCE.info("Button for " + knx + " with value " + status);
+                        LogstashLogger.INSTANCE.info(String.format("Button for %s switched to %s", knx, status));
                     }
                 }
            }
