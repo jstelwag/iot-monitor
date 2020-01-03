@@ -37,7 +37,7 @@ public class KNXLink {
     private long[] lastCheck = {System.currentTimeMillis(), System.currentTimeMillis()};
 
     /** KNX events that come in via both knx bridges are kept in this map in order to ensure an event is handled only once */
-    private final Map<String, String> eventMap = new PassiveExpiringMap(1000);
+    private final Map<String, String> eventMap = new PassiveExpiringMap<>(1000);
     private final List<EventHandler> events = new LinkedList<>();
     private final KNXAddressList addressList = new KNXAddressList();
 
@@ -46,13 +46,10 @@ public class KNXLink {
 
     protected KNXLink() {
         HeatingProperties prop = new HeatingProperties();
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                close(0, 0);
-                close(1,0);
-            }
-        });
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            close(0, 0);
+            close(1,0);
+        }));
 
         events.add(new KNXStateListener());
         events.add(new ToggleAllListener());
@@ -91,7 +88,7 @@ public class KNXLink {
     }
 
     private ProcessCommunicator pc() throws KNXException {
-        robin = robin == 0 ? 1 : 0;
+        robin = robin == 1 ? 0 : 1;
         if (knxLink[robin] == null || !knxLink[robin].isOpen()) {
             LogstashLogger.INSTANCE.info(String.format("KNX link #%d, is closed, creating the connection", robin));
             connect();
@@ -128,7 +125,7 @@ public class KNXLink {
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.warn(String.format("Connection to knx[%d] failed, but i will retry %s", robin, e.getMessage()));
             close(robin, CLOSE_TIMEOUT_MS);
-            robin = robin == 0 ? 1 : 0;
+            robin = robin == 1 ? 0 : 1;
             try {
                 open();
                 open = true;
@@ -191,51 +188,87 @@ public class KNXLink {
     }
 
     public double readFloat(GroupAddress address) throws KNXException, InterruptedException {
+        double retVal;
         try {
-            double retVal = pc().readFloat(address);
+            retVal = pc().readFloat(address);
             lastCheck();
-            return retVal;
         } catch (KNXException | InterruptedException e) {
-            LogstashLogger.INSTANCE.warn("readFloat reported an exception, " + e.getMessage());
+            LogstashLogger.INSTANCE.warn("readFloat reported an exception, retrying with other knx link" + e.getMessage());
             lastCheck[robin] = 0;
-            throw e;
+            try {
+                // pc()  will perform a round robin and with high probability chose the other knx link
+                retVal = pc().readFloat(address);
+                lastCheck();
+            } catch (KNXException e2) {
+                LogstashLogger.INSTANCE.warn("Second attempt on readFloat failed: " + e2.getMessage());
+                lastCheck[robin] = 0;
+                throw e2;
+            }
         }
+        return retVal;
     }
 
     public boolean readBoolean(GroupAddress address) throws KNXException, InterruptedException {
+        boolean retVal;
         try {
-            boolean retVal = pc().readBool(address);
+            retVal = pc().readBool(address);
             lastCheck();
-            return retVal;
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.warn("readBoolean reported an exception, " + e.getMessage());
             lastCheck[robin] = 0;
-            throw e;
+            try {
+                // pc()  will perform a round robin and with high probability chose the other knx link
+                retVal = pc().readBool(address);
+                lastCheck();
+            } catch (KNXException e2) {
+                LogstashLogger.INSTANCE.warn("Second attempt on readBool failed: " + e2.getMessage());
+                lastCheck[robin] = 0;
+                throw e2;
+            }
         }
+        return retVal;
     }
 
     public int readInt(GroupAddress address) throws KNXException, InterruptedException {
+        int retVal;
         try {
-            int retVal = pc().readUnsigned(address, ProcessCommunicator.UNSCALED);
+            retVal = pc().readUnsigned(address, ProcessCommunicator.UNSCALED);
             lastCheck();
-            return retVal;
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.warn("readInt reported an exception, " + e.getMessage());
             lastCheck[robin] = 0;
-            throw e;
+            try {
+                // pc()  will perform a round robin and with high probability chose the other knx link
+                retVal = pc().readUnsigned(address, ProcessCommunicator.UNSCALED);
+                lastCheck();
+            } catch (KNXException e2) {
+                LogstashLogger.INSTANCE.warn("Second attempt on readInt failed: " + e2.getMessage());
+                lastCheck[robin] = 0;
+                throw e2;
+            }
         }
+        return retVal;
     }
 
     public String readString(GroupAddress address) throws KNXException, InterruptedException {
+        String retVal;
         try {
-            String retVal = pc().read(new StateDP(address, "string"));
+            retVal = pc().read(new StateDP(address, "string"));
             lastCheck();
-            return retVal;
         } catch (KNXException | InterruptedException e) {
             LogstashLogger.INSTANCE.warn("readString reported an exception, " + e.getMessage());
             lastCheck[robin] = 0;
-            throw e;
+            try {
+                // pc()  will perform a round robin and with high probability chose the other knx link
+                retVal = pc().read(new StateDP(address, "string"));
+                lastCheck();
+            } catch (KNXException e2) {
+                LogstashLogger.INSTANCE.warn("Second attempt on readString failed: " + e2.getMessage());
+                lastCheck[robin] = 0;
+                throw e2;
+            }
         }
+        return retVal;
     }
 
     public void writeFloat(GroupAddress address, float soll) throws KNXException {
@@ -245,7 +278,15 @@ public class KNXLink {
         } catch (KNXException e) {
             LogstashLogger.INSTANCE.warn("writeInt reported an exception, " + e.getMessage());
             lastCheck[robin] = 0;
-            throw e;
+            try {
+                // pc()  will perform a round robin and with high probability chose the other knx link
+                pc().write(address, soll, true);
+                lastCheck();
+            } catch (KNXException e2) {
+                LogstashLogger.INSTANCE.warn("Second attempt on writeFloat failed: " + e2.getMessage());
+                lastCheck[robin] = 0;
+                throw e2;
+            }
         }
     }
 
@@ -256,7 +297,15 @@ public class KNXLink {
         } catch (KNXException e) {
             LogstashLogger.INSTANCE.warn("writeBoolean reported an exception, " + e.getMessage());
             lastCheck[robin] = 0;
-            throw e;
+            try {
+                // pc()  will perform a round robin and with high probability chose the other knx link
+                pc().write(address, soll);
+                lastCheck();
+            } catch (KNXException e2) {
+                LogstashLogger.INSTANCE.warn("Second attempt on writeBoolean failed: " + e2.getMessage());
+                lastCheck[robin] = 0;
+                throw e2;
+            }
         }
     }
 
@@ -267,7 +316,15 @@ public class KNXLink {
         } catch (KNXException e) {
             LogstashLogger.INSTANCE.warn("writeInt reported an exception, " + e.getMessage());
             lastCheck[robin] = 0;
-            throw e;
+            try {
+                // pc()  will perform a round robin and with high probability chose the other knx link
+                pc().write(address, soll, ProcessCommunicator.UNSCALED);
+                lastCheck();
+            } catch (KNXException e2) {
+                LogstashLogger.INSTANCE.warn("Second attempt on writeInt failed: " + e2.getMessage());
+                lastCheck[robin] = 0;
+                throw e2;
+            }
         }
     }
 }
