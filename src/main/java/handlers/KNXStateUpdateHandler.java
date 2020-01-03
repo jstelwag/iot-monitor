@@ -3,7 +3,7 @@ package handlers;
 import dao.LightingStateDAO;
 import knx.KNXAddress;
 import knx.KNXAddressList;
-import knx.KNXLink;
+import knx.KNXAccess;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import speaker.LogstashLogger;
@@ -37,15 +37,15 @@ public class KNXStateUpdateHandler extends AbstractHandler {
                         if (ignoreErrorAddresses.contains(address.address)) {
                             response.getWriter().println("Ignoring " + address);
                         } else {
-                            boolean state = KNXLink.getInstance().readBoolean(new GroupAddress(address.address.replace("/0/", "/1/")));
+                            boolean state = KNXAccess.readBoolean(new GroupAddress(address.address.replace("/0/", "/1/")));
                             dao.setState(address.address, state);
                             response.getWriter().println("Updated state for " + address);
                             response.getWriter().flush();
                         }
-                    } catch (KNXException | InterruptedException e) {
-                        response.getWriter().println("Error occurred for " + address + ": " + e.toString());
+                    } catch (KNXException e) {
+                        response.getWriter().println("Error occurred for " + address + ": " + e.getMessage());
                         response.getWriter().flush();
-                        LogstashLogger.INSTANCE.error("Failed reading " + address + " while updating the state " + e.toString());
+                        LogstashLogger.INSTANCE.error("Failed reading " + address + " while updating the state " + e.getMessage());
                     }
                 }
             }

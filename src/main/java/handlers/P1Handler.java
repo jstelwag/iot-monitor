@@ -1,6 +1,6 @@
 package handlers;
 
-import knx.KNXLink;
+import knx.KNXAccess;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
@@ -32,12 +32,12 @@ public class P1Handler extends AbstractHandler {
         Map<String, GroupAddress> p1List = buildList();
         try (FluxLogger flux = new FluxLogger()) {
             for (String key : p1List.keySet()) {
-                String value = KNXLink.getInstance().readString(p1List.get(key));
+                String value = KNXAccess.readString(p1List.get(key));
                 BigInteger decimal = new BigInteger(value.replace(" ", ""), 16);
                 knxResponse.put(key, decimal);
                 flux.message("P1,metric=" + key + " value=" + decimal + "i");
             }
-        } catch (KNXException | InterruptedException e) {
+        } catch (KNXException e) {
             LogstashLogger.INSTANCE.error("Failed to receive p1 values, " + e.getMessage());
         }
 

@@ -1,6 +1,6 @@
 package lighting;
 
-import knx.KNXLink;
+import knx.KNXAccess;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
@@ -11,7 +11,7 @@ public class AlwaysOn {
         try {
             Schedule schedule = new Schedule();
             for (String address : schedule.alwaysOn) {
-                KNXLink.getInstance().writeBoolean(new GroupAddress(address), true);
+                KNXAccess.writeBoolean(new GroupAddress(address), true);
                 Thread.sleep(500);
             }
         } catch (KNXException | InterruptedException e) {

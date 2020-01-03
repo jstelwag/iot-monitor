@@ -2,7 +2,7 @@ package handlers;
 
 import building.ControllableArea;
 import dao.TemperatureDAO;
-import knx.KNXLink;
+import knx.KNXAccess;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import speaker.LogstashLogger;
@@ -23,22 +23,22 @@ public class KNXTemperaturesHandler extends AbstractHandler {
     public void handle(String s, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         boolean result = true;
-        String message = "";
+        StringBuilder message = new StringBuilder();
         try (TemperatureDAO temperatures = new TemperatureDAO()) {
             for (ControllableArea controllableArea : ControllableArea.values()) {
                 if (controllableArea.temperatureSensor != null) {
                     try {
-                        double value = KNXLink.getInstance().readFloat(controllableArea.temperatureSensor);
+                        double value = KNXAccess.readFloat(controllableArea.temperatureSensor);
                         temperatures.set(controllableArea, value);
                     } catch (KNXTimeoutException e) {
-                        message += "Timeout retrieving " + controllableArea + " temperature. ";
+                        message.append("Timeout retrieving ").append(controllableArea).append(" temperature. ");
                         LogstashLogger.INSTANCE.error("Timeout retrieving " + controllableArea + " temperature");
                         result = false;
                     }
                 }
             }
-        } catch (KNXException | InterruptedException e) {
-            message += "ERROR: closing KNX link, it is giving exceptions " + e.getMessage();
+        } catch (KNXException e) {
+            message.append("ERROR: closing KNX link, it is giving exceptions ").append(e.getMessage());
             LogstashLogger.INSTANCE.error("Closing KNX link, it is giving exceptions " + e.getMessage());
             result = false;
         }
@@ -47,7 +47,7 @@ public class KNXTemperaturesHandler extends AbstractHandler {
         if (result) {
             response.getWriter().println("{\"status\"=\"OK\"}");
         } else {
-            response.getWriter().println("{\"status\"=\"ERROR\", \"message\"=\"" + message + "\"}");
+            response.getWriter().println("{\"status\"=\"ERROR\", \"message\"=\"" + message.toString() + "\"}");
         }
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);

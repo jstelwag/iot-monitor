@@ -1,9 +1,10 @@
 package lighting;
 
 import building.Room;
+import dao.LightingStateDAO;
 import knx.KNXAddress;
 import knx.KNXAddressList;
-import knx.KNXLink;
+import knx.KNXAccess;
 import redis.clients.jedis.Jedis;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
@@ -13,8 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import dao.LightingStateDAO;
-import static lighting.Schedule.*;
+import static lighting.Schedule.Location;
 
 public class SwitchLights {
 
@@ -30,7 +30,7 @@ public class SwitchLights {
         int retVal = 0;
         for (KNXAddress address : addressList.addressesByRoom(room, "all")) {
             try {
-                KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), false);
+                KNXAccess.writeBoolean(new GroupAddress(address.address), false);
                 retVal++;
             } catch (KNXException e) {
                 LogstashLogger.INSTANCE.error("Failed to switch room " + room
@@ -57,7 +57,7 @@ public class SwitchLights {
 
         for (KNXAddress address : roomLights) {
             try {
-                KNXLink.getInstance().writeBoolean(new GroupAddress(address.address), desiredState);
+                KNXAccess.writeBoolean(new GroupAddress(address.address), desiredState);
                 retVal++;
                 Thread.sleep(50); //Wait a little to reduce LED switching peaks
             } catch (KNXException | InterruptedException e) {
@@ -72,7 +72,7 @@ public class SwitchLights {
         LogstashLogger.INSTANCE.info("Switching - lights " + (on ? "on" : "off"));
         for (String address : lights) {
             try {
-                KNXLink.getInstance().writeBoolean(new GroupAddress(address), on);
+                KNXAccess.writeBoolean(new GroupAddress(address), on);
                 Thread.sleep(100);
             } catch (KNXException | InterruptedException e) {
                  LogstashLogger.INSTANCE.error("KNX switching problem " + e.getMessage());
@@ -86,7 +86,7 @@ public class SwitchLights {
             jedis.set(location + ".state", state.name());
             for (String address : lights) {
                 try {
-                    KNXLink.getInstance().writeBoolean(new GroupAddress(address), (state == LightState.Dusk || state == LightState.WinterMorning));
+                    KNXAccess.writeBoolean(new GroupAddress(address), (state == LightState.Dusk || state == LightState.WinterMorning));
                     Thread.sleep(100);
                 } catch (KNXException | InterruptedException e) {
                     LogstashLogger.INSTANCE.error("KNX switching problem @" + location + ", " + e.getMessage());

@@ -1,6 +1,6 @@
 package handlers;
 
-import knx.KNXLink;
+import knx.KNXAccess;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONObject;
@@ -100,8 +100,8 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/float");
         retVal.put("group", address.toString());
         try {
-            retVal.put("knx return value", KNXLink.getInstance().readFloat(address));
-        } catch (KNXException | InterruptedException e) {
+            retVal.put("knx return value", KNXAccess.readFloat(address));
+        } catch (KNXException e) {
             retVal.put("error", e.getMessage());
         }
 
@@ -114,8 +114,8 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/boolean");
         retVal.put("group", address.toString());
         try {
-            retVal.put("knx return value", KNXLink.getInstance().readBoolean(address));
-        } catch (KNXException | InterruptedException e) {
+            retVal.put("knx return value", KNXAccess.readBoolean(address));
+        } catch (KNXException e) {
             retVal.put("error", e.getMessage());
          }
 
@@ -128,8 +128,8 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/int");
         retVal.put("group", address.toString());
         try {
-            retVal.put("knx return value", KNXLink.getInstance().readInt(address));
-        } catch (KNXException | InterruptedException e) {
+            retVal.put("knx return value", KNXAccess.readInt(address));
+        } catch (KNXException e) {
             retVal.put("error", e.getMessage());
         }
 
@@ -142,8 +142,8 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("command", "read/string");
         retVal.put("group", address.toString());
         try {
-            retVal.put("knx return value", KNXLink.getInstance().readString(address));
-        } catch (KNXException | InterruptedException e) {
+            retVal.put("knx return value", KNXAccess.readString(address));
+        } catch (KNXException e) {
             retVal.put("error", e.getMessage());
         }
 
@@ -157,7 +157,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
-            KNXLink.getInstance().writeFloat(address, soll);
+            KNXAccess.writeFloat(address, soll);
             retVal.put("status", "OK");
         } catch (KNXException e) {
             retVal.put("error", e.getMessage());
@@ -173,7 +173,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
-            KNXLink.getInstance().writeBoolean(address, soll);
+            KNXAccess.writeBoolean(address, soll);
             retVal.put("status", "OK");
         } catch (KNXException e) {
             retVal.put("error", e.getMessage());
@@ -189,7 +189,7 @@ public class KNXHandler extends AbstractHandler {
         retVal.put("group", address.toString());
         retVal.put("value", soll);
         try {
-            KNXLink.getInstance().writeInt(address, soll);
+            KNXAccess.writeInt(address, soll);
             retVal.put("status", "OK");
         } catch (KNXException e) {
             retVal.put("error", e.getMessage());
