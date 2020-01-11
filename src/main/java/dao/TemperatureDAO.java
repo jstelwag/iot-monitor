@@ -12,6 +12,7 @@ public class TemperatureDAO implements Closeable {
     private final Jedis jedis;
 
     final int TTL_KNX = 120;
+    final int EXPIRATION = TTL_KNX - 30;
 
     public TemperatureDAO() {
         jedis = new Jedis("localhost");
@@ -26,6 +27,10 @@ public class TemperatureDAO implements Closeable {
 
     public boolean has(ControllableArea room) {
         return jedis.exists(room + ".temperature");
+    }
+
+    public boolean isExpired(ControllableArea room) {
+        return !has(room) || jedis.ttl(room + ".temperature") < EXPIRATION;
     }
 
     public Double getActual(ControllableArea room) {
