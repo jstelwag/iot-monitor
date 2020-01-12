@@ -8,6 +8,7 @@ import dao.BookingDAO;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
+import knx.KNXLink;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.json.JSONArray;
@@ -85,6 +86,10 @@ public class StatusHandler extends AbstractHandler {
                 }
             }
         }
+
+        statusResponse.put("knxLink", new JSONArray());
+        statusResponse.getJSONArray("knxLink").put(KNXLink.getInstance(0).usageCount);
+        statusResponse.getJSONArray("knxLink").put(KNXLink.getInstance(1).usageCount);
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);

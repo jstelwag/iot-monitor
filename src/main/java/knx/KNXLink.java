@@ -14,10 +14,7 @@ import util.HeatingProperties;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Link to the KNX bus. Low level access to retrieve and write data through this class - usually you will use KNXAccess
@@ -30,13 +27,13 @@ public class KNXLink {
     private InetSocketAddress knxIP = null;
     private InetAddress localIp;
     private int[] localPortStart = {10000, 20000};
-    public boolean[] linkState = {false, false};
+    /** Successful usage count, at a reconnect the counter is reset. */
+    public long usageCount = 0;
+    public long lastCheck = System.currentTimeMillis();
 
     private int knxBridge;
 
     public static final long CLOSE_TIMEOUT_MS = 60000;
-
-    private long lastCheck = System.currentTimeMillis();
 
     /** KNX events that come in via both knx bridges are kept in this map in order to ensure an event is handled only once */
     private final Map<String, String> eventMap = new PassiveExpiringMap<>(1000);
@@ -88,6 +85,7 @@ public class KNXLink {
                 for (EventHandler handler : events) {
                     handler.onEvent(event, knx);
                 }
+                usageCount++;
             } else {
                 LogstashLogger.INSTANCE.warn("Unknown address for event " + event);
             }
@@ -100,7 +98,7 @@ public class KNXLink {
             connect();
         } else if (lastCheck + 300000 < System.currentTimeMillis()) {
             //Check the connection every five minutes
-            if(!testConnection()) {
+            if (!testConnection()) {
                 LogstashLogger.INSTANCE.warn(String.format("Connection test failure at #%d, restarting connection", knxBridge));
                 close(CLOSE_TIMEOUT_MS);
                 connect();
@@ -108,7 +106,6 @@ public class KNXLink {
                 lastCheck(true);
             }
         }
-
         return pc;
     }
 
@@ -126,6 +123,7 @@ public class KNXLink {
 
     private void connect() throws KNXException {
         boolean open = false;
+        usageCount = 0;
         try {
             open();
             open = true;
@@ -149,6 +147,7 @@ public class KNXLink {
     public void lastCheck(boolean success) {
         if (success) {
             lastCheck = System.currentTimeMillis();
+            usageCount++;
         } else {
             lastCheck = 0;
         }
