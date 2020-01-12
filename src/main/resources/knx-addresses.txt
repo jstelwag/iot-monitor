@@ -34,8 +34,8 @@
 0/2/28	P1	misc	yet_unknown	none	aantal lange uitvallen
 0/2/29	P1	misc	yet_unknown	none	laaste lange uitval datum
 0/2/3	P1	misc	yet_unknown	none	P1 error counter
-0/2/30	P1	misc	yet_unknown	none	laaste lange uitval tijd
-0/2/31	P1	misc	yet_unknown	none	laaste lange uitval duur(s)
+0/2/30	P1	misc	yet_unknown	none	laatste lange uitval tijd
+0/2/31	P1	misc	yet_unknown	none	laatste lange uitval duur(s)
 0/2/32	P1	misc	yet_unknown	none	spanningspieken L1
 0/2/33	P1	misc	yet_unknown	none	spanningspieken L2
 0/2/34	P1	misc	yet_unknown	none	spanningspieken L3

@@ -52,10 +52,6 @@ public class P1Handler extends AbstractHandler {
         retVal.put("P1_L2_Actual_W", new GroupAddress(0, 2, 153));
         retVal.put("P1_L3_Actual_W", new GroupAddress(0, 2, 154));
 
-        retVal.put("P1_Low_Usage_kWh", new GroupAddress(0, 2, 71));
-        retVal.put("P1_High_Usage_kWh", new GroupAddress(0, 2, 72));
-        retVal.put("P1_Total_Usage_kWh", new GroupAddress(0, 2, 73));
-
         return retVal;
     }
 }
