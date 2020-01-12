@@ -1,9 +1,8 @@
 package speaker;
 
 import building.Building;
-import building.ControllableArea;
 import building.Room;
-import dao.BookingDAO;
+import dao.RoomOccupationDAO;
 import org.apache.http.client.fluent.Request;
 import util.HeatingProperties;
 
@@ -19,7 +18,7 @@ public class KNXRoomReset implements Runnable {
     @Override
     public void run() {
         int resetCount = 0;
-        try (BookingDAO bookings = new BookingDAO()) {
+        try (RoomOccupationDAO bookings = new RoomOccupationDAO()) {
             for (Room room : Building.INSTANCE.bookableRooms()) {
                 if ("empty".equals(bookings.getTonight(room))) {
                     HeatingProperties prop = new HeatingProperties();

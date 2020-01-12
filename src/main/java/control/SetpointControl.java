@@ -3,10 +3,9 @@ package control;
 import building.Building;
 import building.ControllableArea;
 import building.Room;
-import dao.BookingDAO;
+import dao.RoomOccupationDAO;
 import dao.SetpointDAO;
 import org.apache.commons.lang3.time.DateUtils;
-import speaker.LogstashLogger;
 
 import java.util.Date;
 
@@ -23,15 +22,15 @@ public class SetpointControl implements Runnable {
     @Override
     public void run() {
         try (SetpointDAO setpointDAO = new SetpointDAO();
-            BookingDAO bookingDAO = new BookingDAO()) {
+            RoomOccupationDAO roomOccupationDAO = new RoomOccupationDAO()) {
             for (Room room : Building.INSTANCE.allControllableRooms()) {
-                Double preheatSetpoint = preheatSetpoint(bookingDAO.getFirstCheckinTime(room)
+                Double preheatSetpoint = preheatSetpoint(roomOccupationDAO.getFirstCheckinTime(room)
                         , Building.INSTANCE.firstControllableArea(room).preheatRampTimeHours);
                 for (ControllableArea controlRoom : Building.INSTANCE.findControllableAreas(room)) {
                     if (room.beds24Id == null) {
                         // Not a bookable room
                         setpointDAO.setDefault(controlRoom, setpointDAO.getHardDefault(controlRoom));
-                    } else if (isOccupied(bookingDAO.getFirstCheckinTime(room))) {
+                    } else if (isOccupied(roomOccupationDAO.getFirstCheckinTime(room))) {
                         setpointDAO.setDefault(controlRoom, setpointDAO.getHardDefault(controlRoom));
                     } else if (preheatSetpoint != null) {
                         setpointDAO.setDefault(controlRoom, preheatSetpoint);

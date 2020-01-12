@@ -4,7 +4,7 @@ import building.Building;
 import building.ControllableArea;
 import building.HeatZone;
 import building.Room;
-import dao.BookingDAO;
+import dao.RoomOccupationDAO;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
@@ -36,9 +36,9 @@ public class StatusHandler extends AbstractHandler {
         statusResponse.put("occupiedTomorrow", new JSONArray());
 
         try (SetpointDAO setpointDAO = new SetpointDAO();
-                TemperatureDAO temperatureDAO = new TemperatureDAO();
-                BookingDAO bookingDAO = new BookingDAO();
-                HeatZoneStateDAO zoneStateDAO = new HeatZoneStateDAO()) {
+             TemperatureDAO temperatureDAO = new TemperatureDAO();
+             RoomOccupationDAO roomOccupationDAO = new RoomOccupationDAO();
+             HeatZoneStateDAO zoneStateDAO = new HeatZoneStateDAO()) {
 
             for (ControllableArea controllableArea : ControllableArea.values()) {
                 JSONObject roomResponse = new JSONObject();
@@ -66,22 +66,22 @@ public class StatusHandler extends AbstractHandler {
             }
 
             for (Room room : Building.INSTANCE.allControllableRooms()) {
-                if (bookingDAO.isOccupiedNow(room)) {
+                if (roomOccupationDAO.isOccupiedNow(room)) {
                     JSONObject bookingNow = new JSONObject();
                     statusResponse.getJSONArray("occupiedNow").put(bookingNow);
-                    bookingNow.put("name", bookingDAO.getNow(room));
+                    bookingNow.put("name", roomOccupationDAO.getNow(room));
                     bookingNow.put("room", room);
                 }
-                if (bookingDAO.isOccupiedTonight(room)) {
+                if (roomOccupationDAO.isOccupiedTonight(room)) {
                     JSONObject bookingTonight = new JSONObject();
                     statusResponse.getJSONArray("occupiedTonight").put(bookingTonight);
-                    bookingTonight.put("name", bookingDAO.getTonight(room));
+                    bookingTonight.put("name", roomOccupationDAO.getTonight(room));
                     bookingTonight.put("room", room);
                 }
-                if (bookingDAO.isOccupiedTomorrow(room)) {
+                if (roomOccupationDAO.isOccupiedTomorrow(room)) {
                     JSONObject bookingTomorrow = new JSONObject();
                     statusResponse.getJSONArray("occupiedTomorrow").put(bookingTomorrow);
-                    bookingTomorrow.put("name", bookingDAO.getTomorrow(room));
+                    bookingTomorrow.put("name", roomOccupationDAO.getTomorrow(room));
                     bookingTomorrow.put("room", room);
                 }
             }

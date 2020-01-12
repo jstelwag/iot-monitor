@@ -3,7 +3,7 @@ package control;
 import building.Building;
 import building.Furnace;
 import building.HeatZone;
-import dao.BookingDAO;
+import dao.RoomOccupationDAO;
 import dao.HeatZoneStateDAO;
 import dao.SetpointDAO;
 import dao.TemperatureDAO;
@@ -48,7 +48,7 @@ public class ZoneModulation implements Runnable {
     @Override
     public void run() {
         try (HeatZoneStateDAO zoneDao = new HeatZoneStateDAO();
-             BookingDAO bookingDAO = new BookingDAO();
+             RoomOccupationDAO roomOccupationDAO = new RoomOccupationDAO();
              TemperatureDAO temperatureDAO = new TemperatureDAO();
              SetpointDAO setpointDAO = new SetpointDAO()) {
 
@@ -69,7 +69,7 @@ public class ZoneModulation implements Runnable {
                             item.weight = item.weight - 50;
                         }
 
-                        if (zone.controllableArea.room.beds24Id != null && bookingDAO.isOccupiedNow(zone.controllableArea.room)) {
+                        if (zone.controllableArea.room.beds24Id != null && roomOccupationDAO.isOccupiedNow(zone.controllableArea.room)) {
                             item.weight = item.weight + 50;
                         }
 

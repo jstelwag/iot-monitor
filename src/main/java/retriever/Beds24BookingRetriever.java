@@ -2,7 +2,7 @@ package retriever;
 
 import building.Building;
 import building.Room;
-import dao.BookingDAO;
+import dao.RoomOccupationDAO;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.http.HttpVersion;
@@ -37,7 +37,7 @@ public class Beds24BookingRetriever implements Runnable {
 
         Map<Room, SortedSet<Booking>> bookings = new HashMap<>();
 
-        try (BookingDAO bookingDAO = new BookingDAO()) {
+        try (RoomOccupationDAO roomOccupationDAO = new RoomOccupationDAO()) {
             responseBody = Request.Post("https://www.beds24.com/api/json/getBookings")
                     .version(HttpVersion.HTTP_1_1)
                     .bodyString(request.toString(), ContentType.APPLICATION_JSON)
@@ -64,15 +64,15 @@ public class Beds24BookingRetriever implements Runnable {
                                 bookings.get(room).add(booking);
 
                                 if (booking.isOccupied()) {
-                                    bookingDAO.setNow(room, name);
+                                    roomOccupationDAO.setNow(room, name);
                                     roomsNow.add(room);
                                 }
                                 if (booking.isBookedToday()) {
-                                    bookingDAO.setTonight(room, name);
+                                    roomOccupationDAO.setTonight(room, name);
                                     roomsTonight.add(room);
                                 }
                                 if (booking.isBookedTomorrow()) {
-                                    bookingDAO.setTomorrow(room, name);
+                                    roomOccupationDAO.setTomorrow(room, name);
                                     roomsTomorrow.add(room);
                                 }
                             }
@@ -85,18 +85,18 @@ public class Beds24BookingRetriever implements Runnable {
 
             for (Room room : Building.INSTANCE.bookableRooms()) {
                 if (!roomsNow.contains(room)) {
-                    bookingDAO.setNow(room, null);
+                    roomOccupationDAO.setNow(room, null);
                 }
                 if (!roomsTonight.contains(room)) {
-                    bookingDAO.setTonight(room, null);
+                    roomOccupationDAO.setTonight(room, null);
                 }
                 if (!roomsTomorrow.contains(room)) {
-                    bookingDAO.setTomorrow(room, null);
+                    roomOccupationDAO.setTomorrow(room, null);
                 }
             }
 
             for (Room room : bookings.keySet()) {
-                bookingDAO.setFirstCheckinTime(room, bookings.get(room).first().checkinTime);
+                roomOccupationDAO.setFirstCheckinTime(room, bookings.get(room).first().checkinTime);
             }
             LogstashLogger.INSTANCE.info("Retrieved " + response.length() + " bookings");
         } catch (IOException | ParseException e) {
