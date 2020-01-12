@@ -1,9 +1,10 @@
 package knx;
 
+import speaker.FluxLogger;
 import speaker.LogstashLogger;
-import tuwien.auto.calimero.GroupAddress;
-import tuwien.auto.calimero.KNXException;
 
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,18 +21,16 @@ public class P1EventLogger implements EventHandler {
     @Override
     public void onEvent(String event, KNXAddress knx) {
         if (knx.type == KNXAddress.Type.P1) {
-            LogstashLogger.INSTANCE.message("p1-event", knx.address + " " + event);
-                if (fluxList.containsKey(knx.address) && event.contains("tpdu 00 80")) {
-                    try {
-                        int p1Value = Integer.parseInt(
-                                event.split("tpdu 00 80")[1].replaceAll(" ", "").trim()
-                                , 16);
-                        int knxValue = KNXAccess.readInt(new GroupAddress(knx.address));
-                        LogstashLogger.INSTANCE.message("p1-event", "Match " + knx.address + " " + p1Value + " - " + knxValue);
-                    } catch (KNXException e) {
-                        e.printStackTrace();
-                    }
+            if (fluxList.containsKey(knx.address) && event.contains("tpdu 00 80")) {
+                try (FluxLogger flux = new FluxLogger()) {
+                    int p1Value = Integer.parseInt(
+                            event.split("tpdu 00 80")[1].replaceAll(" ", "").trim()
+                            , 16);
+                    flux.message("P1,metric=" + fluxList.get(knx.address) + " value=" + p1Value + "i");
+                } catch (SocketException | UnknownHostException e) {
+                    LogstashLogger.INSTANCE.warn("Could not connect with InfluxDB to upload p1. " + e.getMessage());
                 }
+            }
         }
     }
 }
