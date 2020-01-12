@@ -22,7 +22,7 @@ import java.util.*;
  * @see KNXAddress
  */
 public class KNXLink {
-
+    final private int knxBridge;
     private static KNXLink[] INSTANCE = {null, null};
     private InetSocketAddress knxIP = null;
     private InetAddress localIp;
@@ -30,8 +30,6 @@ public class KNXLink {
     /** Successful usage count, at a reconnect the counter is reset. */
     public long usageCount = 0;
     public long lastCheck = System.currentTimeMillis();
-
-    private int knxBridge;
 
     public static final long CLOSE_TIMEOUT_MS = 60000;
 
@@ -43,11 +41,10 @@ public class KNXLink {
     private KNXNetworkLink knxLink = null;
     private ProcessCommunicator pc = null;
 
-    protected KNXLink() {
+    protected KNXLink(int knxBridge) {
+        this.knxBridge = knxBridge;
         HeatingProperties prop = new HeatingProperties();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            close(0);
-        }));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> close(0)));
 
         events.add(new KNXStateListener());
         events.add(new ToggleAllListener());
@@ -69,7 +66,7 @@ public class KNXLink {
 
     public synchronized static KNXLink getInstance(int knxBridge) {
         if (INSTANCE[knxBridge] == null) {
-            INSTANCE[knxBridge] = new KNXLink();
+            INSTANCE[knxBridge] = new KNXLink(knxBridge);
         }
         return INSTANCE[knxBridge];
     }
@@ -128,18 +125,16 @@ public class KNXLink {
     }
 
     private void connect() throws KNXException {
-        boolean open = false;
         usageCount = 0;
         try {
             open();
-            open = true;
         } catch (KNXException | InterruptedException e) {
-            LogstashLogger.INSTANCE.warn(String.format("Connection to knx[%d] failed", knxBridge, e.getMessage()));
+            LogstashLogger.INSTANCE.warn(String.format("Connection to knx[%d] failed: %s", knxBridge, e.getMessage()));
             close(CLOSE_TIMEOUT_MS);
             throw new KNXException(String.format("Connection to knx[%d] failed", knxBridge), e);
         }
 
-        if (open && testConnection()) {
+        if (testConnection()) {
             knxLink.addLinkListener(new KNXEventListener());
             LogstashLogger.INSTANCE.info(String.format("Connected #%d to knx %s @ %s", knxBridge, knxIP
                     , knxLink.getKNXMedium().getDeviceAddress()));
