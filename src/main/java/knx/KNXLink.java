@@ -52,6 +52,7 @@ public class KNXLink {
         events.add(new KNXStateListener());
         events.add(new ToggleAllListener());
         events.add(new KNXEventLogger());
+        events.add(new P1EventLogger());
 
         try {
             if (knxBridge == 0) {
