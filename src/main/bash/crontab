@@ -11,7 +11,6 @@ HOME=/home/jaap
 * * * * * curl (sleep 20 && localhost:8000/knxtemperatures/)
 * * * * * curl (sleep 40 && localhost:8000/knxtemperatures/)
 * * * * * curl localhost:8000/knx-update/
-#* * * * * curl localhost:8000/p1/
 */5 * * * * curl localhost:8000/timer/
 5 0 * * * curl localhost:8000/timer/midnight/
 30 7 * * * curl localhost:8000/timer/winter-morning/

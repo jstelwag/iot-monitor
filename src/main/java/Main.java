@@ -92,8 +92,6 @@ public class Main {
         knxContext.setHandler(new KNXHandler());
         ContextHandler roomContext = new ContextHandler("/room");
         roomContext.setHandler(new KNXRoomHandler());
-        ContextHandler p1Context = new ContextHandler("/p1");
-        p1Context.setHandler(new P1Handler());
         ContextHandler timerContext = new ContextHandler("/timer");
         timerContext.setHandler(new TimerHandler());
         ContextHandler knxUpdateContext = new ContextHandler("/knx-update");
@@ -104,7 +102,7 @@ public class Main {
 
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { stateContext, statusContext, restContext, valveGroupContext
-                , furnaceContext, knxtemperatures, redisContext, knxContext, roomContext, p1Context
+                , furnaceContext, knxtemperatures, redisContext, knxContext, roomContext
                 , timerContext, knxUpdateContext, echoContext});
         return contexts;
     }
