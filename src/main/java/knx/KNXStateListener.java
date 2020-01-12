@@ -3,13 +3,24 @@ package knx;
 import dao.LightingStateDAO;
 import speaker.LogstashLogger;
 
+import java.io.IOException;
+
 /**
  * Listen to status messages and update state in Redis
  */
 public class KNXStateListener implements EventHandler {
+    private String event;
+    private KNXAddress knx;
 
     @Override
-    public void onEvent(String event, KNXAddress knx) {
+    public EventHandler onEvent(String event, KNXAddress knx) {
+        this.event = event;
+        this.knx = knx;
+        return this;
+    }
+
+    @Override
+    public void run() {
         try {
             //TODO test if this is correct, not sure if the tdpu codes are in order
             //https://doc.qt.io/QtKNX/qknxtpdu.html
@@ -26,9 +37,10 @@ public class KNXStateListener implements EventHandler {
                         LogstashLogger.INSTANCE.info(String.format("Button for %s switched to %s", knx, status));
                     }
                 }
-           }
-        } catch (Exception e) {
-            LogstashLogger.INSTANCE.error("Caught unexpected exception, " + e.getMessage());
+            }
+        } catch (IOException e) {
+            LogstashLogger.INSTANCE.error("Problem connecting with Redis at handling state event " + event + " for " + knx
+                    + ", " + e.getMessage());
         }
     }
 }

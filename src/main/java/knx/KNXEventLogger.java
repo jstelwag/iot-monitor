@@ -4,8 +4,18 @@ import speaker.LogstashLogger;
 
 public class KNXEventLogger implements EventHandler {
     private final KNXAddressList addressList = new KNXAddressList();
+    private String event;
+    private KNXAddress knx;
+
     @Override
-    public void onEvent(String event, KNXAddress knx) {
+    public EventHandler onEvent(String event, KNXAddress knx) {
+        this.event = event;
+        this.knx = knx;
+        return this;
+    }
+
+    @Override
+    public void run() {
         switch (knx.type) {
             case P1: //ignore
                 break;

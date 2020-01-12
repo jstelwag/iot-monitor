@@ -85,7 +85,7 @@ public class KNXLink {
             if (knx != null) {
                 for (EventHandler handler : events) {
                     try {
-                        handler.onEvent(event, knx);
+                        new Thread(handler.onEvent(event, knx)).start();
                     } catch (Exception e) {
                         LogstashLogger.INSTANCE.error("Exception at EventHandler " + handler.getClass().getName()
                                 + " " + e.getMessage());

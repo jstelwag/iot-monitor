@@ -1,5 +1,5 @@
 package knx;
 
-public interface EventHandler {
-    public void onEvent(String event, KNXAddress knx);
+public interface EventHandler extends Runnable {
+    public EventHandler onEvent(String event, KNXAddress knx);
 }
