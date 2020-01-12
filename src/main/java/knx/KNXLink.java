@@ -30,6 +30,7 @@ public class KNXLink {
     private InetSocketAddress knxIP = null;
     private InetAddress localIp;
     private int[] localPortStart = {10000, 20000};
+    public boolean[] linkState = {false, false};
 
     private int knxBridge;
 
