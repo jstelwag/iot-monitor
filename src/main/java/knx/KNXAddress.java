@@ -40,6 +40,6 @@ public class KNXAddress {
 
     @Override
     public String toString() {
-        return room + " (" + type + ") " + description;
+        return String.format("%s: %s (%s) '%s'", address, room, type, description);
     }
 }

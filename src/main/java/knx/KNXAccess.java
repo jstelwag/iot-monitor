@@ -55,9 +55,9 @@ public class KNXAccess {
                 retVal = KNXLink.getInstance(bridge).pc().readBool(address);
                 KNXLink.getInstance(bridge).lastCheck(true);
             } catch (KNXException | InterruptedException e2) {
-                LogstashLogger.INSTANCE.warn("Attempting readFloat on both knx links failed: " + e2.getMessage());
+                LogstashLogger.INSTANCE.warn("Attempting readBoolean on both knx links failed: " + e2.getMessage());
                 KNXLink.getInstance(bridge).lastCheck(false);
-                throw new KNXException("Attempting readFloat on both knx links failed", e2);
+                throw new KNXException("Attempting readBoolean on both knx links failed", e2);
             }
         }
         return retVal;
@@ -79,9 +79,9 @@ public class KNXAccess {
                 retVal = KNXLink.getInstance(bridge).pc().readUnsigned(address, ProcessCommunicator.UNSCALED);
                 KNXLink.getInstance(bridge).lastCheck(true);
             } catch (KNXException | InterruptedException e2) {
-                LogstashLogger.INSTANCE.warn("Attempting readFloat on both knx links failed: " + e2.getMessage());
+                LogstashLogger.INSTANCE.warn("Attempting readInt on both knx links failed: " + e2.getMessage());
                 KNXLink.getInstance(bridge).lastCheck(false);
-                throw new KNXException("Attempting readFloat on both knx links failed", e2);
+                throw new KNXException("Attempting readInt on both knx links failed", e2);
             }
         }
         return retVal;
@@ -103,9 +103,9 @@ public class KNXAccess {
                 retVal = KNXLink.getInstance(bridge).pc().read(new StateDP(address, "string"));
                 KNXLink.getInstance(bridge).lastCheck(true);
             } catch (KNXException | InterruptedException e2) {
-                LogstashLogger.INSTANCE.warn("Attempting readFloat on both knx links failed: " + e2.getMessage());
+                LogstashLogger.INSTANCE.warn("Attempting readString on both knx links failed: " + e2.getMessage());
                 KNXLink.getInstance(bridge).lastCheck(false);
-                throw new KNXException("Attempting readFloat on both knx links failed", e2);
+                throw new KNXException("Attempting readString on both knx links failed", e2);
             }
         }
         return retVal;
@@ -126,9 +126,9 @@ public class KNXAccess {
                 KNXLink.getInstance(bridge).pc().write(address, soll, true);
                 KNXLink.getInstance(bridge).lastCheck(true);
             } catch (KNXException e2) {
-                LogstashLogger.INSTANCE.warn("Attempting readFloat on both knx links failed: " + e2.getMessage());
+                LogstashLogger.INSTANCE.warn("Attempting writeFloat on both knx links failed: " + e2.getMessage());
                 KNXLink.getInstance(bridge).lastCheck(false);
-                throw new KNXException("Attempting readFloat on both knx links failed", e2);
+                throw new KNXException("Attempting writeFloat on both knx links failed", e2);
             }
         }
     }
@@ -148,9 +148,9 @@ public class KNXAccess {
                 KNXLink.getInstance(bridge).pc().write(address, soll);
                 KNXLink.getInstance(bridge).lastCheck(true);
             } catch (KNXException e2) {
-                LogstashLogger.INSTANCE.warn("Attempting readFloat on both knx links failed: " + e2.getMessage());
+                LogstashLogger.INSTANCE.warn("Attempting writeBoolean on both knx links failed: " + e2.getMessage());
                 KNXLink.getInstance(bridge).lastCheck(false);
-                throw new KNXException("Attempting readFloat on both knx links failed", e2);
+                throw new KNXException("Attempting writeBoolean on both knx links failed", e2);
             }
         }
     }
@@ -170,9 +170,9 @@ public class KNXAccess {
                 KNXLink.getInstance(bridge).pc().write(address, soll, ProcessCommunicator.UNSCALED);
                 KNXLink.getInstance(bridge).lastCheck(true);
             } catch (KNXException e2) {
-                LogstashLogger.INSTANCE.warn("Attempting readFloat on both knx links failed: " + e2.getMessage());
+                LogstashLogger.INSTANCE.warn("Attempting writeInt on both knx links failed: " + e2.getMessage());
                 KNXLink.getInstance(bridge).lastCheck(false);
-                throw new KNXException("Attempting readFloat on both knx links failed", e2);
+                throw new KNXException("Attempting writeInt on both knx links failed", e2);
             }
         }
     }
