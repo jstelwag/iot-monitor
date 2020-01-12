@@ -24,7 +24,8 @@ public class P1EventLogger implements EventHandler {
                 if (fluxList.containsKey(knx.address) && event.contains("tpdu 00 80")) {
                     try {
                         int p1Value = Integer.parseInt(
-                            event.split("tpdu 00 80")[1].replaceAll(" ", ""), 16);
+                                event.split("tpdu 00 80")[1].replaceAll(" ", "").trim()
+                                , 16);
                         int knxValue = KNXAccess.readInt(new GroupAddress(knx.address));
                         LogstashLogger.INSTANCE.message("p1-event", "Match " + knx.address + " " + p1Value + " - " + knxValue);
                     } catch (KNXException e) {
