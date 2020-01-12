@@ -18,8 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Interface to KNX. Use case
- * /knx/group address/[read|write]/[int|float|boolean]/[value/]
+ * Pushes p1 metrics (retrieved from KNX) to Influx
  */
 public class P1Handler extends AbstractHandler {
 
