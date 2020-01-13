@@ -4,6 +4,7 @@ import org.apache.commons.collections4.map.PassiveExpiringMap;
 import speaker.LogstashLogger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
+import tuwien.auto.calimero.knxnetip.KNXnetIPConnection;
 import tuwien.auto.calimero.link.KNXNetworkLink;
 import tuwien.auto.calimero.link.KNXNetworkLinkIP;
 import tuwien.auto.calimero.link.medium.TPSettings;
@@ -24,9 +25,10 @@ import java.util.*;
 public class KNXLink {
     final private int knxBridge;
     private static KNXLink[] INSTANCE = {null, null};
-    private InetSocketAddress knxIP = null;
+    private InetSocketAddress knxHost = null;
     private InetAddress localIp;
-    private int[] localPortStart = {10000, 20000};
+    private final int[] localPortStart = {10000, 20000};
+    private final String[] knxIP = {"192.168.178.120", "192.168.178.93"};
     /** Successful usage count, at a reconnect the counter is reset. */
     public long usageCount = 0;
     public long lastCheck = System.currentTimeMillis();
@@ -52,16 +54,12 @@ public class KNXLink {
         events.add(new P1EventLogger());
 
         try {
-            if (knxBridge == 0) {
-                knxIP = new InetSocketAddress(InetAddress.getByName(prop.knxIp), prop.knxPort);
-            } else {
-                knxIP = new InetSocketAddress(InetAddress.getByName("192.168.178.120"), prop.knxPort);
-            }
+            knxHost = new InetSocketAddress(InetAddress.getByName(knxIP[knxBridge]), KNXnetIPConnection.DEFAULT_PORT);
             localIp = InetAddress.getByName(prop.localIp);
         } catch (UnknownHostException e) {
-            LogstashLogger.INSTANCE.error("Could not initialize KNX link settings " + e.getMessage());
+            LogstashLogger.INSTANCE.error("Could not initialize KNX link " + e.getMessage());
         }
-        LogstashLogger.INSTANCE.info("KNXLink initialized");
+        LogstashLogger.INSTANCE.info(String.format("KNXLink #%d initialized via bridge %s", knxBridge, knxIP[knxBridge]));
     }
 
     public synchronized static KNXLink getInstance(int knxBridge) {
@@ -119,7 +117,7 @@ public class KNXLink {
         LogstashLogger.INSTANCE.info("Connecting KNX link @" + localAddress.toString());
 
         knxLink = KNXNetworkLinkIP.newTunnelingLink(localAddress
-                , knxIP, false
+                , knxHost, false
                 , TPSettings.TP1);
         pc = new ProcessCommunicatorImpl(knxLink);
     }
@@ -136,7 +134,7 @@ public class KNXLink {
 
         if (testConnection()) {
             knxLink.addLinkListener(new KNXEventListener());
-            LogstashLogger.INSTANCE.info(String.format("Connected #%d to knx %s @ %s", knxBridge, knxIP
+            LogstashLogger.INSTANCE.info(String.format("Connected #%d to bridge %s (%s)", knxBridge, knxIP[knxBridge]
                     , knxLink.getKNXMedium().getDeviceAddress()));
         } else {
             LogstashLogger.INSTANCE.error(String.format("knx link #%d connection failed, closing without retrying", knxBridge));

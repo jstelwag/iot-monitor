@@ -8,7 +8,7 @@ public enum ControllableArea {
     apartment_II(Room.apartment_II, new GroupAddress(1, 5, 1), new GroupAddress(1, 5, 61), 24),
     apartment_II_bedroom(Room.apartment_II, new GroupAddress(1, 5, 61), null,24),
     room_a(Room.room_a, new GroupAddress(2, 5, 11), null,36),
-    room_b(Room.room_b, new GroupAddress(1, 5, 21), null,48),
+    room_b(Room.room_b, new GroupAddress(1, 5, 21), null,4),
     room_c(Room.room_c, new GroupAddress(1, 5, 31), null, 36),
     room_d(Room.room_d, new GroupAddress(1, 5, 41),  null,24),
     room_e(Room.room_e, new GroupAddress(1, 5, 11), null, 24),
