@@ -11,9 +11,9 @@ public enum ControllableArea {
     room_b(Room.room_b, new GroupAddress(1, 5, 21), null,4),
     room_c(Room.room_c, new GroupAddress(1, 5, 31), null, 36),
     room_d(Room.room_d, new GroupAddress(1, 5, 41),  null,24),
-    room_e(Room.room_e, new GroupAddress(1, 5, 11), null, 24),
-    room_f(Room.room_f, new GroupAddress(1, 5, 70), null, 36),
-    room_f_bathroom(Room.room_f, new GroupAddress(1, 5, 51), null, 36),
+    room_e(Room.room_e, new GroupAddress(1, 5, 11), null, 36),
+    room_f(Room.room_f, new GroupAddress(1, 5, 70), null, 48),
+    room_f_bathroom(Room.room_f, new GroupAddress(1, 5, 51), null, 48),
     //Room 1 needs to bo colder so set the default mode to Away (2)
     room_1(Room.room_1, new GroupAddress(4, 5, 1), null, 24),
     room_2(Room.room_2, null, null,24),

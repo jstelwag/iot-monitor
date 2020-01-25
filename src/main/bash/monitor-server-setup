@@ -81,7 +81,6 @@ iot.port=8888
 master.port=8000
 influx.ip=192.168.178.18
 influx.port=8087
-knx.ip=192.168.
 logstash.ip=192.168.
 logstash.port=9000
 local.ip=192.168.
