@@ -1,10 +1,15 @@
 package lighting;
 
+import dao.RoomOccupationDAO;
 import lighting.Schedule.Location;
 import lighting.SwitchLights.LightState;
 import redis.clients.jedis.Jedis;
 
-public class DuskTimer implements Runnable{
+/**
+ * Turns on lights in the evening. Outdoor lighting is only switched on when there is occupation.
+ * Indoor is turned on earlier than outdoor.
+ */
+public class DuskTimer implements Runnable {
 
     @Override
     public void run() {
@@ -17,8 +22,12 @@ public class DuskTimer implements Runnable{
         }
 
         if (!LightState.Dusk.name().equals(jedis.get(Location.outdoor + ".state")) && new Sun().dusk(8.0)) {
-            SwitchLights.switchPublicLight(schedule.outdoorToMidnight, Location.outdoor, LightState.Dusk);
-            SwitchLights.switchPublicLight(schedule.outdoorToDawn, Location.outdoor, LightState.Dusk);
+            try (RoomOccupationDAO dao = new RoomOccupationDAO()) {
+                if (dao.occupationCount() > 0) {
+                    SwitchLights.switchPublicLight(schedule.outdoorToMidnight, Location.outdoor, LightState.Dusk);
+                    SwitchLights.switchPublicLight(schedule.outdoorToDawn, Location.outdoor, LightState.Dusk);
+                }
+            }
         }
     }
 }

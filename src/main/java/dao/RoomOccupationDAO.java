@@ -102,6 +102,18 @@ public class RoomOccupationDAO implements Closeable {
         return !"empty".equals(getTonight(room));
     }
 
+    public int occupationCount() {
+        int retVal = 0;
+        for (Room room : Room.values()) {
+            if (room.beds24Id != null) {
+                if (isOccupiedTonight(room)) {
+                    retVal++;
+                }
+            }
+        }
+        return retVal;
+    }
+
     public boolean isOccupiedTomorrow(Room room) {
         if (!jedis.exists(room + ".booking-tomorrow")) {
             if (Building.INSTANCE.bookableRooms().contains(room)) {
