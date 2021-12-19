@@ -7,10 +7,8 @@ import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ErrorHandler;
-import retriever.Beds24BookingRetriever;
 import speaker.*;
 import util.HeatingProperties;
-
 
 public class Main {
 
@@ -31,8 +29,6 @@ public class Main {
             new ControlCalculator().run();
         } else if ("modulate".equals(args[0])) {
             new ZoneModulation().run();
-        } else if ("beds24".equals(args[0])) {
-            new Beds24BookingRetriever(prop.beds24ApiKey, prop.beds24PropKey).run();
         } else if ("roomreset".equals(args[0])) {
             new KNXRoomReset().run();
         }
@@ -58,7 +54,6 @@ public class Main {
             LogstashLogger.INSTANCE.fatal("Failed to start http listener " + e.toString());
             System.exit(0);
         }
-
 
         while (true) {
             try {

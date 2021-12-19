@@ -29,5 +29,6 @@ public class DuskTimer implements Runnable {
                 }
             }
         }
+        jedis.close();
     }
 }

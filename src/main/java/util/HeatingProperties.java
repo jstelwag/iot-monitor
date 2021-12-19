@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Properties;
 
 public class HeatingProperties {
-    public final String influxIp, localIp, logstashIp, beds24ApiKey, beds24PropKey;
+    public final String influxIp, localIp, logstashIp;
     public int masterPort, influxPort, localPort, logstashPort, elevation;
     public double latitude, longitude;
 
@@ -47,9 +47,7 @@ public class HeatingProperties {
         } else {
             localPort = 11111;
         }
-        beds24ApiKey = prop.getProperty("beds24.apiKey").trim();
-        beds24PropKey = prop.getProperty("beds24.propKey").trim();
-
+        
         latitude = Double.parseDouble(prop.getProperty("location.latitude"));
         longitude = Double.parseDouble(prop.getProperty("location.longitude"));
         elevation = Integer.parseInt(prop.getProperty("location.elevation"));

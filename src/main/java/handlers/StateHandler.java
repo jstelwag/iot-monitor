@@ -1,19 +1,20 @@
 package handlers;
 
-import building.Building;
-import building.HeatZone;
-import dao.HeatZoneStateDAO;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import speaker.LogstashLogger;
+import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import building.Building;
+import building.HeatZone;
+import dao.HeatZoneStateDAO;
+import speaker.LogstashLogger;
 
 /**
  * Created by Jaap on 27-5-2016.

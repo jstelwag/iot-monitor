@@ -19,5 +19,6 @@ public class DawnTimer implements Runnable {
             SwitchLights.switchPublicLight(schedule.outdoorToDawn, Location.outdoor, LightState.Dawn);
             SwitchLights.switchPublicLight(schedule.outdoorToMidnight, Location.outdoor, LightState.Dawn);
         }
+        jedis.close();
     }
 }
